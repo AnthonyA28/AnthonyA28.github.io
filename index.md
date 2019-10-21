@@ -9,4 +9,3 @@ title: Anthony Arrowood Home
 
 You have reached my internet headquarters. Check out my articles [here](/Articles.html).
 
-
