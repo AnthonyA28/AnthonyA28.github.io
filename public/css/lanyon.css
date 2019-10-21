@@ -219,8 +219,8 @@ a.sidebar-nav-item:focus {
   display: block;
   width: 2.2rem;
   padding: .5rem .65rem;
-  color: #505050;
-  background-color: rgba(43, 136, 21,.4);
+  color: rgba(255,255,255,1);
+  background-color: rgba(43, 136, 21,0.4);
   border-radius: 4px;
   cursor: pointer;
 }

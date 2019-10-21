@@ -1,7 +1,7 @@
 ---
 # front matter 
 
-layout: index
+layout: default
 title: Anthony Arrowood Home
 --- 
 
