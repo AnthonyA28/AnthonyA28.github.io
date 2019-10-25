@@ -1,29 +1,40 @@
-
 <canvas id="chart" class="chartjs" width="300" height="150"></canvas>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
+<form>
+    Phi: <input type="number" id="phi_id"><br>
+    <input type="submit" value="Submit" onclick="update_phi()">
+</form>
 
 <script>
+var phi = 1;
+var dt = 1000; 
+
+function update_phi() {
+    phi = document.getElementById("phi_id").value;
+}
+
 var start_time = new Date().getTime();
 
 chart = new Chart(document.getElementById("chart"),
-  {"type":"line",
-  "data":{
-    "labels":[],
-    "datasets":[{"label":"u",
-    "data":[],
-    "fill":false,
-    "borderColor":"rgb(75, 192, 192)",
-    "lineTension":0.1}]},
-    "options":{}});
-
+    {"type":"line",
+        "data":{
+        "labels":[],
+        "datasets":[{"label":"u",
+        "data":[],
+        "fill":false,
+        "borderColor":"rgb(75, 192, 192)",
+        "lineTension":0.1}]},
+        "options":{}
+    }
+);
 
 
 function addData(chart, label, data) {
     chart.data.labels.push(label);
     chart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
+      dataset.data.push(data);
     });
     chart.update();
 }
@@ -36,18 +47,17 @@ function removeData(chart) {
     chart.update();
 }
 
- var dt = 100; 
 
 function the_fn(last_y){
-  var next_y = last_y + (Math.random() * (1 - (-1)) ) + (-1);
+  var next_y = last_y + phi*((Math.random() * (1 - (-1)) ) + (-1));
   return next_y;
 }
 
 function timed_callback() {
   var current_time = new Date();
   let s = (current_time - start_time)/1000.0;
-  console.log(s);
-  console.log(chart.data.datasets[0].data);
+//   console.log(s);
+//   console.log(chart.data.datasets[0].data);
   let length = chart.data.datasets[0].data.length;
 
   if( length>0 ){
