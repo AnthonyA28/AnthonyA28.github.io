@@ -1,3 +1,10 @@
+---
+title: How to make a VLE Diagram
+layout: article_post
+section: article
+excerpt: Making a VLE entails applying a few simple formulas. 
+---
+
 # How to Make a VLE Diagram
 
 
