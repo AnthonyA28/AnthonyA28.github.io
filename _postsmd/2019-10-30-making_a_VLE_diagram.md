@@ -5,8 +5,14 @@ section: article
 excerpt: Making a VLE entails applying a few simple formulas. 
 ---
 
-# How to Make a VLE Diagram
+# Making a Vapor Liquid Equilibrium Diagram
 
+## Introduction 
+
+A Vapor Liquid Equilibrium diagram illustrates the compositions of liquid and the vapor above it in equilibrium. It is particularly useful for modelling distillation operations. In a binary VLE diagram, the x axis will be the liquid mole fraction and the y axis will be the vapor mole fraction of the more volatile component. At any equilibrium point between the boiling points of the two species, the compositions of the liquid and vapor can be discerned from the diagram. 
+
+## Background
+There are just a few laws and equations necessary to create the diagram and significant simplications can be made undercertain assumptions. Each equation models some factor in system that plays a role in the equilibrium concentrations. As a liquid is vaporized, the molecules 
 
 
 ## Rault's Law 
@@ -16,8 +22,6 @@ $$
 p_a = y_aP = x_ap^*_a(T)
 $$
 where, $p_a$ is the partial pressure of component *a*; $y_a$ is the concentration of *a* in the gas; $P$ is the total pressure of the gas; $x_a$ is the concentration of *a* in the liquid; $p^*_a(T)$ is the a vapor pressure of pure *a* at temperature *T*.
-
-----
 
 
 
@@ -29,7 +33,6 @@ P = p_a + p_b
 $$
 where,  $p_b$ is the partial pressure of component *b*.
 
-----
 
 ## Antoine Equation
 
@@ -38,7 +41,6 @@ $$
 p* = 10^{[A - \frac{B}{C+T}]}
 $$
 
-----
 
 ## Combining 
 

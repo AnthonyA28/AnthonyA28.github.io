@@ -1,0 +1,39 @@
+---
+title: How to make a VLE Diagram
+layout: article_post
+section: article
+excerpt: Making a VLE entails applying a few simple formulas.
+---
+
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>How to make a VLE Diagram</title></head>
+<body>
+<h1>Making a Vapor Liquid Equilibrium Diagram</h1>
+<h2>Introduction </h2>
+<p>A Vapor Liquid Equilibrium diagram illustrates the compositions of liquid and the vapor above it in equilibrium. It is particularly useful for modelling distillation operations. In a binary VLE diagram, the x axis will be the liquid mole fraction and the y axis will be the vapor mole fraction of the more volatile component. At any equilibrium point between the boiling points of the two species, the compositions of the liquid and vapor can be discerned from the diagram. </p>
+<h2>Rault&#39;s Law </h2>
+<p>Rault&#39;s law states how the partial pressure of a gas is proportional to its concentration both within the gas and in the solution in equilibrium with the gas. </p>
+<div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n105" cid="n105" mdtype="math_block"><div class="md-rawblock-container md-math-container" tabindex="-1"><script type="math/tex; mode=display">p_a = y_aP = x_ap^*_a(T)</script></div></div>
+<p>where, $p_a$ is the partial pressure of component <em>a</em>; $y_a$ is the concentration of <em>a</em> in the gas; $P$ is the total pressure of the gas; $x_a$ is the concentration of <em>a</em> in the liquid; $p^*_a(T)$ is the a vapor pressure of pure <em>a</em> at temperature <em>T</em>.</p>
+<p>&nbsp;</p>
+<h2>Dalton&#39;s Law</h2>
+<p> Dalton&#39;s law states that the sum of partial pressures is equal to the partial pressure. If a system contained two components: <em>a</em> and <em>b</em> , then the total pressure of the system would be:</p>
+<div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n110" cid="n110" mdtype="math_block"><div class="md-rawblock-container md-math-container" tabindex="-1"><script type="math/tex; mode=display">P = p_a + p_b</script></div></div>
+<p>where,  $p_b$ is the partial pressure of component <em>b</em>.</p>
+<h2>Antoine Equation</h2>
+<p>The Antoine equation allows one to solve for the vapor pressures of a component at different temperatures. It is an empirical relationship with constants found in the literature. </p>
+<div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n115" cid="n115" mdtype="math_block"><div class="md-rawblock-container md-math-container" tabindex="-1"><script type="math/tex; mode=display">p* = 10^{[A - \frac{B}{C+T}]}</script></div></div>
+<h2>Combining </h2>
+<p>If the partial pressures in Dalton&#39;s Law (equation (1)) are substituted into Rault&#39;s Law (equation (2)), the following equation is developed:</p>
+<div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n119" cid="n119" mdtype="math_block"><div class="md-rawblock-container md-math-container" tabindex="-1"><script type="math/tex; mode=display">P = x_ap*_a + x_bp^*_b</script></div></div>
+<p>and since we just have two components we can say: </p>
+<div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n121" cid="n121" mdtype="math_block"><div class="md-rawblock-container md-math-container" tabindex="-1"><script type="math/tex; mode=display">1 = x_a + x_b</script></div></div>
+<p>Substituting equation (5) into equation (4) yields: </p>
+<div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n123" cid="n123" mdtype="math_block"><div class="md-rawblock-container md-math-container" tabindex="-1"><script type="math/tex; mode=display">P = x_ap*_a + (1-x_a)p^*_b</script></div></div>
+<p>If equation (6) is rearranged to isolate $x_a$, then is becomes:</p>
+<div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n125" cid="n125" mdtype="math_block"><div class="md-rawblock-container md-math-container" tabindex="-1"><script type="math/tex; mode=display">x_a = \frac{P-p^*_b}{p^*_a - p^*_b}</script></div></div>
+<p>Equation (3) at a known <em>T</em> can be used to solve for $p_a$ and $p_b$. The temperatures to be used are those within the range of boiling points between the two components. Then $p_a$ and $p_b$ can be plugged into equation (6) at a known <em>P</em> ( whatever your system is at - probably 1 atm) to solve for $x_a$. Then use equation (5) to solve for $x_b$. Finally use equation (1) to solve for $y_a$ and $y_b$.</p>
+<p>&nbsp;</p>
+</body>
+</html>
