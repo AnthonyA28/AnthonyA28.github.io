@@ -3,6 +3,8 @@ title: Regression
 layout: article_post
 section: article
 excerpt: Applying regression to relate power to energy usage. 
+tags:
+- draft
 ---
 
 

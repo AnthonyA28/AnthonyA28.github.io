@@ -3,16 +3,28 @@ title: How to make a VLE Diagram
 layout: article_post
 section: article
 excerpt: Making a VLE entails applying a few simple formulas. 
+tags: 
+- draft
+- requiresCompilation
 ---
 
 # Making a Vapor Liquid Equilibrium Diagram
 
 ## Introduction 
 
-A Vapor Liquid Equilibrium diagram illustrates the compositions of liquid and the vapor above it in equilibrium. It is particularly useful for modelling distillation operations. In a binary VLE diagram, the x axis will be the liquid mole fraction and the y axis will be the vapor mole fraction of the more volatile component. At any equilibrium point between the boiling points of the two species, the compositions of the liquid and vapor can be discerned from the diagram. 
+Vapor Liquid Equilibrium Diagrams are used to illustrate the composition of a liquid and the vapor above it when at equilibrium. In this article, only binary solutions will be considered. An example is an ethanol water mixture - used for alcohol distillation. If the solution is at equilibrium, the VLE diagram will show how concentrated the vapor and the liquid will be. This is extremely useful when designing and modelling a distillation process. 
+
+
 
 ## Background
-There are just a few laws and equations necessary to create the diagram and significant simplications can be made undercertain assumptions. Each equation models some factor in system that plays a role in the equilibrium concentrations. As a liquid is vaporized, the molecules 
+
+If a binary solution is at temperature between its two components, it will eventfully come to equilibrium with the vapor being concentrated with the  [more volatile component](#definitions). 
+
+
+
+
+
+There are just a few laws and equations necessary to create the diagram and significant simplifications can be made under certain assumptions. Each equation models some factor in system that plays a role in the equilibrium concentrations. As a liquid is vaporized, the molecules 
 
 
 ## Rault's Law 
@@ -41,10 +53,9 @@ $$
 p* = 10^{[A - \frac{B}{C+T}]}
 $$
 
-
 ## Combining 
 
-If the partial pressures in Dalton's Law (equation (1)) are substituted into Rault's Law (equation (2)), the following equation is developed:
+If the partial pressures in Dalton's Law  are substituted into Rault's Law (equation (2)), the following equation is developed:
 $$
 P = x_ap*_a + x_bp^*_b
 $$
@@ -64,3 +75,8 @@ $$
 
 Equation (3) at a known *T* can be used to solve for $p_a$ and $p_b$. The temperatures to be used are those within the range of boiling points between the two components. Then $p_a$ and $p_b$ can be plugged into equation (6) at a known *P* ( whatever your system is at - probably 1 atm) to solve for $x_a$. Then use equation (5) to solve for $x_b$. Finally use equation (1) to solve for $y_a$ and $y_b$.
 
+---
+
+## Definitions <a name="definitions"></a>
+
+**More Volatile Component**: The component in a solution having the lowest boiling point. 
