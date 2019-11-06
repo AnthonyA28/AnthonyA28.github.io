@@ -11,6 +11,10 @@ tags:
 This is how I move files to be published into the published folder and the remainder into the unpublished folder.
 
 ```bash
+
+mkdir published
+mkdir unpublished
+
 echo off
 setlocal EnableDelayedExpansion
 set i=0
