@@ -1,6 +1,7 @@
 ---
 title: Batch Script For Moving Files
 section: article
+layout: article_post
 excerpt: Sometimes you have to move a significant amount of files to another directory.
 tags:
 ---
@@ -9,7 +10,7 @@ tags:
 
 Sometimes you have to move a significant amount of files to another directory. It can be tiresome and tedious to do by hand in the file explorer. Here is a batch script that will move files into specified folders.
 
- You must place a list of file names in a a file *published.txt*. The script will  check the current directory for files (with extensions: *.doc *.doc *.pdf) containing any of the names in *published.txt* and move those files to a directory titled *published*. The remainder of the files in the current directory will be transferred to *unpublished*.
+ You must place a list of file names in a a file *published.txt*. The script will  check the current directory for files (with extensions: .doc .doc .pdf) containing any of the names in *published.txt* and move those files to a directory titled *published*. The remainder of the files in the current directory will be transferred to *unpublished*.
 
 ```bash
 
