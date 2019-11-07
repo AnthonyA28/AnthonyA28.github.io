@@ -12,19 +12,15 @@ tags:
 
 ## Introduction 
 
-Vapor Liquid Equilibrium Diagrams are used to illustrate the composition of a liquid and the vapor above it when at equilibrium. In this article, only binary solutions will be considered. An example is an ethanol water mixture - used for alcohol distillation. If the solution is at equilibrium, the VLE diagram will show how concentrated the vapor and the liquid will be. This is extremely useful when designing and modelling a distillation process. 
+Vapor Liquid Equilibrium Diagrams are used to illustrate the composition of a liquid and the vapor above it when at equilibrium. In this article, only binary solutions will be considered. An example is an ethanol water mixture. If the solution is at equilibrium, the VLE diagram will show how concentrated the vapor and the liquid will be. This is extremely useful when designing and modelling a distillation process. 
 
 
 
 ## Background
 
-If a binary solution is at temperature between its two components, it will eventfully come to equilibrium with the vapor being concentrated with the  [more volatile component](#definitions). 
+If a binary solution is at a temperature between the boiling point of its two components,  it will eventfully come to equilibrium; the vapor will be more concentrated with the  [more volatile component](#definitions) and the liquid will be more concentrated in the [less volatile component](#definitions). Exactly what concentrations they will end up at  can be ascertained from the x-y diagram.  
 
-
-
-
-
-There are just a few laws and equations necessary to create the diagram and significant simplifications can be made under certain assumptions. Each equation models some factor in system that plays a role in the equilibrium concentrations. As a liquid is vaporized, the molecules 
+With just a few laws and starting from first principles, the necessary and sufficient formulas can be derived. There are just a few laws and equations necessary to create the diagram and significant simplifications can be made under certain assumptions. Each equation models some factor in system that plays a role in the equilibrium concentrations.
 
 
 ## Rault's Law 
@@ -39,7 +35,7 @@ where, $p_a$ is the partial pressure of component *a*; $y_a$ is the concentratio
 
 ## Dalton's Law
 
- Dalton's law states that the sum of partial pressures is equal to the partial pressure. If a system contained two components: *a* and *b* , then the total pressure of the system would be:
+ Dalton's law states that the sum of partial pressures is equal to the total pressure in the system. If a system contained two components: *a* and *b* , then the total pressure of the system would be:
 $$
 P = p_a + p_b
 $$
@@ -48,7 +44,7 @@ where,  $p_b$ is the partial pressure of component *b*.
 
 ## Antoine Equation
 
-The Antoine equation allows one to solve for the vapor pressures of a component at different temperatures. It is an empirical relationship with constants found in the literature. 
+The Antoine equation solves for the [vapor](#)  of a component at different temperatures. It is an empirical relationship with constants found in the literature. 
 $$
 p* = 10^{[A - \frac{B}{C+T}]}
 $$
