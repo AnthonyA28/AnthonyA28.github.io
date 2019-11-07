@@ -56,5 +56,7 @@ for %%f in (*.doc *.doc *.pdf) do (
 
 ```
 
+Currently it does not work with files containing spaces, but I will fix that soon. 
+
 
 
