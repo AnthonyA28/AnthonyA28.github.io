@@ -1,5 +1,6 @@
 ---
-title: Batch Script For Moving Files
+title: Batch Script For Moving File
+layout: article_post
 section: article
 layout: article_post
 excerpt: Sometimes you have to move a significant amount of files to another directory.
