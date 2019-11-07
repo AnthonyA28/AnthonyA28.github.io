@@ -13,7 +13,7 @@ Starting Unit: <input type = "text" id="unit_init">
 </p>
 <button onclick="convert()">Convert.</button>
 <button onclick="reset()">Reset.</button>
-<p id="demo"></p>
+<p id="output"></p>
 
 
 <script>
@@ -23,10 +23,15 @@ function conversion (_unit_L, _x_l, _x_R, _unit_R) {
 	this.unit_R = _unit_R;
 	this.x_L = _x_l;
 	this.x_R = _x_R;
+	
 }
 
 var num_units = 1; // inclusive of the starting unit.
 var units = [];
+var units_used = [];
+var start_unit = "";
+var start_x = 0.0; 
+var current_val = 0.0;
 
 
 
@@ -48,7 +53,14 @@ function add_unit() {
 function reset() {
 	console.log("reset");
 	document.getElementById("unit_section").innerHTML = "";
+	document.getElementById("output").innerHTML = "";
 	num_units = 1;
+	var units = [];
+	var units_used = [];
+	var start_unit = "";
+	var start_x = 0.0; 
+	var current_val = 0.0;
+
 }
 
 
@@ -90,14 +102,49 @@ function get_values(i) {
 
 
 function convert(){
+	document.getElementById("output").innerHTML = "";
+	start_x = document.getElementById("amount_init").value;
+	start_unit = document.getElementById("unit_init").value;
+	current_val = start_x;
+	var current_unit = start_unit; 
+
+	console.log("start unit " + start_unit + ", start amount " + start_x);
+
 	console.log("converting");
 	var i =0;
+	var j =0; 
 	for ( i = 1; i < num_units; i ++ ) {
 		get_values(i);
 	}
 
+	document.getElementById("output").innerHTML = "<h3> " + start_x + " " + start_unit + " </h3>";
 	for ( i = 0; i < units.length ; i ++ ) {
-		console.log("(" + units[i].unit_L + ", " + units[i].x_L + ") = (" + units[i].unit_R + ", " + units[i].x_R + ")");
+		for( j = 0; j < units_used.length; j ++ ) {
+			if ( i == units_used[j]) { // do not do anything if we have already used the conversion at this index. 
+				console.log("ignoring conversion " + i );
+				console.log(i + "  .. (" + units[i].unit_L + ", " + units[i].x_L + ") = (" + units[i].unit_R + ", " + units[i].x_R + ")");
+				continue; 
+			}
+		}
+
+		if( current_unit == units[i].unit_L) {
+			console.log("found a unit to convert with L");
+			current_val = current_val / units[i].x_L * units[i].x_R;
+			current_unit = units[i].unit_R;
+			units_used.push(i); 
+
+		} else if ( current_unit == units[i].unit_R) {
+			console.log("found a unit to convert with R");
+			current_val = current_val / units[i].x_R * units[i].x_L;
+			current_unit = units[i].unit_L;
+			units_used.push(i); 
+		}
+		console.log("current: " + current_val + " " + current_unit );
+		document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "</br> = " + ("" + current_val + " " + current_unit );
+	}
+
+	for ( i = 0; i < units.length ; i ++ ) {
+		console.log(i + "  .. (" + units[i].unit_L + ", " + units[i].x_L + ") = (" + units[i].unit_R + ", " + units[i].x_R + ")");
 	}
 
 }
