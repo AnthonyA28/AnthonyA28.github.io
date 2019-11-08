@@ -1,5 +1,5 @@
 ---
-title: Batch Script For Moving File
+title: Batch Script For Moving Files
 layout: article_post
 section: article
 layout: article_post
