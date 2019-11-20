@@ -14,7 +14,7 @@ tags:
 
 # Introduction
 
-There seems to be a lot of confusion regarding kilowatt hours despite it being the unit in which residential electricity is sold. Often times it is mixed up with kilowatts. Kilowatt hours and Kilowatts represent different things. I think it is worth clarifying what a kilowatt hour.
+There seems to be a lot of confusion regarding the difference between kilowatt hours and kilowatts - understandably so. Residental electric bills charge for energy by the kilowatt hour. Sometimes power usage will be charged for as well, power is charged by the kilowatt. The seeming similarity between the terms makes them easy to confuse with each other. kilowatt hour (kwh) is a unit of energy and kilowatt (kw) is a unit of power. Energy and power, although related are entirely different things. I will attempt to help the reader develop a better understanding of what kw and kwh really represent. 
 
 This is a simple mathematical analysis that reduces the terms to simpler units. Understanding how to work with units and their  conversions is incredibly simple and useful. I'm a stickler for writing out units when doing any type math as it will prevent many mistakes. In the future I may write a separate article on units and their conversions intended for non-engineers. For now just understand that kw and kwh are different units which means they cannot be added or subtracted.
 
