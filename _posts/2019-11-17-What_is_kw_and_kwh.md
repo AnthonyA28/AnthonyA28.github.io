@@ -1,8 +1,8 @@
 ---
-itle: The Dreaded kwh
+title: The Dreaded kwh
 layout: article_post
 section: article
-excerpt: Many people simply don't understand difference between kilowatt and kilowatt hour. Lets quickly clear it up. 
+excerpt: Many have trouble with the difference between kilowatt and kilowatt hour. Lets quickly clear it up. 
 tags:
 - requiresCompilation
 ---
@@ -113,5 +113,4 @@ $$
 
  There is an interesting parallel between this formula and formula (6) for energy. If there is 1 man working, in *n* hours he will work *n* man hours.  If there are *m* men working, they will work *n* * *m* man hours. 
 
-
-[^1]: https://www.colorado.gov/pacific/energyoffice/hydropower 
+[^1]: https://www.colorado.gov/pacific/energyoffice/hydropower
