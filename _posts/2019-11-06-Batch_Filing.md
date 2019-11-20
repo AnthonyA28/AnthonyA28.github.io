@@ -12,7 +12,7 @@ tags:
 Sometimes you have to move a significant amount of files to another directory. It can be tiresome and tedious to do by hand in the file explorer. Here is a batch script that will move files into specified folders.
 
 * Place all the files you need to move in a folder. 
-* List of file names you want to move in a file titled *published.txt* and add it to the folder.
+* List the name of the files you want to move in a text file titled *published.txt* (one name on each line) and add it to the folder.
 * Place the script below in a batch (.bat). Place the batch script in the folder. 
 
  The script will  check the current directory for files (with extensions: .doc .doc .pdf) containing any of the names in *published.txt* and move those files to a folder titled *published*. The remainder of the files will be transferred to *unpublished*.
