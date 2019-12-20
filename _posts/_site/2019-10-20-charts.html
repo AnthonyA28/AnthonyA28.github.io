@@ -1,48 +1,47 @@
----
-title: Time Series Simulation
-layout: article_post
-section: article
-excerpt: Graphing a time series with variable parameters. 
----
+<h1 id="time-series">Time Series</h1>
 
+<p>Below is a real time graph of a time series model with some variable parameters.</p>
 
-# Time Series 
+<p>The model:
+<script type="math/tex">x_t = \phi x_{t-1} + \epsilon_t</script>
+where</p>
 
-Below is a real time graph of a time series model with some variable parameters. 
+<blockquote>
+  <p>$\ \phi $ is the autocorrelation parameter [-1,1].</p>
 
-The model:
-$$
-x_t = \phi x_{t-1} + \epsilon_t 
-$$
-where
+  <p>$\ \epsilon $ is white noise with a known standard deviation.</p>
 
-> $\ \phi $ is the autocorrelation parameter [-1,1].
-> 
-> $\ \epsilon $ is white noise with a known standard deviation. 
-> 
-> $\ x_t $ is x at time *t*.
-> 
-> $\ x_{t-1}$  is x at time *t-1*.
+  <p>$\ x_t $ is x at time <em>t</em>.</p>
 
-A few things to note:
+  <p>$\ x_{t-1}$  is x at time <em>t-1</em>.</p>
+</blockquote>
 
+<p>A few things to note:</p>
 
-
-* at $\ \phi $ = 0; It is a white noise process. 
-* at $\ \phi $ = 1; It is a random walk process. 
-* at $\ | \phi| $ ≥ 1; The system is nonstationary.
-
-
-
-
+<ul>
+  <li>at $\ \phi $ = 0; It is a white noise process.</li>
+  <li>at $\ \phi $ = 1; It is a random walk process.</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>at $\</td>
+          <td>\phi</td>
+          <td> $ ≥ 1; The system is nonstationary.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
 
 <canvas id="chart" class="chartjs" width="300" height="150"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
 <form action="#" onsubmit="update_params();return false">
-    Phi: <input type="text" id="phi_id"><br>
-    standard deviation: <input type="text" id="standard_deviation_id"><br>
-    Sample period (ms) : <input type="text" id="samplePeriod_id"><br>
-    <input type="submit">
+    Phi: <input type="text" id="phi_id" /><br />
+    standard deviation: <input type="text" id="standard_deviation_id" /><br />
+    Sample period (ms) : <input type="text" id="samplePeriod_id" /><br />
+    <input type="submit" />
 </form>
 
 <script>
@@ -189,3 +188,4 @@ function timed_callback() {
 setTimeout(timed_callback, dt);
 
 </script>
+
