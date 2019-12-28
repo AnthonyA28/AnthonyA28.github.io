@@ -9,3 +9,6 @@ title: Anthony Arrowood Home
 
 You have reached my internet headquarters. Check out my articles [here](/Articles.html).
 
+
+
+<p > <br><br><br><br><img class="center-fit" src = "\assets\images\art\art1.png"></p>
