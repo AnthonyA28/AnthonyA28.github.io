@@ -1,0 +1,36 @@
+<h1 id="choosing-the-correct-rate">Choosing the Correct Rate</h1>
+
+<hr />
+
+<h1 id="introduction">Introduction</h1>
+
+<p>WHen comparing possible utility rate schemes, both kwh and kwh are factors that determine the optimal rate. To determine the best rate when both kw and kwh are known it is straightforward. If one or both of kw and kwh are unknown, the decision can be tricky. I have developed a system to illustrate the break even point at a given rate and a system that does not require calculations for determining which rate is cheaper based off kw and kwh amounts.</p>
+
+<hr />
+
+<h1 id="example">Example</h1>
+
+<p>A good example of a rate scheme choice, is the option of electric utility bills. The monthly bill depends on usage of power (kw) and electric consumption (kwh) and therefore the determination of optimal rate depends on how much of power and energy will be used. Below is an example and this kind of comparison.</p>
+
+<p>Two electric rates are provide; call them R1 and R2. At R1 you get charged a \$10 fee, \$0.05 per kwh and \$0.01 per kw. At R2 you get charges a \$100 fee, \$0.02 per kwh and \$0.5 per kwh.</p>
+
+<p>Total costs:</p>
+
+<p>At R1:</p>
+
+<script type="math/tex; mode=display">kw = \frac{ kwh \cdot(0.05 - 0.02) - 90 }{ 0.05 - 0.01 }</script>
+
+<p>At R2:</p>
+
+<script type="math/tex; mode=display">C_{R2} = 100 + 0.02 \cdot kwh + 0.05 \cdot kwh</script>
+
+<p>The obvious way to determine which rate is preferable is to simply plug in your kwh and kw and compare the costs at each rate. The next question that arises - which do we keep constant kw or kwh. Or do we try all possibilities of kwh and kw to see which combinations R1 is better than R2 and vice versa.</p>
+
+<p>A good comparison starts by determining at what kwh and kw would the rates yield the same price. This is done by setting the eq 1 and eq 2 to each other. After grouping terms and isolating the kwh, the equation becomes:</p>
+
+<script type="math/tex; mode=display">kw = \frac{ kwh \cdot(0.05 - 0.02) - 90 }{ 0.05 - 0.01 }</script>
+
+<p>From here the equation can be graphed as kw vs kwh. The x axis is kwh and the y axis is kwh. The line illustrates all the possible combinations of kw and kwh in which both rates would cost the same. Furthermore, the graph illustrates the regions - or kw/kwh combinations - in which R1 or R2 would be cheaper.</p>
+
+<p align="center"> <img src="\assets\images\rates\1571987215641.png" /></p>
+<p>Pick any point on the graph, read the kw and kwh from the axes, and you can determine which rate would be cheaper at those conditions. No calculations are required.</p>
