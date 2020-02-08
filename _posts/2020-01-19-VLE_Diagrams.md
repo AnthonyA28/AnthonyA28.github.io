@@ -1,12 +1,12 @@
-s---
-title: XY Diagram Generator
+---
+title: VLE Diagram Generator
 layout: article_post
 section: article
 excerpt: Generate an XY and T-XY chart from Antoine equation constants.
 tags:
 ---
 
-# XY Diagram
+# VLE Diagram
 
 <form action="#xychart" onsubmit="submitted();">
 
@@ -14,11 +14,12 @@ tags:
 <table style="height: 46px; width: 507px;">
 <tbody>
     This is an ideal XY and T-XY VLE diagram calculator using Antoines equation.
-    Use the Antoines constants that will correspond to a pressure in mmHg and T in Celsius. (The logarithm is base 10.)
+    Use the Antoine's constants that will correspond to a pressure in mmHg and T in Celsius. (The logarithm is base 10.)
 <tr>
 <td >&nbsp;
-    <h2> MVC: <br>
+    <h2> MVC
     </h2>
+    (more volatile component):<br>
     <p>
         <!-- Ethanol from wikipedia -->
         A: <input type="text" id="MVC_A" value="7.68117 "><br>
@@ -38,9 +39,6 @@ tags:
 
 </td>
 <td>&nbsp;
-<h2>
-    Temp range:
-</h2>
     <p >
         Temperature interval between datapoints: <input type="text" id="step" value="1"><br>
         P total [mmHg]: <input type="text" id="P_total" value="760"><br>
