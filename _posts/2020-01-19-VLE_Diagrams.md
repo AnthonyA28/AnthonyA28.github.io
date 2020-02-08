@@ -1,8 +1,8 @@
----
-title: XY diagram calculator
+s---
+title: XY Diagram Generator
 layout: article_post
 section: article
-excerpt: Generate an XY chart from antoine equation constants.
+excerpt: Generate an XY and T-XY chart from Antoine equation constants.
 tags:
 ---
 
@@ -13,7 +13,7 @@ tags:
 
 <table style="height: 46px; width: 507px;">
 <tbody>
-    This is an ideal xy VLE diagram calculator using Antoines equation.
+    This is an ideal XY and T-XY VLE diagram calculator using Antoines equation.
     Use the Antoines constants that will correspond to a pressure in mmHg and T in Celsius. (The logarithm is base 10.)
 <tr>
 <td >&nbsp;
