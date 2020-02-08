@@ -150,7 +150,7 @@ function removeData(chart) {
 
 
 function time_series_fn(last_y){
-    var next_y = phi*last_y + gaussian(0,0);;// 
+    var next_y = phi*last_y + gaussian(0,standard_deviation);;// 
     return next_y;
 }
 
