@@ -8,39 +8,41 @@ excerpt: Simulating a process control system of a AR(1) process using a PI contr
 
 # Process Control Simulation
 
-Below is a simulation of a AR(1) process with PI control applied to it. 
+Below is a simulation of a random walk process with PID control applied to it. 
+Change the setpoint to watch the control algorithm approach the target. 
+Change the kc, tauI, and kd tuning parameters to vary the control algorithm behavior. 
 
 
 <canvas id="chart" class="chartjs" width="300" height="150"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <form action="#" onsubmit="update_params();return false">
-    Phi: <input type="text" id="phi_id" value =0.95><br>
-    standard deviation: <input type="text" id="standard_deviation_id" value ="1.0"><br>
-    Sample period (ms) : <input type="text" id="samplePeriod_id" value = "500"><br>
-    Kc : <input type="text" id="Kc_id" value = "1.0"><br>
-    tauI : <input type="text" id="tauI_id" value= "100"><br>
-    tauD : <input type="text" id="tauD_id" value = "1.0"><br>
+    <!-- Phi: <input type="text" id="phi_id" value ="0.95"><br> -->
+    <!-- standard deviation: <input type="text" id="standard_deviation_id" value ="1.0"><br> -->
+    <!-- Sample period (ms) : <input type="text" id="samplePeriod_id" value = "100"><br> -->
     setpoint : <input type="text" id="setpoint_id" value = "10"><br>
+    kc : <input type="text" id="kc_id" value = "1.0"><br>
+    tauI : <input type="text" id="tauI_id" value= "100"><br>
+    kd : <input type="text" id="kd_id" value = "0.0"><br>
 
     <input type="submit">
+
 </form>
 
 <script>
 'use strict';
-var phi = 0.95;
+var phi = 1;
 var standard_deviation = 1; 
-var dt = 500; 
+var dt = 200; 
 
-var y_prev = 0;
 var error = 0 ;
 var errorPrev = error;
 var u = 0;
 var u_prev = 0;
 var start_time; 
 var y_setpoint = 10;
-var Kc = 1;
+var kc = 1;
 var tauI = 100;
-var tauD = 1; 
+var kd = 0; 
 var G = .1;
 var sumForIntegral = 0
 
@@ -62,54 +64,30 @@ function gaussian(mean, stdev) {
 }
 
 function update_params() {
-    let input = document.getElementById("phi_id").value;
-    let x = 0; 
+  let input; 
+  let x; 
+    input = document.getElementById("kc_id").value; 
     if( input != "") {
       x = parseFloat(input); 
       if (isNaN(x)){
-        window.alert("Phi must be a valid number.");
-        document.getElementById("phi_id").value = "";
+        window.alert("kc must be a valid number.");
+        document.getElementById("kc_id").value = "";
         return; 
       } 
       else {
-        phi = x;
+        kc = x;
       }
     }
-
-    input = document.getElementById("samplePeriod_id").value;
-    if ( input != "" ) {
-      x = parseFloat(input);
-      if (isNaN(x)){
-        window.alert("Sample period must be a valid number.");
-        document.getElementById("samplePeriod_id").value = "";
-        return;
-      } 
-      else {
-        dt = x;
-      }
-    }
-    input = document.getElementById("standard_deviation_id").value; 
+    input = document.getElementById("kd_id").value; 
     if( input != "") {
       x = parseFloat(input); 
       if (isNaN(x)){
-        window.alert("standard_deviation must be a valid number.");
-        document.getElementById("standard_deviation_id").value = "";
+        window.alert("kd must be a valid number.");
+        document.getElementById("kd_id").value = "";
         return; 
       } 
       else {
-        standard_deviation = x;
-      }
-    }
-    input = document.getElementById("tauD_id").value; 
-    if( input != "") {
-      x = parseFloat(input); 
-      if (isNaN(x)){
-        window.alert("tauD must be a valid number.");
-        document.getElementById("tauD_id").value = "";
-        return; 
-      } 
-      else {
-        tauD = x;
+        kd = x;
       }
     }
     input = document.getElementById("setpoint_id").value; 
@@ -172,7 +150,7 @@ function removeData(chart) {
 
 
 function time_series_fn(last_y){
-    var next_y = phi*last_y + gaussian(0,standard_deviation);;// 
+    var next_y = phi*last_y + gaussian(0,0);;// 
     return next_y;
 }
 
@@ -181,29 +159,27 @@ function timed_callback() {
   let s = Math.floor((current_time - start_time)/1000.0);
   let length = chart.data.datasets[0].data.length;
 
-  if( length>0 ){
-    var y_nminus1 = chart.data.datasets[0].data[length-1]
+  if( length>1 ){
+    var y_nminus1 = chart.data.datasets[0].data[length-1];
+    var y_nminus2 = chart.data.datasets[0].data[length-2];
   } else {
-    var y_nminus1 = 0; 
+    var y_nminus1 = 0;
+    var y_nminus2 = 0;
     addData(chart, s, y_nminus1);
   }
 
   let y = time_series_fn(y_nminus1);
   errorPrev = error;
   error = y_setpoint - y ;
-  console.log("y: " + y);
-  let KI = Kc/tauI; 
-  sumForIntegral += KI*error;
-  let propInt = 1 + Kc * error + dt * sumForIntegral;
-  let u = propInt;
-  // if( u > 10 ) u = 100; 
-  // if( u < -10 ) u = -100;
+  // console.log("y: " + y);
+  sumForIntegral += kc/tauI*error;
+  let propInt = 1 + kc * error + dt * sumForIntegral;
+  // let u = propInt;
+  let u = propInt + kc * kd/dt * ( y_nminus1 - y_nminus2 );
+  if( u > 50 ) u = 50; 
+  if( u < -50 ) u = -50;
   y = y + G*u;
-
-  console.log("error: " + error);
-  console.log("setpoint: " + y_setpoint)
-  console.log("u: " + u);
-  
+  console.log(kd)
 
   addData(chart, s, y);
   if(chart.data.labels.length > 50) { removeData(chart)};
