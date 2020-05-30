@@ -1,14 +1,17 @@
 ---
-# front matter 
+# front matter
 
 layout: default
 title: Anthony Arrowood Home
---- 
+---
 
-# The Personal Website of Anthony Arrowood
+# Howdy
 
-You have reached my internet headquarters. Check out my articles [here](/Articles.html).
+Welcome to the procrastination station. Thanks for tuning in.
 
+<br>
 
+Check out my [articles](/Articles.html) or learn more [about me](/About.html). You can see more stuff I am working on [github](https://github.com/AnthonyA28). Alternatively, you can admire my abstract art shown below.
 
-<p > <br><br><br><br><img class="center-fit" src = "\assets\images\art\art1.png"></p>
+<p><br><img class="center-fit" src = "\assets\images\art\art1.png"></p>
+<p align="center">  <b>Convergence</b> by Anthony Arrowood </p>

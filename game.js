@@ -624,6 +624,7 @@ var init = function (){
         MPS[i] = (image);
 
     }
+    combineIDhorizontal(MPS[2], MPS[3], MPS[2]);
 
     let CXT_M           = CVS.getContext("2d");
     let CXT_G           = CVS.getContext("2d");
