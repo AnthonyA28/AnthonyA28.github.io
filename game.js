@@ -1,783 +1,602 @@
-/*
-global
-    getMousePos,
-    get_pixel_pos,
-    hexToRgb,
-    colorMixer,
-    rgbToHex,
-    inMap,
-    fmap,
-    findFlag,
-    fobjmap,
-    clone,
-    get_fps:
-true
-*/
-
-/*
-exported
-    gaming_mode,
-    game_keypress_fn,
-*/
-
-
 "use strict";
-var gaming_mode = true;
-var game_keypress_fn; // a global pointer to a scoped function
-
-// (function()
-/* Scoped */
-{
-
-
-var GAME_JSON; // Will resolve to that in data.js or undefined
-let P;
-let CVS; // for the Game/player
-let G_keys = [];
-let GAMEWIDTH;
-let GAMEHEIGHT;
-
-let  particles;
-let  angle;
-
-
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+};
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+};
+var _lastSprFlip, _lastSprFlip_1, _lastSprFlip_2, _carrying, _jumping, _jumpStartTime, _bullets;
+let g = new Game("Canvas");
+onkeydown = onkeyup = function (e) { g.keypress(e); };
 /****
-    Global Variables.
+ Global letiables.
  **/
-let  G_delta;
-
-let G_message;
-let G_pixPos = {};
-let flag;
-let PLAYERMAP;
-
-let player;
-let map;
-let tree1;
-let trees;
-
-let sunPos;
-let moonPos;
-let G_partMode;
-
-let backgroundImage;
-let MPS;
-
-
-
-
-var __INIT_INFO = function () {
-    var INIT_RESULT = true;
-    /* GAME_JSON was initialized from data.js it will be defined */
-    if ( document.getElementById("json") != undefined ) {
-        GAME_JSON = document.getElementById("json").value;
-        if (GAME_JSON === '' || GAME_JSON === undefined){
-            INIT_RESULT = false;
-            window.alert("ERROR: NO GAME INFORMATION! Ensure valid game information is encoded in JSON in 'data.js'");
-            return INIT_RESULT;
-        }
-    }
-
-    /* Initialize only if the JSON info is found. */
-    P             = JSON.parse(GAME_JSON);
-    MPS = new Array(P.length);
-    CVS         = document.getElementById("Canvas");
-    GAMEWIDTH     = CVS.width;
-    GAMEHEIGHT    = CVS.height;
-    return INIT_RESULT;
+let CURMAP = 0;
+let SCALEW;
+let SCALEH;
+let PAUSED = false;
+let MAPENTITIES;
+let mousePos = {
+    x: 0,
+    y: 0,
 };
-
-
-
-var keyClicked = function(clicked){
-
-    // let y_prev =  player.y;
-    if( clicked[88] ) {
-        let x = player.x;
-        if (player.dirRight){
-            x += 13;
-        }else{
-            x -= 8;
-        }
-
-        let remainder = x%8;
-        x -= remainder;
-        remainder = player.y%8;
-        let newTree = clone(tree1);
-        newTree.x = x;
-        newTree.y = (P[map.curSpr][0].length-8)-P[newTree.curSpr][0].length;
-        if( !fobjmap(newTree.x,newTree.y-1,P[newTree.curSpr],P[map.curSpr], 1) ) {
-            newTree.map = map.curSpr;
-            TREE_reset(newTree);
-            trees.push(newTree);
-        }
-
+let GRAVITY;
+let entities = [];
+let PLR;
+/**
+ * Entity class
+ * */
+class entity {
+    constructor(x, y, baseSprite, lastSprite, flipSpeed, west = false, north = false, danger = 0, Z = 1) {
+        _lastSprFlip.set(this, void 0);
+        this.x = x;
+        this.y = y;
+        this.baseSprite = baseSprite;
+        this.lastSprite = lastSprite;
+        this.flipSpeed = flipSpeed;
+        this.west = west;
+        this.north = north;
+        this.sprite = baseSprite;
+        this.danger = danger;
+        this.Z = Z;
+        __classPrivateFieldSet(this, _lastSprFlip, Date.now());
     }
-
-    /* Handle jump */
-    if( clicked[90] && (!inMap( player.x, player.y+P[player.minSpr][0].length, P[map.curSpr], 1) ||fmap(player.x, player.y+P[player.minSpr][0].length, P[map.curSpr], 1) ||fmap(player.x+P[player.minSpr].length, player.y+P[player.minSpr][0].length, P[map.curSpr], 1))
-    ) {
-        // player.y -=5;
-        player.jump_set = 10;
-        if( G_keys[38] ){
-            player.jump_set += 10;
-        }
+    checkFlipSprite() {
+        let now = Date.now();
+        if (now - __classPrivateFieldGet(this, _lastSprFlip) < this.flipSpeed)
+            return;
+        __classPrivateFieldSet(this, _lastSprFlip, now);
+        this.sprite += 1;
+        if (this.sprite > this.lastSprite)
+            this.sprite = this.baseSprite;
     }
-
-
-
-    /* Enter door if up button is clicked */
-    if( clicked[38] ){
-
-        if( fobjmap(player.x, player.y,P[player.minSpr], P[map.curSpr], 3)  ) {
-            /* Enterng Right Door*/
-            map.curSpr += 1;
-            let posDoor = findFlag(2,P[map.curSpr] );
-            player.x = posDoor.x;
-            player.y = posDoor.y;
-            draw_M();
-
-        }else if (fobjmap(player.x, player.y,P[player.minSpr], P[map.curSpr], 2)) {
-            /* Entering Left Door */
-            map.curSpr -= 1;
-            let posDoor = findFlag(3,P[map.curSpr] );
-            player.x = posDoor.x;
-            player.y = posDoor.y;
-            draw_M();
-        }
-
+    update() {
+        this.checkFlipSprite();
     }
-    draw_M();
-
-};
-
-
-
-var iter_spr = function (time_now, obj){
-    if( ! obj.iter ) {
-        obj.curSpr = obj.minSpr;
+    draw() {
+        draw_image(g.CVS, SPRIMAGES[this.sprite], SCALEW, SCALEH, this.x, this.y, 0, this.west, this.north);
+    }
+    ;
+    checkEntitiesCollision() {
+        let thisEastBorder = this.x + SPRIMAGES[this.baseSprite].width;
+        let thisWestBorder = this.x;
+        let thisNorthBorder = this.y;
+        let thisSouthBorder = this.y + SPRIMAGES[this.baseSprite].height;
+        for (let index = 0; index < entities.length; index++) {
+            if (entities[index] == this)
+                continue;
+            if (this.Z > entities[index].Z)
+                continue;
+            let otherEastBorder = entities[index].x + SPRIMAGES[entities[index].baseSprite].width;
+            let otherWestBorder = entities[index].x;
+            let otherNorthBorder = entities[index].y;
+            let otherSouthBorder = entities[index].y + SPRIMAGES[entities[index].baseSprite].height;
+            if (thisSouthBorder < otherNorthBorder) {
+                continue;
+            }
+            if (thisNorthBorder > otherSouthBorder) {
+                continue;
+            }
+            if (thisEastBorder < otherWestBorder) {
+                continue;
+            }
+            if (thisWestBorder > otherEastBorder) {
+                continue;
+            }
+            return index;
+        }
+        return -1;
+    }
+}
+_lastSprFlip = new WeakMap();
+class movable extends entity {
+    constructor(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, Z, weight, speed, stillSprite, moveFn) {
+        super(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, Z);
+        _lastSprFlip_1.set(this, void 0);
+        this.baseSprite = baseSprite;
+        this.lastSprite = lastSprite;
+        this.flipSpeed = flipSpeed;
+        this.west = west;
+        this.north = north;
+        this.weight = weight;
+        this.speed = speed;
+        this.stillSprite = stillSprite;
+        this.sprite = baseSprite;
+        this.moveFn = moveFn;
+        this.moving = false;
+        this.falling = false;
+        __classPrivateFieldSet(this, _lastSprFlip_1, Date.now());
+    }
+    assesGravity() {
+        /* Gravity  */
+        let movement = this.weight * GRAVITY;
+        this.moveNorthSouth(movement);
         return;
     }
-    if( time_now - obj.lastDraw > obj.dtIter ){
-        obj.lastDraw = time_now;
-        obj.curSpr += 1;
-        if ( obj.curSpr > obj.maxSpr ) {
-            obj.curSpr = obj.minSpr;
+    moveNorthSouth(amount = this.speed) {
+        let prevY;
+        let delta = 1;
+        this.north = false;
+        if (amount < 0) {
+            delta = -1;
+            this.north = true;
         }
-        // obj.curSpr;
-        return;
-    }
-    return;
-};
-
-
-let keysPrev = [];
-var game_keypress_fn = function (e) {
-    e = e || event; // to deal with IE
-    G_keys[e.keyCode] = e.type == 'keydown';
-    let k;
-    let keysClicked = [];
-    for(k=0; k < G_keys.length; k ++ ){
-        keysClicked[k] = ( (G_keys[k] != keysPrev[k]) && ( G_keys[k] ) );
-        keysPrev[k]    = G_keys[k];
-        // keysClicked[e.keyCode] = ( (keys[e.keyCode] != keysPrev[e.keyCode]) ) && ( keys[e.keyCode] ) ;
-    }
-    keyClicked(keysClicked);
-};
-
-
-
-var reset_PARTICLES = function () {
-
-    let W = GAMEWIDTH;
-    let H = GAMEHEIGHT;
-    let mp = 100; //max particles
-    particles = [];
-    for (var i = 0; i < mp; i++) {
-        particles.push({
-            x: Math.random()*W, //x-coordinate
-            y: Math.random()*H, //y-coordinate
-            r: Math.random()*1+1, //radius
-            d: Math.random()*mp //density
-        });
-    }
-
-};
-
-//Function to move the_PARTICLESflakes
-//angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
-var update_PARTICLES = function () {
-    if(G_partMode == "rain"){
-        if( Math.floor(Math.random() + 0.000005)) {
-            G_partMode = "snow";
-            reset_PARTICLES();
-        }
-    } else if (G_partMode == "snow"){
-        if (Math.floor(Math.random() + 0.000005)) {
-            G_partMode = "";
-            reset_PARTICLES();
-        }
-    }else if (G_partMode === "") {
-        if(Math.floor(Math.random() + 0.000005)) {
-            G_partMode = "rain";
-            reset_PARTICLES();
-        }
-        return;
-    }
-    let W = GAMEWIDTH;
-    let H = GAMEHEIGHT;
-    angle += 0.005;
-    for(let i = 0; i < particles.length; i++) {
-        let p = particles[i];
-        //Updating X and Y coordinates
-        //We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
-        //Every particle has its own density which can be used to make the downward movement different for each flake
-        //Lets make it more random by adding in the radius
-
-        if( G_partMode == "rain" ) {
-            p.y += Math.cos(angle+p.d)*0.1 + 4*p.r;
-        }else {
-            p.y += Math.cos(angle+p.d) + 0.8 + p.r/2;
-        }
-
-        if( G_partMode == "rain"){
-            p.x += Math.sin(angle)*0.005 ;
-        }else {
-            p.x += Math.sin(angle)*1.5 ;
-        }
-
-
-        //Sending flakes back from the top when it exits
-        //Lets make it a bit more organic and let flakes enter from the left and right also.
-        if(p.x > W+5 || p.x < -5 || p.y > H) {
-            if(i%3 > 0) {//66.67% of the flakes
-                particles[i] = {x: Math.random()*W, y: -10, r: p.r, d: p.d};
-            }else{
-                //If the flake is exitting from the right
-                if(Math.sin(angle) > 0){ //Enter from the left
-                    particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
-                }else{//Enter from the right
-                    particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
+        this.falling = true;
+        for (let dy = 0; dy < Math.abs(amount); dy++) {
+            prevY = this.y;
+            this.y += delta;
+            if (this.north) {
+                if (this.NorthCollis() || this.checkEntitiesCollision() >= 0) {
+                    this.y = prevY;
+                    this.falling = false;
+                    return false;
+                }
+            }
+            else {
+                if (this.SouthCollis() || this.checkEntitiesCollision() >= 0) {
+                    this.y = prevY;
+                    this.falling = false;
+                    return false;
                 }
             }
         }
+        return true;
     }
-    //animation loop
-    // setInterval(draw, 33);
-};
-
-
-var TREE_reset = function (tree1){
-    tree1.curSpr   = tree1.minSpr;
-    tree1.interval = setInterval(
-        function (tree1) {
-             if( tree1.curSpr >= tree1.maxSpr ) {
-                clearInterval(tree1.interval);
+    moveEastWest(amount = this.speed) {
+        let prevX;
+        let delta = 1;
+        this.west = false;
+        if (amount < 0) {
+            delta = -1;
+            this.west = true;
+        }
+        this.moving = true;
+        for (let dx = 0; dx < Math.abs(amount); dx++) {
+            prevX = this.x;
+            this.x += delta;
+            if (this.west) {
+                if (this.WestCollis() || this.checkEntitiesCollision() >= 0) {
+                    this.x = prevX;
+                    this.moving = false;
+                    return false;
+                }
+            }
+            else {
+                if (this.EastCollis() || this.checkEntitiesCollision() >= 0) {
+                    this.x = prevX;
+                    this.moving = false;
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    /* Overload the base class entity  update  */
+    update() {
+        this.moveFn();
+        this.assesGravity();
+        this.checkFlipSprite();
+    }
+    EastCollis() {
+        let x = (this.x + SPRIMAGES[this.baseSprite].width);
+        for (let y = this.y; y <= (this.y + SPRIMAGES[this.baseSprite].height); y += 8) {
+            if (x >= MAPIMAGES[CURMAP].width) {
+                return true;
+            }
+            if (fmap(x / 8, y / 8, CURMAP, 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    WestCollis() {
+        let x = (this.x);
+        for (let y = this.y; y <= (this.y + SPRIMAGES[this.baseSprite].height); y += 8) {
+            if (x <= 0) {
+                return true;
+            }
+            if (fmap(x / 8, y / 8, CURMAP, 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    SouthCollis() {
+        let y = (this.y + SPRIMAGES[this.baseSprite].height);
+        for (let x = this.x; x <= (this.x + SPRIMAGES[this.baseSprite].width); x += 8) {
+            if (y >= MAPIMAGES[CURMAP].height) {
+                return true;
+            }
+            if (fmap(x / 8, y / 8, CURMAP, 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    ;
+    NorthCollis() {
+        let y = (this.y);
+        for (let x = this.x; x <= (this.x + SPRIMAGES[this.baseSprite].width); x += 8) {
+            if (y <= 0) {
+                return true;
+            }
+            if (fmap(x / 8, y / 8, CURMAP, 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    checkFlipSprite() {
+        if (!this.moving) {
+            this.sprite = this.stillSprite;
+            return;
+        }
+        super.checkFlipSprite();
+    }
+}
+_lastSprFlip_1 = new WeakMap();
+/***
+ * player class
+ * */
+class player extends movable {
+    constructor(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, Z, /*  Entity object arguments  */ weight, speed, stillSprite, moveFn, /*  Movable object arguments  */ keyNorth, keySouth, keyEast, keyWest, keyAction1, keyAction2, carrySprite, shootSprite, jumpFrames /*  player object argument  */) {
+        super(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, Z, weight, speed, stillSprite, moveFn);
+        _lastSprFlip_2.set(this, void 0);
+        _carrying.set(this, void 0);
+        _jumping.set(this, void 0);
+        _jumpStartTime.set(this, void 0);
+        _bullets.set(this, void 0);
+        this.sprite = baseSprite;
+        this.moving = false;
+        this.keyNorth = keyNorth;
+        this.keySouth = keySouth;
+        this.keyEast = keyEast;
+        this.keyWest = keyWest;
+        this.keyAction1 = keyAction1;
+        this.keyAction2 = keyAction2;
+        this.carrySprite = carrySprite;
+        this.shootSprite = shootSprite;
+        this.jumpFrames = jumpFrames;
+        __classPrivateFieldSet(this, _jumping, 0);
+        __classPrivateFieldSet(this, _jumpStartTime, 0);
+        __classPrivateFieldSet(this, _carrying, -1);
+        __classPrivateFieldSet(this, _lastSprFlip_2, Date.now());
+        __classPrivateFieldSet(this, _bullets, []);
+    }
+    /* Overload the base class movable  update  */
+    update() {
+        let e = this.checkEntitiesCollision();
+        if ((e >= 0 && entities[e].danger > 3) ||
+            fmap(this.x / 8, this.y / 8, CURMAP, 3) ||
+            fmap((this.x + SPRIMAGES[this.baseSprite].width) / 8, this.y / 8, CURMAP, 3) ||
+            fmap(this.x / 8, (this.y + SPRIMAGES[this.baseSprite].height) / 8, CURMAP, 3) ||
+            fmap((this.x + SPRIMAGES[this.baseSprite].width) / 8, (this.y + SPRIMAGES[this.baseSprite].height) / 8, CURMAP, 3)) {
+            entities = [];
+            g.start();
+            return;
+        }
+        if (fmap(this.x / 8, this.y / 8, CURMAP, 2) && this.weight > 0) {
+            this.weight = -1 * this.weight;
+            this.north = true;
+        }
+        else if (!fmap(this.x / 8, this.y / 8, CURMAP, 2) && this.weight < 0) {
+            this.weight = -1 * this.weight;
+            this.north = false;
+        }
+        if (this.x + SPRIMAGES[this.baseSprite].width >= 511) {
+            CURMAP += 1;
+            this.x = 1;
+            __classPrivateFieldSet(this, _bullets, []);
+            entities = MAPENTITIES[CURMAP];
+        }
+        if (__classPrivateFieldGet(this, _jumping) > 0) {
+            let max = 0.1; // representative of the amplitude of this
+            if (GRAVITY < 0)
+                max *= -1;
+            let jumpOffset = max * (__classPrivateFieldGet(this, _jumping));
+            console.log("JumpOffset: " + jumpOffset);
+            this.moveNorthSouth(-jumpOffset);
+            // this.moveNorthSouth(-5);
+            __classPrivateFieldSet(this, _jumping, __classPrivateFieldGet(this, _jumping) - 1);
+        }
+        else {
+            // this.#jumping = false;
+        }
+        this.checkInput();
+        super.update();
+    }
+    jump() {
+        if (__classPrivateFieldGet(this, _jumping)) {
+            return;
+        }
+        __classPrivateFieldSet(this, _jumping, this.jumpFrames);
+    }
+    shoot() {
+        let moveFn = function () {
+            if (!this.moveEastWest(this.speed) && this.weight == 0) {
+                this.speed = 0;
+                this.weight = 1;
+                this.startKillTime = Date.now();
+                this.Z = 3;
+            }
+            if (this.weight != 0) {
+                this.moving = false;
+            }
+        };
+        let xPos = this.x;
+        let yPos = this.y;
+        let speed = 4;
+        if (GRAVITY < 0) {
+            yPos += 12;
+        }
+        else {
+            yPos += 4;
+        }
+        if (this.west) {
+            xPos -= (1 + 8);
+            speed *= -1;
+        }
+        else {
+            xPos += SPRIMAGES[this.baseSprite].width + 1;
+        }
+        let e = new movable(xPos, yPos, 113, 115, 500, false, false, 1, 2, 0, speed, 116, moveFn);
+        __classPrivateFieldGet(this, _bullets).push(e);
+        if (__classPrivateFieldGet(this, _bullets).length > 2) {
+            let index = entities.indexOf(__classPrivateFieldGet(this, _bullets)[0]);
+            if (index >= 0)
+                entities.splice(index, 1);
+            __classPrivateFieldGet(this, _bullets).splice(0, 1);
+        }
+        entities.push(e);
+    }
+    keyClicked(key) {
+        if (key[this.keyNorth]) {
+            let tmpY = this.y;
+            if (GRAVITY < 0)
+                this.y -= 1;
+            else
+                this.y += 1;
+            if (this.SouthCollis() || this.checkEntitiesCollision() >= 0 || (GRAVITY < 0 && this.NorthCollis())) {
+                this.jump();
+            }
+            this.y = tmpY;
+        }
+        if (key[this.keyAction2]) {
+            GRAVITY *= -1;
+        }
+        /* Shooting disabled  */
+        if (key[this.keyAction1]) {
+            this.shoot();
+        }
+    }
+    checkInput() {
+        this.moving = false;
+        if (g.keysDown[this.keyEast]) {
+            this.moveEastWest(this.speed);
+        }
+        if (g.keysDown[this.keyWest]) {
+            this.moveEastWest(-this.speed);
+        }
+        let prevX = this.x;
+        if (this.west) {
+            this.x -= 8; //todo #p3 fix this being hardcoded
+        }
+        else {
+            this.x += 8; //todo #p3 fix this being hardcoded
+        }
+        let e = this.checkEntitiesCollision();
+        this.x = prevX;
+    }
+    /**
+     * Overloads the super checkFlipSprite
+     * */
+    checkFlipSprite() {
+        if (!this.moving) {
+            /*  Only do actions if not moving  */
+            if (g.keysDown[this.keyAction1]) {
+                this.sprite = this.carrySprite;
                 return;
             }
-            tree1.curSpr += 1;
+            if (g.keysDown[this.keyAction2]) {
+                this.sprite = this.shootSprite;
+                return;
+            }
+        }
+        super.checkFlipSprite();
+    }
+}
+_lastSprFlip_2 = new WeakMap(), _carrying = new WeakMap(), _jumping = new WeakMap(), _jumpStartTime = new WeakMap(), _bullets = new WeakMap();
+function addMovable(x = undefined, y = undefined, baseSprite = 101, lastSprite = 101, flipSpeed = Infinity, gravity = 0, speed = 0, danger = 0) {
+    if (x == undefined) {
+        x = Math.random() * 512;
+    }
+    if (y == undefined) {
+        y = Math.random() * 512 / 2;
+    }
+    let moveFn = function () {
+        if (!this.moveEastWest(this.speed)) {
+            this.speed *= -0.9;
             return;
-    },
-    tree1.growthRate, tree1);
-};
-
-
-
-
-var draw_BG = function (){
-    let cxt = CVS.getContext("2d");
-    // cxt.clearRect(0,0,GAMEWIDTH, GAMEHEIGHT);
-    // cxt.beginPath();
-    // cxt.rect(0, 0, GAMEWIDTH, GAMEHEIGHT);
-    sunPos -= G_delta/40;
-    moonPos -= G_delta/40;
-    // sunPos -= G_delta;
-    // moonPos -= G_delta;
-
-    if(sunPos < -GAMEHEIGHT *4) sunPos = 4*GAMEHEIGHT ;
-    let grd = cxt.createRadialGradient(GAMEWIDTH/2+sunPos/4,GAMEHEIGHT+sunPos,30,GAMEWIDTH/2+sunPos/4,GAMEHEIGHT+sunPos,300);
-    grd.addColorStop(0,"#db821d");
-
-    let rgba = hexToRgb("#ffb5b5");
-    let rgbb = hexToRgb("#5c8b93");
-    let mixLevel = 1-Math.abs((sunPos/(GAMEHEIGHT*1.5)));
-    mixLevel = (mixLevel > 0.4 ) ? 0.4 : mixLevel;
-    mixLevel = (mixLevel < 0 ) ? 0 : mixLevel;
-    let mixed = colorMixer(rgba, rgbb, mixLevel);
-    mixed = rgbToHex(mixed[0], mixed[1], mixed[2]);
-    grd.addColorStop(1,mixed);
-    cxt.fillStyle = grd;
-    cxt.fillRect(0, 0, GAMEWIDTH, GAMEHEIGHT);
-
-    if( moonPos < -GAMEHEIGHT *4) moonPos = 4*GAMEHEIGHT ;
-    if ( sunPos > GAMEHEIGHT*2 || sunPos < -2*GAMEHEIGHT ){
-        grd = cxt.createRadialGradient(GAMEWIDTH/2+moonPos,GAMEHEIGHT/2+moonPos,5,GAMEWIDTH/2+moonPos,GAMEHEIGHT/2+moonPos,30);
-        grd.addColorStop(0,"#FFFFFF");
-
-        let rgba = hexToRgb("#000000");
-        let rgbb = hexToRgb("#5c8b93");
-        let mixLevel = 1-Math.abs((moonPos/(GAMEHEIGHT*1.5)));
-        mixLevel = (mixLevel > 0.4 ) ? 0.4 : mixLevel;
-        mixLevel = (mixLevel < 0 ) ? 0 : mixLevel;
-        let mixed = colorMixer(rgba, rgbb, mixLevel);
-        mixed = rgbToHex(mixed[0], mixed[1], mixed[2]);
-        grd.addColorStop(1,mixed);
-        cxt.fillStyle = grd;
-        cxt.fillRect(0, 0, GAMEWIDTH, GAMEHEIGHT);
-
-    }
-
-    /* Draw_PARTICLES */
-    update_PARTICLES();
-    if( G_partMode == "rain" ) {
-        cxt = CVS.getContext("2d");
-        cxt.fillStyle = "rgba(206, 236, 240, 0.5)";
-    } else if (G_partMode == "snow"){
-        cxt.fillStyle = "rgba(255, 255, 255, 0.8)";
-    } else {
-        return;
-    }
-
-    cxt.beginPath();
-    for(let i = 0; i < particles.length; i++) {
-        let p = particles[i];
-        cxt.moveTo(p.x, p.y);
-        cxt.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
-    }
-    cxt.fill();
-
-
-};
-
-function mirrorImage(ctx, image, x = 0, y = 0, horizontal = false, vertical = false){
-    ctx.save();  // save the current canvas state
-    ctx.setTransform(
-        horizontal ? -1 : 1, 0, // set the direction of x axis
-        0, vertical ? -1 : 1,   // set the direction of y axis
-        x + horizontal ? image.width : 0, // set the x origin
-        y + vertical ? image.height : 0   // set the y origin
-    );
-    ctx.drawImage(image,0,0);
-    ctx.restore(); // restore the state as it was when this function was called
+        }
+        this.moving = true;
+    };
+    let e = new movable(x, y, baseSprite, lastSprite, flipSpeed, false, false, danger, 3, gravity, speed, baseSprite, moveFn);
+    entities.push(e);
+    return entities.length - 1;
 }
-
-var draw_G = function () {
-    let cxt = CVS.getContext("2d");
-
-    var newCanvas = document.getElementById("Canvas_tmp");
-
-
-
-    newCanvas.getContext("2d").clearRect(0,0,newCanvas.width, newCanvas.height);
-
-    cxt.font = '12pt Calibri';
-    cxt.fillStyle = 'black';
-    cxt.fillText(G_message, 2, 12);
-    G_message = '';
-
-
-    cxt = CVS.getContext("2d");
-    newCanvas.getContext("2d").clearRect(0,0,newCanvas.width, newCanvas.height);
-    cxt.save();
-    cxt.scale(Math.floor(CVS.width/MPS[map.curSpr].width),Math.floor(CVS.height/MPS[map.curSpr].height));
-    let t=0;
-    for(; t<trees.length; t++){
-        if( trees[t].map == map.curSpr){
-            newCanvas.getContext("2d").putImageData(MPS[trees[t].curSpr], trees[t].x, trees[t].y);
-
-        }
-    }
-    cxt.drawImage(newCanvas,  0, 0);
-    cxt.restore();
-
-    cxt.save();
-    cxt.scale(Math.floor(CVS.width/MPS[map.curSpr].width),Math.floor(CVS.height/MPS[map.curSpr].height));
-    newCanvas.getContext("2d").putImageData(MPS[player.curSpr], MPS[map.curSpr].width/2, player.y);
-    cxt.drawImage(newCanvas,  0, 0);
-    cxt.restore();
-
-
-
-
-};
-
-
-function export_json_stamp_to_ppm(json){
-    let x,y;
-    let text = "P3\n"
-    text += "# PXMP STAMPED GAMEINFO in P3 format.\n"
-    text += json.length + " " + json[0].length + "\n" ; // width and height
-    text += "255\n";
-
-    for(y =0; y < json[0].length; y ++ ){
-        for(x =0; x < json.length; x ++ ){
-            let rgb = ((json[x][y][0]));
-            rgb = rgb.toString();
-            // console.log(rgb);
-            if( rgb.includes('-') ){
-                text += "-1\n-1\n-1\n";
-            } else {
-                let num = parseInt(rgb.substring(0,2),16);
-                text +=  fmtNumLen(num, 3) + "\n"
-                num = parseInt(rgb.substring(2,4),16);
-                text +=  fmtNumLen(num, 3) + "\n"
-                num = parseInt(rgb.substring(4,6),16);
-                text +=  fmtNumLen(num, 3) + "\n"
-
-            }
-        }
-
-    }
-    return text;
-}
-
-
-function scaleImageData(imageData, scale, ctx) {
-    var scaled = ctx.createImageData(imageData.width * scale, imageData.height * scale);
-    var subLine = ctx.createImageData(scale, 1).data
-    for (var row = 0; row < imageData.height; row++) {
-        for (var col = 0; col < imageData.width; col++) {
-            var sourcePixel = imageData.data.subarray(
-                (row * imageData.width + col) * 4,
-                (row * imageData.width + col) * 4 + 4
-            );
-            for (var x = 0; x < scale; x++) subLine.set(sourcePixel, x*4)
-            for (var y = 0; y < scale; y++) {
-                var destRow = row * scale + y;
-                var destCol = col * scale;
-                scaled.data.set(subLine, (destRow * scaled.width + destCol) * 4)
-            }
-        }
-    }
-
-    return scaled;
-}
-
-
-
-
-
-function PPM_to_ImageData(value, canvas){
-
-    let lines = value.split("\n");
-
-    if( lines[0].includes("p3") || lines[0].includes("P3") ){
-        /*Importing a ppm file */
-        console.log("Importing p3 ppm file.");
-
-        let n = 1;
-        while( lines[n].includes("#") ) {
-            console.log(lines[n]);
-            n ++;
-        }
-        let cols = parseInt(lines[n].split(" ")[0]);
-        let rows = parseInt(lines[n].split(" ")[1]);
-
-        let cxt = canvas.getContext("2d");
-        var image = cxt.createImageData(cols, rows);
-
-        n++;
-        let maxInt = parseInt(lines[n]);
-        n++;
-
-
-        let y, x, str;
-        console.log( rows + " pix Horizontal , " + cols + " pix Vertical");
-        // let newMap = [];
-        let index = 0;
-        let imageData = new Uint8ClampedArray(rows*cols*4);
-        for(y =0; y < rows; y ++ ){
-            for(x =0; x < cols; x ++ ){
-                if(lines[n]=="-1"){
-                    imageData[index] = 0;
-                    imageData[index+1] = 0;
-                    imageData[index+2] = 0;
-                    imageData[index+3] = 0;
-                    index+=4;
-                    n+= 3;
-                    continue;
+g.pre_parse = function () {
+    MAPENTITIES = [];
+    for (let map = 0; map < MAPS.length; map++) {
+        entities = [];
+        let x = 0;
+        let y = 0;
+        for (y = 0; y < MAPS[map].length; y++) {
+            for (x = 0; x < MAPS[map][0].length; x++) {
+                if (MAPS[map][y][x] == 10) {
+                    addMovable(x * 8, y * 8, 10, 10, Infinity, 1, 0, 4);
+                    MAPS[map][y][x] = 254;
                 }
-                let r = parseInt(lines[n]);
-                imageData[index] = r;
-                n ++; index++;
-                let g = parseInt(lines[n]);
-                imageData[index] = g;
-                n ++; index++;
-                let b = parseInt(lines[n]);
-                imageData[index] = b;
-                n++; index++;
-                imageData[index] = 255; //alpha
-                index++;
-                // let rgb = {r: r, g: g, b: b};
-                // newMap.push(rgb);
-                // console.log(rgb);
+                if (MAPS[map][y][x] == 102) {
+                    addMovable(x * 8, y * 8, 102, 110, 100, 1, 0.5, 4);
+                    MAPS[map][y][x] = 254;
+                }
+                if (MAPS[map][y][x] == 5) {
+                    addMovable(x * 8, y * 8, 5, 6, 100, 1, 0.5, 4);
+                    MAPS[map][y][x] = 254;
+                }
+                if (MAPS[map][y][x] == 0) {
+                    addMovable(x * 8, y * 8, 0, 4, 50, 0, 2, 0);
+                    MAPS[map][y][x] = 254;
+                }
+                if (MAPS[map][y][x] == 11) {
+                    addMovable(x * 8, y * 8, 11, 13, 100, 1, 0.5, 4);
+                    MAPS[map][y][x] = 254;
+                }
+                if (MAPS[map][y][x] == 14) {
+                    let e = addMovable(x * 8, y * 8, 14, 16, 100, 1, 0.5, 4);
+                    entities[e].moveFn = function () {
+                        if (!this.moveEastWest(this.speed)) {
+                            this.speed *= -1;
+                            return;
+                        }
+                        this.moving = true;
+                        if (GRAVITY < 0) {
+                            this.weight = -1 * Math.abs(this.weight);
+                        }
+                        else if (GRAVITY > 0) {
+                            this.weight = Math.abs(this.weight);
+                        }
+                    };
+                    MAPS[map][y][x] = 254;
+                }
+                if (MAPS[map][y][x] == 17) {
+                    let e = addMovable(x * 8, y * 8, 17, 19, 100, 1, 0.5, 4);
+                    entities[e].moveFn = function () {
+                        if (!this.moveEastWest(this.speed)) {
+                            this.speed *= -1;
+                            return;
+                        }
+                        this.moving = true;
+                        if (GRAVITY < 0) {
+                            this.weight = Math.abs(this.weight);
+                        }
+                        else if (GRAVITY > 0) {
+                            this.weight = -1 * Math.abs(this.weight);
+                        }
+                    };
+                    MAPS[map][y][x] = 254;
+                }
+                if (MAPS[map][y][x] == 20) {
+                    let e = addMovable(x * 8, y * 8, 20, 22, 100, -1, 0.5, 4);
+                    MAPS[map][y][x] = 254;
+                }
+                if (MAPS[map][y][x] == 9) {
+                    addMovable(x * 8, y * 8, 9, 9, Infinity, 1, 0, 4);
+                    MAPS[map][y][x] = 254;
+                }
             }
         }
-
-        image.data.set(imageData);
-        // image = scaleImageData(image, Math.floor(canvas.width/image.width) , cxt);
-        // scaled = CXT.createImageData(cols*4, rows*4);
-        // scaled.data.set(image.data);
-
-        return image;
+        MAPENTITIES.push(entities);
     }
-}
-
-
-var draw_M = function () {
-    let cxt = CVS.getContext("2d");
-    // cxt.clearRect(0,0,GAMEWIDTH, GAMEHEIGHT);
-
-    // cxt.putImageData(backgroundImage, 0, 0);
-
-    cxt.save();
-    var newCanvas = document.getElementById("Canvas_tmp");
-    newCanvas.getContext("2d").putImageData(MPS[map.curSpr], 0, 0);
-    cxt.scale(Math.floor(CVS.width/MPS[map.curSpr].width),Math.floor(CVS.height/MPS[map.curSpr].height));
-    cxt.drawImage(newCanvas,30-player.x,0);
-    newCanvas.getContext("2d").clearRect(0,0,MPS[map.curSpr].width, MPS[map.curSpr].height);
-    cxt.restore();
-
-
-
 };
-
-
-
-var init = function (){
-
-    /****
-    Global Variables.
- **/
-    angle = 0;
-    G_message   = "";
-    if( Math.floor(Math.random() + 0.33) ) {
-        G_partMode = "rain";
-    } else if ( Math.floor(Math.random() + 0.5)){
-        G_partMode = "snow";
-    } else {
-        G_partMode = "";
-    }
-
-
-    map = {
-        curSpr: 2,
-    };
-
-    flag        = 0;
-
-    sunPos=0;
-    moonPos=GAMEHEIGHT*4;
-
-    player = {
-        curSpr: 97,
-        minSpr: 97,
-        maxSpr: 100,
-        upSpr: 101,
-        downSpr: 102,
-        jumpSpr: 101,
-        dtIter: 100,
-        lastDraw: 0,
-        dirRight: false,
-        iter: true,
-        x:30,
-        y:100,
-        jump_set: 0,
-        air:  function() {
-
-            if( player.jump_set > 0){
-                player.y -= 1;
-                player.jump_set -=1;
-                return true;
-            } else {
-                player.y +=1;
-                return false;
-            }
+g.init = function () {
+    console.log("initializeing g");
+    GRAVITY = 4;
+    CURMAP = 0;
+    entities = MAPENTITIES[CURMAP];
+    SCALEW = Math.floor(g.CVS.width / MAPIMAGES[0].width);
+    SCALEH = Math.floor(g.CVS.height / MAPIMAGES[0].height);
+    {
+        let x = 10;
+        let y = 100;
+        let baseSprite = 102;
+        let lastSprite = 109;
+        let flipSpeed = 45;
+        let west = false;
+        let north = false;
+        let danger = 0;
+        let weight = 1;
+        let speed = 1;
+        let stillSprite = 101;
+        let keyNorth = 38;
+        let keySouth = 40;
+        let keyEast = 39;
+        let keyWest = 37;
+        let keyAction1 = 88;
+        let keyAction2 = 90;
+        let carrySprite = 111;
+        let shootSprite = 112;
+        let jumpFrames = 50;
+        let moveFn = function () { };
+        PLR = {};
+        PLR = new player(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, 1, weight, speed, stillSprite, moveFn, keyNorth, keySouth, keyEast, keyWest, keyAction1, keyAction2, carrySprite, shootSprite, jumpFrames);
+        for (let i = 0; i < MAPENTITIES.length; i++) {
+            MAPENTITIES[i].push(PLR);
         }
-    };
-
-    trees = [];
-    tree1 = {
-        t_start:0,
-        curSpr: 207,
-        minSpr:207,
-        maxSpr:210,
-        map: 500,
-        x: 50,
-        y: 100,
-        growthRate: 2000,
-    };
-    TREE_reset(tree1);
-    trees.push(tree1);
-
-    reset_PARTICLES();
-
-
-    let i =0;
-    let ppm;
-    let image;
-    for(; i < P.length; i ++ ){
-        if( P[i].length == 1 && P[i][0].length == 1 || P[i][0].length < 1 || P[i].length < 1) continue;
-        console.log(i);
-        ppm = export_json_stamp_to_ppm(P[i], 2)
-        image = PPM_to_ImageData(ppm, CVS );
-        MPS[i] = (image);
-
+        // entities.push(PLR);
     }
-    combineIDhorizontal(MPS[2], MPS[3], MPS[2]);
-
-    let CXT_M           = CVS.getContext("2d");
-    let CXT_G           = CVS.getContext("2d");
-    let CXT_G2           = CVS.getContext("2d");
-    let CXT_BG           = CVS.getContext("2d");
-
-    CXT_M.webkitImageSmoothingEnabled = false;
-    CXT_M.mozImageSmoothingEnabled = false;
-    CXT_M.imageSmoothingEnabled = false;
-    CXT_G.webkitImageSmoothingEnabled = false;
-    CXT_G.mozImageSmoothingEnabled = false;
-    CXT_G.imageSmoothingEnabled = false;
-    CXT_G2.webkitImageSmoothingEnabled = false;
-    CXT_G2.mozImageSmoothingEnabled = false;
-    CXT_G2.imageSmoothingEnabled = false;
-
-    CXT_BG.webkitImageSmoothingEnabled = false;
-    CXT_BG.mozImageSmoothingEnabled = false;
-    CXT_BG.imageSmoothingEnabled = false;
-
-
-
-    draw_M();// clear all screens
-
-    window.requestAnimationFrame(GAMELOOP);
-
-    CVS.addEventListener('mousemove', function(evt) {
-        let mousePos = getMousePos(CVS, evt);
-        G_pixPos = get_pixel_pos(mousePos, P[map.curSpr], CVS.width, CVS.height);
-    }, false);
-
-
 };
-
-
-
-
-
-/***
-    The main drawing function.
-    Called at each refresh.
-    Use it to draw all the relavent maps and sprites.
-*/
-var __draw = function() {
-    draw_BG();
-    draw_M();
-    draw_G();
+g.draw = function () {
+    G_TMPCTX.clearRect(0, 0, G_TMPCVS.width, G_TMPCVS.height);
+    g.CTX.clearRect(0, 0, g.CVS.width, g.CVS.height);
+    draw_image(g.CVS, MAPIMAGES[CURMAP]);
+    for (let index = 0; index < entities.length; index++) {
+        entities[index].draw();
+    }
+    let fps = get_fps();
+    let info = PLR.x + ", " + PLR.y + "; " + PLR.weight + "  FPS: " + fps;
+    info += "pixel Pos = (" + mousePos.x + ", " + mousePos.y + "); ";
+    draw_text_info(g.CVS, 510, info);
+    // draw_text_info(g.CVS, 510, info);
 };
-
-/***
-    The main action function.
-    All that should have occured between time_now and time_now - G_delta
-    should be placed here.
-*/
-let time_prev=0;
-var __update = function(time_now){
-    G_delta = time_now - time_prev;
-    time_prev = time_now;
-
-    /* If player goes out of map bounds towards right . */
-    if( player.x+P[player.minSpr].length >= P[map.curSpr].length && G_keys[39]) {
-        map.curSpr += 1;
-        player.x = 2;
-        draw_M();
+g.update = function () {
+    if (PAUSED)
         return;
+    for (let index = 0; index < entities.length; index++) {
+        let x = entities[index].x;
+        let y = entities[index].y;
+        entities[index].update();
     }
-    /* If player goes out of map bounds towards left . */
-    if( player.x <= 0 && G_keys[37]) {
-        map.curSpr -= 1;
-        player.x = P[map.curSpr].length-6-2;
-        draw_M();
-        return;
+};
+g.keyClicked = function (keys) {
+    for (let index = 0; index < entities.length; index++) {
+        let x = entities[index].x;
+        let y = entities[index].y;
+        // Call keyclicked for whichever entity has a keclicked function
+        (entities[index].keyClicked && entities[index].keyClicked(keys));
     }
-
-
-
-    /* Handle movement from keyboard */
-    const x_prev = player.x;
-    // const y_prev = player.y;
-    if ( G_keys[39] && !G_keys[38] && !G_keys[40]) {// right arrow: 39
-        player.x += 1;
-        player.dirRight = true;
-        iter_spr(time_now, player);
-
-    } else if ( G_keys[37] && !G_keys[38] && !G_keys[40]) { // left arrow: 37
-        player.x -= 1;
-        player.dirRight = false;
-        iter_spr(time_now, player);
-
-    } else {
-        player.curSpr = player.minSpr;
-    }
-
-    /* Check map bounds and if player is on a solid surface (Flag == 1) */
-    if( !inMap(player.x,player.y+P[player.minSpr][0].length-1, P[map.curSpr]) || fmap(player.x, player.y, P[map.curSpr],  1) || fmap(player.x+P[player.minSpr].length-1, player.y,P[map.curSpr],  1)) {
-        player.x = x_prev;
-        player.curSpr = player.minSpr;
-    }
-
-    if ( G_keys[38] ) { // up arrow : 38
-        player.curSpr = player.upSpr;
-    }
-    if ( G_keys[40] ) { // down arrow: 40
-        player.y += 1;
-        player.curSpr = player.downSpr;
-    }
-
-    /* Gravity */
-    if ( player.air() && !G_keys[38] && !G_keys[40]){
-        player.curSpr = player.jumpSpr;
-    }
-
-
-    let it = 0;
-    while( !inMap(player.x, player.y+P[player.minSpr][0].length-1, P[map.curSpr]) || fmap(player.x, player.y+P[player.minSpr][0].length-1, P[map.curSpr], 1) || fmap(player.x+P[player.minSpr].length-1, player.y+P[player.minSpr][0].length-1,P[map.curSpr],  1) ){
-        player.y -= 1 ;
-        it += 1;
-        if( it > 10000 ) {
-            window.console.log("Warning, character reached max iterations.");
-            break;
+    /*  Lets slow down time  */
+    if (keys[PLR.keySouth]) {
+        if (g.fps == 200) {
+            g.fps = 30;
+        }
+        else {
+            g.fps = 200;
         }
     }
-
-
-    G_message += ' t: ' + time_now + ', ' ;
-    G_message += ' Dt: ' + G_delta + '. ';
-    G_message += ' fps:' + get_fps();
-    G_message += ' PlayerPos( x:' + player.x + ', y :' + player.y + '), ';
-    G_message += ' pixPos( x: ' + G_pixPos.x + ', y: ' + G_pixPos.y + ')';
 };
-
-/***
- The callback function called every G_delta
- */
-var GAMELOOP = function (time) {
-    __update(time);
-    __draw();
-    window.requestAnimationFrame(GAMELOOP);
-};
-
-
-
-/* Press the Play Button by default*/
-document.getElementById("play_game").onclick = function() {
-    if( __INIT_INFO() ) {
-        init();
+g.start();
+// document.getElementById("play_g").dispatchEvent(new MouseEvent("click"));
+g.CVS.addEventListener('mousedown', function (evt) {
+    let absPos = getMousePos(g.CVS, evt);
+    let map = MAPS[CURMAP];
+    if (map != undefined) {
+        mousePos = get_pixel_pos_img(absPos, map, g.CVS.width, g.CVS.height);
+        addMovable(mousePos.x * 8, mousePos.y * 8, 11, 13, 100, 1, 1, 4);
     }
-};
-
-document.getElementById("play_game").dispatchEvent(new MouseEvent("click"));
-
-}//)(); /* End Game Scope */
-
-
-
-
+}, false);
+g.CVS.addEventListener('mousemove', function (evt) {
+    let absPos = getMousePos(g.CVS, evt);
+    let map = MAPS[CURMAP];
+    if (map != undefined) {
+        mousePos = get_pixel_pos_img(absPos, map, g.CVS.width, g.CVS.height);
+    }
+}, false);
+//# sourceMappingURL=game.js.map

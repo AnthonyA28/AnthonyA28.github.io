@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+
+<style type="text/css">
+
+
+
+</style>
+
+
+	<body>
+
+
+
+<!--     <form ref='uploadForm'
+      id='uploadForm'
+      action='http://localhost:8000/upload'
+      method='post'
+      encType="multipart/form-data">
+        <input type="file" name="sampleFile" />
+        <input type='submit' value='Upload!' />
+    </form>
+
+ -->
+		<div  style="text-align: center;">
+
+
+<table>
+<tbody>
+
+
+
+
+
+
+<!-- Game stuff  -->
+ <tr>
+<td>
+		<button id="play_game">Start/Restart Game </button>
+		<div style="position: relative;">
+		<canvas id="Canvas" width="1024" height="512"
+		style="position: absolute; left: 0; top: 0; z-index: 1;">
+		<canvas id="Canvas_tmp" width="1024" height="512"
+		style="position: absolute; left: 0; top: 0; z-index: 0; display: none;"></canvas>
+		</canvas>
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+
+
+
+<tr>
+<td>
+
+<canvas id="Canvas_build" width="1024" height="512" style="border:1px solid #000000;">
+Your browser does not support the HTML5 canvas tag.
+
+
+</td>
+</tr>
+</tbody>
+</table>
+
+		<br>
+<p id="info_text" value="" type="text" align="left"> </p>
+
+<table>
+<tbody>
+<tr>
+<td>
+		PixMap Number:   <input id="pixMap_num" value="0" type="number">
+		<br>
+		<button id="undo">undo</button>
+		<button id="redo">redo</button>
+		 &#160;
+		<button id="previous_map">Previous Map</button>
+		<br>
+		Color: <input id="color" class="jscolor" value="ab2567">
+
+<button id="add_color_to_pallete">Add to pallete</button>
+<select id="color_dropdown">
+
+<option value="-1">Eraser</option>
+
+
+
+</select>
+
+<button id="remove_color_from_pallete">Remove from pallete</button>
+<!-- <button id="add_map_colors_to_pallete">Add all map colors to pallete</button> -->
+
+		<br>
+		<button id="reset_map">Reset Map</button>
+		<br>
+		Width: <input id="width" value="1">
+		<br>
+		<br>
+		Overlay Previous: <input type="checkbox" id="overlay_previous"></input>
+		Overlay Next: <input type="checkbox" id="overlay_next"></input>
+		<button id="zoom">Zoom</button>
+		<button id="reset_zoom">Reset Zoom:</button>
+		<button type="checkbox" id="swap_color" >Swap all instances of Color</button>
+		New: <input id="new_color" value="-1"></input>
+
+</td>
+<td>
+		Rectangle Mode: <input type="checkbox" id="rectangle">
+
+		<button id="fill_rectangle"> Fill Rectangle</button>
+		<br>
+		<button id="copy">Copy Rectanlge</button>
+		<button id="copy_map">Copy This Map</button>
+		<br>
+		Stamp: <input type="checkbox" id="stamp">
+		Flip Horiz: <input type="checkbox" id="stamp_flip_horiz">
+		Flip Vert: <input type="checkbox" id="stamp_flip_vert">
+		<br>
+		<button id="stamp_map">Stamp Map Number: </button>
+		<input id="copy_map_num" value="0" type="number">
+		<br>
+		Show Grid: <input type="checkbox" id="show_grid" checked="checked">
+		<br>
+		mirror horiz: <input type="checkbox" id="mirror_horiz" >
+		mirror vert: <input type="checkbox" id="mirror_vert" >
+		<br>
+		Dropper: <input type="checkbox" id="dropper">
+		Bucket: <input type="checkbox" id="bucket">
+		<br>
+		Flag only: <input type="checkbox" id="flag_only" >
+		Paint only: <input type="checkbox" id="paint_only" checked="checked">
+		<br>
+		Flags: &#160;
+			<sup>1</sup><input type="checkbox" id="F0">
+			<sup>2</sup><input type="checkbox" id="F1">
+			<sup>3</sup><input type="checkbox" id="F2">
+			<sup>4</sup><input type="checkbox" id="F3">
+			<sup>5</sup><input type="checkbox" id="F4">
+			<sup>6</sup><input type="checkbox" id="F5">
+			<sup>7</sup><input type="checkbox" id="F6">
+			<sup>8</sup><input type="checkbox" id="F7">
+			Show: <input type="checkbox" id="show_flags">
+		<br>
+
+</td>
+<td>
+		<button id="resize">Resize</button>
+		x:   <input id="resize_x" value="8">
+		y:   <input id="resize_y" value="8">
+		<br>
+		<button id="insert_map">Insert New PixMap Here</button>
+		<button id="remove_map">Remove This PixMap</button>
+		<br>
+
+
+
+		<button id="download_GAME">Download Game as .js variable</button>
+		<button id="download_map_as_PPM">Download MAP as PPM file</button>
+		<!-- <button id="upload">Upload</button> -->
+		<br>
+		<!-- <button id="export_GAMEINFO">Export Game Info</button> -->
+		<button id="import_GAMEINFO">Import Game Info</button>
+		<button id="import_sprite">Import Map from JSON or PPM</button>
+		<!-- <button id="export">export</button> -->
+		<button id="import_pallete_hex">Import Color Pallete as list of hex codes </button>
+		<br>
+		<div align="center">
+			<input type ="file" id="upload_file">Upload JSON GAME File </input>
+		</div>
+		<br>
+		<form>
+		<!-- <form target="uploader_iframe" action="/save_json" method="post" enctype="multipart/form-data"  id="theform"> -->
+		<!-- <input  type="submit" id="save" value="Save"> -->
+		<button  type="button" id="decode"> Decode</button>
+		<button  type="button" id="save" value="Save"> save</button>
+		<textarea id="json" rows="5" cols="50" name="json"></textarea>
+
+		</form>
+	<br>
+	</div>
+
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+</body>
+<script scr="libs/external/decoder.js"></script>
+<script src="libs/init.js"> </script>
+<script src="libs/external/jscolor.js"></script>
+<script src="libs/core.js"></script>
+<script src="data.js"> </script>
+<script src="libs/builder.js"> </script>
+<script src="libs/gamecore.js"></script>
+<script src="game.js"></script>
+
+</html>

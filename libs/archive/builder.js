@@ -11,7 +11,9 @@
 {
 
 
-
+function docElem(name) {
+    return document.getElementById(name);
+}
 
 /***
     Returns the part of the map zoomed in onto.
