@@ -19,7 +19,7 @@ class Game {
         this.MAPIMAGES = [];
         this.SPRIMAGES = [];
         this.prevDraw = 0;
-        this.fps = 200;
+        this.fps = 30;
         this.now = 0;
         this.endGame = false;
         this.gameInProgress = false;

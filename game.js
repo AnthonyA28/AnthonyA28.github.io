@@ -322,7 +322,7 @@ class player extends movable {
         let moveFn = function () {
             if (!this.moveEastWest(this.speed) && this.weight == 0) {
                 this.speed = 0;
-                this.weight = 1;
+                this.weight = PLR.weight;
                 this.startKillTime = Date.now();
                 this.Z = 3;
             }
@@ -332,7 +332,7 @@ class player extends movable {
         };
         let xPos = this.x;
         let yPos = this.y;
-        let speed = 4;
+        let speed = 20;
         if (GRAVITY < 0) {
             yPos += 12;
         }
@@ -413,7 +413,7 @@ class player extends movable {
     }
 }
 _lastSprFlip_2 = new WeakMap(), _carrying = new WeakMap(), _jumping = new WeakMap(), _jumpStartTime = new WeakMap(), _bullets = new WeakMap();
-function addMovable(x = undefined, y = undefined, baseSprite = 101, lastSprite = 101, flipSpeed = Infinity, gravity = 0, speed = 0, danger = 0) {
+function addMovable(x = undefined, y = undefined, baseSprite = 101, lastSprite = 101, flipSpeed = Infinity, weight = 0, speed = 0, danger = 0) {
     if (x == undefined) {
         x = Math.random() * 512;
     }
@@ -422,12 +422,12 @@ function addMovable(x = undefined, y = undefined, baseSprite = 101, lastSprite =
     }
     let moveFn = function () {
         if (!this.moveEastWest(this.speed)) {
-            this.speed *= -0.9;
+            this.speed *= -1;
             return;
         }
         this.moving = true;
     };
-    let e = new movable(x, y, baseSprite, lastSprite, flipSpeed, false, false, danger, 3, gravity, speed, baseSprite, moveFn);
+    let e = new movable(x, y, baseSprite, lastSprite, flipSpeed, false, false, danger, 3, weight, speed, baseSprite, moveFn);
     entities.push(e);
     return entities.length - 1;
 }
@@ -440,15 +440,15 @@ g.pre_parse = function () {
         for (y = 0; y < MAPS[map].length; y++) {
             for (x = 0; x < MAPS[map][0].length; x++) {
                 if (MAPS[map][y][x] == 10) {
-                    addMovable(x * 8, y * 8, 10, 10, Infinity, 1, 0, 4);
+                    addMovable(x * 8, y * 8, 10, 10, Infinity, 3, 0, 4);
                     MAPS[map][y][x] = 254;
                 }
                 if (MAPS[map][y][x] == 102) {
-                    addMovable(x * 8, y * 8, 102, 110, 100, 1, 0.5, 4);
+                    addMovable(x * 8, y * 8, 102, 110, 100, 3, 5, 4);
                     MAPS[map][y][x] = 254;
                 }
                 if (MAPS[map][y][x] == 5) {
-                    addMovable(x * 8, y * 8, 5, 6, 100, 1, 0.5, 4);
+                    addMovable(x * 8, y * 8, 5, 6, 100, 3, 5, 4);
                     MAPS[map][y][x] = 254;
                 }
                 if (MAPS[map][y][x] == 0) {
@@ -456,11 +456,11 @@ g.pre_parse = function () {
                     MAPS[map][y][x] = 254;
                 }
                 if (MAPS[map][y][x] == 11) {
-                    addMovable(x * 8, y * 8, 11, 13, 100, 1, 0.5, 4);
+                    addMovable(x * 8, y * 8, 11, 13, 100, 3, 5, 4);
                     MAPS[map][y][x] = 254;
                 }
                 if (MAPS[map][y][x] == 14) {
-                    let e = addMovable(x * 8, y * 8, 14, 16, 100, 1, 0.5, 4);
+                    let e = addMovable(x * 8, y * 8, 14, 16, 100, 3, 5, 4);
                     entities[e].moveFn = function () {
                         if (!this.moveEastWest(this.speed)) {
                             this.speed *= -1;
@@ -477,7 +477,7 @@ g.pre_parse = function () {
                     MAPS[map][y][x] = 254;
                 }
                 if (MAPS[map][y][x] == 17) {
-                    let e = addMovable(x * 8, y * 8, 17, 19, 100, 1, 0.5, 4);
+                    let e = addMovable(x * 8, y * 8, 17, 19, 100, 3, 5, 4);
                     entities[e].moveFn = function () {
                         if (!this.moveEastWest(this.speed)) {
                             this.speed *= -1;
@@ -494,11 +494,11 @@ g.pre_parse = function () {
                     MAPS[map][y][x] = 254;
                 }
                 if (MAPS[map][y][x] == 20) {
-                    let e = addMovable(x * 8, y * 8, 20, 22, 100, -1, 0.5, 4);
+                    let e = addMovable(x * 8, y * 8, 20, 22, 100, -3, 5, 4);
                     MAPS[map][y][x] = 254;
                 }
                 if (MAPS[map][y][x] == 9) {
-                    addMovable(x * 8, y * 8, 9, 9, Infinity, 1, 0, 4);
+                    addMovable(x * 8, y * 8, 9, 9, Infinity, 3, 0, 4);
                     MAPS[map][y][x] = 254;
                 }
             }
@@ -509,7 +509,7 @@ g.pre_parse = function () {
 g.init = function () {
     console.log("initializeing g");
     GRAVITY = 4;
-    CURMAP = 0;
+    CURMAP = 3;
     entities = MAPENTITIES[CURMAP];
     SCALEW = Math.floor(g.CVS.width / MAPIMAGES[0].width);
     SCALEH = Math.floor(g.CVS.height / MAPIMAGES[0].height);
@@ -522,8 +522,8 @@ g.init = function () {
         let west = false;
         let north = false;
         let danger = 0;
-        let weight = 1;
-        let speed = 1;
+        let weight = 3;
+        let speed = 5;
         let stillSprite = 101;
         let keyNorth = 38;
         let keySouth = 40;
@@ -572,15 +572,14 @@ g.keyClicked = function (keys) {
         // Call keyclicked for whichever entity has a keclicked function
         (entities[index].keyClicked && entities[index].keyClicked(keys));
     }
-    /*  Lets slow down time  */
-    if (keys[PLR.keySouth]) {
-        if (g.fps == 200) {
-            g.fps = 30;
-        }
-        else {
-            g.fps = 200;
-        }
-    }
+    // /*  Lets slow down time  */
+    // if (keys[PLR.keySouth]) {
+    //     if( g.fps == 200 ){
+    //         g.fps = 30;
+    //     } else {
+    //         g.fps = 200;
+    //     }
+    // }
 };
 g.start();
 // document.getElementById("play_g").dispatchEvent(new MouseEvent("click"));
