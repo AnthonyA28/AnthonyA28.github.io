@@ -12,7 +12,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _lastSprFlip, _lastSprFlip_1, _lastSprFlip_2, _carrying, _jumping, _jumpStartTime, _bullets;
+var _lastSprFlip, _lastSprFlip_1, _lastSprFlip_2, _carrying, _jumping, _jumpStartTime;
 let g = new Game("Canvas");
 onkeydown = onkeyup = function (e) { g.keypress(e); };
 /****
@@ -178,6 +178,30 @@ class movable extends entity {
         }
         return true;
     }
+    unStickFrom(e) {
+        let prevX = this.x;
+        if (this.x < entities[e].x) {
+            while (this.x + SPRIMAGES[this.baseSprite].width >= entities[e].x) {
+                this.x -= 1;
+            }
+            if (this.WestCollis()) {
+                this.x = prevX;
+            }
+            else {
+                return;
+            }
+        }
+        /*  Assuming moving left did not work  */
+        while (this.x <= entities[e].x + SPRIMAGES[entities[e].baseSprite].width) {
+            this.x += 1;
+        }
+        if (this.EastCollis()) {
+            this.x = prevX;
+        }
+        else {
+            return;
+        }
+    }
     /* Overload the base class entity  update  */
     update() {
         this.moveFn();
@@ -252,7 +276,6 @@ class player extends movable {
         _carrying.set(this, void 0);
         _jumping.set(this, void 0);
         _jumpStartTime.set(this, void 0);
-        _bullets.set(this, void 0);
         this.sprite = baseSprite;
         this.moving = false;
         this.keyNorth = keyNorth;
@@ -268,7 +291,7 @@ class player extends movable {
         __classPrivateFieldSet(this, _jumpStartTime, 0);
         __classPrivateFieldSet(this, _carrying, -1);
         __classPrivateFieldSet(this, _lastSprFlip_2, Date.now());
-        __classPrivateFieldSet(this, _bullets, []);
+        this.bullets = [];
     }
     /* Overload the base class movable  update  */
     update() {
@@ -293,17 +316,17 @@ class player extends movable {
         if (this.x + SPRIMAGES[this.baseSprite].width >= 511) {
             CURMAP += 1;
             this.x = 1;
-            __classPrivateFieldSet(this, _bullets, []);
+            this.bullets = [];
             entities = MAPENTITIES[CURMAP];
         }
         if (__classPrivateFieldGet(this, _jumping) > 0) {
-            let max = 0.1; // representative of the amplitude of this
+            let max = 1.80; // representative of the amplitude of this
             if (GRAVITY < 0)
                 max *= -1;
             let jumpOffset = max * (__classPrivateFieldGet(this, _jumping));
             console.log("JumpOffset: " + jumpOffset);
-            this.moveNorthSouth(-jumpOffset);
-            // this.moveNorthSouth(-5);
+            if (!this.moveNorthSouth(-jumpOffset))
+                __classPrivateFieldSet(this, _jumping, 0);
             __classPrivateFieldSet(this, _jumping, __classPrivateFieldGet(this, _jumping) - 1);
         }
         else {
@@ -325,6 +348,9 @@ class player extends movable {
                 this.weight = PLR.weight;
                 this.startKillTime = Date.now();
                 this.Z = 3;
+                let e = this.checkEntitiesCollision();
+                if (e >= 0)
+                    this.unStickFrom(e);
             }
             if (this.weight != 0) {
                 this.moving = false;
@@ -332,7 +358,7 @@ class player extends movable {
         };
         let xPos = this.x;
         let yPos = this.y;
-        let speed = 20;
+        let speed = 30;
         if (GRAVITY < 0) {
             yPos += 12;
         }
@@ -346,15 +372,19 @@ class player extends movable {
         else {
             xPos += SPRIMAGES[this.baseSprite].width + 1;
         }
-        let e = new movable(xPos, yPos, 113, 115, 500, false, false, 1, 2, 0, speed, 116, moveFn);
-        __classPrivateFieldGet(this, _bullets).push(e);
-        if (__classPrivateFieldGet(this, _bullets).length > 2) {
-            let index = entities.indexOf(__classPrivateFieldGet(this, _bullets)[0]);
+        let b = new movable(xPos, yPos, 113, 115, 500, false, false, 1, 2, 0, speed, 116, moveFn);
+        let e = b.checkEntitiesCollision();
+        if (e >= 0) {
+            return;
+        }
+        this.bullets.push(b);
+        if (this.bullets.length > 2) {
+            let index = entities.indexOf(this.bullets[0]);
             if (index >= 0)
                 entities.splice(index, 1);
-            __classPrivateFieldGet(this, _bullets).splice(0, 1);
+            this.bullets.splice(0, 1);
         }
-        entities.push(e);
+        entities.push(b);
     }
     keyClicked(key) {
         if (key[this.keyNorth]) {
@@ -412,7 +442,7 @@ class player extends movable {
         super.checkFlipSprite();
     }
 }
-_lastSprFlip_2 = new WeakMap(), _carrying = new WeakMap(), _jumping = new WeakMap(), _jumpStartTime = new WeakMap(), _bullets = new WeakMap();
+_lastSprFlip_2 = new WeakMap(), _carrying = new WeakMap(), _jumping = new WeakMap(), _jumpStartTime = new WeakMap();
 function addMovable(x = undefined, y = undefined, baseSprite = 101, lastSprite = 101, flipSpeed = Infinity, weight = 0, speed = 0, danger = 0) {
     if (x == undefined) {
         x = Math.random() * 512;
@@ -509,7 +539,7 @@ g.pre_parse = function () {
 g.init = function () {
     console.log("initializeing g");
     GRAVITY = 4;
-    CURMAP = 3;
+    CURMAP = 0;
     entities = MAPENTITIES[CURMAP];
     SCALEW = Math.floor(g.CVS.width / MAPIMAGES[0].width);
     SCALEH = Math.floor(g.CVS.height / MAPIMAGES[0].height);
@@ -533,7 +563,7 @@ g.init = function () {
         let keyAction2 = 90;
         let carrySprite = 111;
         let shootSprite = 112;
-        let jumpFrames = 50;
+        let jumpFrames = 8;
         let moveFn = function () { };
         PLR = {};
         PLR = new player(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, 1, weight, speed, stillSprite, moveFn, keyNorth, keySouth, keyEast, keyWest, keyAction1, keyAction2, carrySprite, shootSprite, jumpFrames);
