@@ -7,5 +7,5 @@ title: About
 
 # Anthony
 
-Human being with interests in breathing, eating and being comfortable.
+Chemical Engineering PhD candidate in Austin, Texas.
 
