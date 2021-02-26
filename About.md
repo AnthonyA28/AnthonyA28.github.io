@@ -7,5 +7,5 @@ title: About
 
 # Anthony
 
-Chemical Engineering PhD candidate in Austin, Texas.
+Chemical Engineering PhD student at UT Austin.
 
