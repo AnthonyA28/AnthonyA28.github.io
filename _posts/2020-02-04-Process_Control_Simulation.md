@@ -8,7 +8,7 @@ excerpt: Simulating a process control system of a AR(1) process using a PI contr
 
 # Process Control Simulation
 
-Below is a simulation of a random walk process with PID control applied to it. 
+Below is a simulation of an AR(1) process with PID control applied to it. 
 Change the setpoint to watch the control algorithm approach the target. 
 Change the kc, tauI, and kd tuning parameters to vary the control algorithm behavior. 
 
@@ -30,7 +30,7 @@ Change the kc, tauI, and kd tuning parameters to vary the control algorithm beha
 
 <script>
 'use strict';
-var phi = 1;
+var phi = 0.9;
 var standard_deviation = 1; 
 var dt = 200; 
 
@@ -121,21 +121,37 @@ var start_time = new Date().getTime();
 var chart = new Chart(document.getElementById("chart"),
     {"type":"line",
         "data":{
-        "labels":[],
-        "datasets":[{"label":"y",
-        "data":[],
-        "fill":false,
-        "borderColor":"rgb(75, 192, 192)",
-        "lineTension":0.1}]},
+          "labels":[],
+          "datasets":[
+            {
+              "label":"Measurement",
+              "data":[],
+              "fill":false,
+              "borderColor":"rgb(75, 192, 192)",
+              "lineTension":0.1
+            },
+            {
+              "label":"Input",
+              "data":[],
+              "fill":false,
+              "borderColor":"rgb(175, 12, 192)",
+              "lineTension":0.1
+            }
+            ]
+          },
         "options":{}
-    }
+    },
 );
 
 
-function addData(chart, label, data) {
-    chart.data.labels.push(label);
+function addData(chart, label, data, series_name) {
     chart.data.datasets.forEach((dataset) => {
-      dataset.data.push(data);
+      if(dataset.label == series_name){
+        if(chart.data.labels[chart.data.labels.length-1]!=label){
+            chart.data.labels.push(label);
+        }
+        dataset.data.push(data);
+      }
     });
     chart.update();
 }
@@ -156,7 +172,8 @@ function time_series_fn(last_y){
 
 function timed_callback() {
   var current_time = new Date();
-  let s = Math.floor((current_time - start_time)/1000.0);
+  let s = ((current_time - start_time)/1000);
+  
   let length = chart.data.datasets[0].data.length;
 
   if( length>1 ){
@@ -165,7 +182,7 @@ function timed_callback() {
   } else {
     var y_nminus1 = 0;
     var y_nminus2 = 0;
-    addData(chart, s, y_nminus1);
+    addData(chart, s, y_nminus1, "Measurement");
   }
 
   let y = time_series_fn(y_nminus1);
@@ -176,12 +193,12 @@ function timed_callback() {
   let propInt = 1 + kc * error + dt * sumForIntegral;
   // let u = propInt;
   let u = propInt + kc * kd/dt * ( y_nminus1 - y_nminus2 );
-  if( u > 50 ) u = 50; 
-  if( u < -50 ) u = -50;
+  
   y = y + G*u;
-  console.log(kd)
-
-  addData(chart, s, y);
+    console.log(y)
+    console.log(u)
+  addData(chart, s, y, "Measurement");
+  addData(chart, s, u, "Input");
   if(chart.data.labels.length > 50) { removeData(chart)};
   setTimeout(timed_callback, dt);
 }
