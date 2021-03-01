@@ -9,3 +9,9 @@ Check out my [articles](/Articles.html) or learn more [about me](/About.html). Y
 
 <p><br><img class="center-fit" src = "\assets\images\art\molecules.png"></p>
 <p align="center">  
+    
+    
+<p><br><img class="center-fit" src = "\assets\images\art\scaleup.gif"></p>
+<p align="center">  
+    
+    
