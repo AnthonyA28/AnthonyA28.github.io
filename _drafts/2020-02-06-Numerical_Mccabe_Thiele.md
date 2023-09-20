@@ -6,9 +6,6 @@ excerpt: A simple guid on how to easily do a Mccabe Thiele stage steppin in Exce
 ---
 
 
-{{  toc_only }}
-
-
 # Stage Stepping in Excel 
 
 ## step 2 
