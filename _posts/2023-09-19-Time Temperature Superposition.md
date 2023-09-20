@@ -2,8 +2,8 @@
 layout: default
 title: Time Temperature Superposition
 tags: Tools
+section: article
 ---
-
 
 
 # Time Temperature Superposition
@@ -14,11 +14,10 @@ Rheological data can be transformed so that the effect of temperature is removed
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({ "HTML-CSS": { scale: 1.3, linebreaks: { automatic: true } },SVG: { font: "STIX General" },displayAlign: "left" });</script>
+<!-- <script type="text/x-mathjax-config"> MathJax.Hub.Config({ "HTML-CSS": { scale: 1.3, linebreaks: { automatic: true } },SVG: { font: "STIX General" },displayAlign: "left" });</script> -->
 <script src="/assets/plotter/deps/papaparse.js"></script>
 <script src="/assets/plotter/deps/Inputer.js"></script>
 <script src="/assets/plotter/deps/Options.js"></script>
-<!-- <script type="text/javascript">window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);</script> NOT SURE WHY I EVERY HAD THIS --> 
 <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
