@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   class="main-svg"
+   width="280"
+   height="280"
+   style=""
+   viewBox="0 0 280 280"
+   version="1.1"
+   id="svg268"
+   sodipodi:docname="PeelAnglePlot.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   inkscape:export-filename="PeelAnglePlot.png"
+   inkscape:export-xdpi="600"
+   inkscape:export-ydpi="600"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview270"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="2.7535714"
+     inkscape:cx="93.333334"
+     inkscape:cy="140.72633"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg268" />
+  <defs
+     id="defs-87e385">
+    <g
+       class="clips"
+       id="g16">
+      <clipPath
+         id="clip87e385xyplot"
+         class="plotclip">
+        <rect
+           width="190"
+           height="190"
+           id="rect4" />
+      </clipPath>
+      <clipPath
+         class="axesclip"
+         id="clip87e385x">
+        <rect
+           x="80"
+           y="0"
+           width="190"
+           height="280"
+           id="rect7" />
+      </clipPath>
+      <clipPath
+         class="axesclip"
+         id="clip87e385y">
+        <rect
+           x="0"
+           y="10"
+           width="280"
+           height="190"
+           id="rect10" />
+      </clipPath>
+      <clipPath
+         class="axesclip"
+         id="clip87e385xy">
+        <rect
+           x="80"
+           y="10"
+           width="190"
+           height="190"
+           id="rect13" />
+      </clipPath>
+    </g>
+    <g
+       class="gradients"
+       id="g18" />
+    <g
+       class="patterns"
+       id="g20" />
+  </defs>
+  <g
+     class="bglayer"
+     id="g23" />
+  <g
+     class="layer-below"
+     id="g29">
+    <g
+       class="imagelayer"
+       id="g25" />
+    <g
+       class="shapelayer"
+       id="g27" />
+  </g>
+  <g
+     class="cartesianlayer"
+     id="g225">
+    <g
+       class="subplot xy"
+       id="g223">
+      <g
+         class="layer-subplot"
+         id="g35">
+        <g
+           class="shapelayer"
+           id="g31" />
+        <g
+           class="imagelayer"
+           id="g33" />
+      </g>
+      <g
+         class="minor-gridlayer"
+         id="g41">
+        <g
+           class="x"
+           id="g37" />
+        <g
+           class="y"
+           id="g39" />
+      </g>
+      <g
+         class="gridlayer"
+         id="g47">
+        <g
+           class="x"
+           id="g43" />
+        <g
+           class="y"
+           id="g45" />
+      </g>
+      <g
+         class="zerolinelayer"
+         id="g49" />
+      <path
+         class="xlines-below"
+         id="path51" />
+      <path
+         class="ylines-below"
+         id="path53" />
+      <g
+         class="overlines-below"
+         id="g55" />
+      <g
+         class="xaxislayer-below"
+         id="g57" />
+      <g
+         class="yaxislayer-below"
+         id="g59" />
+      <g
+         class="overaxes-below"
+         id="g61" />
+      <g
+         class="plot"
+         transform="translate(80,10)"
+         clip-path="url(#clip87e385xyplot)"
+         id="g79">
+        <g
+           class="scatterlayer mlayer"
+           id="g77">
+          <g
+             class="trace scatter trace4fc1ed"
+             style="stroke-miterlimit: 2; opacity: 1;"
+             id="g75">
+            <g
+               class="fills"
+               id="g63" />
+            <g
+               class="errorbars"
+               id="g65" />
+            <g
+               class="lines"
+               id="g69">
+              <path
+                 class="js-line"
+                 d="M2.09,9.5Q2.75,21.4 3.13,26.62C3.45,31.02 3.81,34.98 4.18,38.77C4.51,42.11 4.85,45.21 5.22,48.19C5.55,50.89 5.9,53.43 6.26,55.88C6.6,58.14 6.95,60.3 7.31,62.39C7.65,64.34 7.99,66.21 8.35,68.02C8.69,69.73 9.04,71.37 9.4,72.98C9.74,74.5 10.08,75.98 10.44,77.42C10.78,78.8 11.12,80.13 11.48,81.44C11.82,82.69 12.17,83.91 12.53,85.1C12.87,86.25 13.22,87.37 13.57,88.47C13.91,89.53 14.27,90.56 14.62,91.58C14.96,92.57 15.31,93.53 15.66,94.48C16,95.4 16.35,96.3 16.7,97.19C17.04,98.05 17.4,98.9 17.75,99.73C18.09,100.54 18.44,101.34 18.79,102.13C19.13,102.9 19.49,103.65 19.84,104.39C20.18,105.12 20.53,105.83 20.88,106.54C21.22,107.23 21.57,107.91 21.92,108.58C22.27,109.24 22.62,109.88 22.97,110.52C23.31,111.15 23.66,111.76 24.01,112.37C24.35,112.97 24.7,113.56 25.05,114.14C25.4,114.71 25.75,115.28 26.1,115.84C26.45,116.39 26.79,116.93 27.14,117.47C27.49,118 27.84,118.52 28.19,119.04C28.54,119.55 28.88,120.05 29.23,120.54C29.57,121.03 29.92,121.51 30.27,121.99C30.62,122.46 30.97,122.93 31.32,123.39C31.67,123.85 32.01,124.3 32.36,124.75C32.71,125.19 33.06,125.62 33.41,126.05C33.76,126.48 34.1,126.9 34.45,127.32C34.79,127.73 35.14,128.14 35.49,128.54C35.84,128.94 36.19,129.34 36.54,129.73C36.89,130.12 37.23,130.5 37.58,130.88C37.93,131.26 38.28,131.63 38.63,132C38.98,132.36 39.32,132.72 39.67,133.08C40.02,133.44 40.36,133.79 40.71,134.14C41.06,134.49 41.41,134.83 41.76,135.17C42.11,135.51 42.45,135.84 42.8,136.17C43.15,136.5 43.5,136.82 43.85,137.14C44.2,137.46 44.54,137.78 44.89,138.09C45.24,138.4 45.58,138.71 45.93,139.01C46.28,139.31 46.63,139.61 46.98,139.91C47.33,140.21 47.67,140.5 48.02,140.79C48.37,141.08 48.72,141.37 49.07,141.65C49.42,141.93 49.76,142.21 50.11,142.49C50.46,142.76 50.8,143.03 51.15,143.3C51.5,143.57 51.85,143.83 52.2,144.1C52.55,144.36 52.89,144.63 53.24,144.89C53.59,145.15 53.94,145.4 54.29,145.65C54.64,145.9 54.98,146.15 55.33,146.4C55.68,146.65 56.02,146.89 56.37,147.13C56.72,147.37 57.07,147.6 57.42,147.84C57.77,148.07 58.11,148.31 58.46,148.54C58.81,148.77 59.16,149 59.51,149.23C59.86,149.46 60.2,149.68 60.55,149.9C60.9,150.12 61.24,150.34 61.59,150.56C61.94,150.78 62.29,151 62.64,151.21C62.99,151.42 63.33,151.63 63.68,151.84C64.03,152.05 64.38,152.26 64.73,152.46C65.08,152.66 65.42,152.86 65.77,153.06C66.12,153.26 66.46,153.46 66.81,153.66C67.16,153.86 67.51,154.05 67.86,154.24C68.21,154.43 68.55,154.63 68.9,154.82C69.25,155.01 69.6,155.19 69.95,155.38C70.3,155.56 70.64,155.75 70.99,155.93C71.34,156.11 71.68,156.29 72.03,156.47C72.38,156.65 72.73,156.82 73.08,157C73.43,157.18 73.77,157.36 74.12,157.53C74.47,157.7 74.81,157.87 75.16,158.04C75.51,158.21 75.86,158.37 76.21,158.54C76.56,158.7 76.9,158.87 77.25,159.03C77.6,159.19 77.95,159.36 78.3,159.52C78.65,159.68 78.99,159.84 79.34,160C79.69,160.16 80.03,160.31 80.38,160.46C80.73,160.61 81.08,160.77 81.43,160.92C81.78,161.07 82.12,161.22 82.47,161.37C82.82,161.52 83.17,161.67 83.52,161.82C83.87,161.97 84.21,162.11 84.56,162.25C84.91,162.39 85.25,162.54 85.6,162.68C85.95,162.82 86.3,162.96 86.65,163.1C87,163.24 87.34,163.37 87.69,163.51C88.04,163.65 88.39,163.78 88.74,163.92C89.09,164.05 89.43,164.19 89.78,164.32C90.13,164.45 90.47,164.58 90.82,164.71C91.17,164.84 91.52,164.97 91.87,165.1C92.22,165.23 92.56,165.35 92.91,165.47C93.26,165.6 93.61,165.73 93.96,165.85C94.31,165.97 94.65,166.09 95,166.21C95.35,166.33 95.69,166.45 96.04,166.57C96.39,166.69 96.74,166.8 97.09,166.92C97.44,167.04 97.78,167.16 98.13,167.27C98.48,167.39 98.83,167.5 99.18,167.61C99.53,167.72 99.87,167.84 100.22,167.95C100.57,168.06 100.91,168.16 101.26,168.27C101.61,168.38 101.96,168.49 102.31,168.6C102.66,168.71 103,168.82 103.35,168.92C103.7,169.03 104.05,169.13 104.4,169.23C104.75,169.33 105.09,169.43 105.44,169.53C105.79,169.63 106.13,169.74 106.48,169.84C106.83,169.94 107.18,170.03 107.53,170.13C107.88,170.23 108.22,170.32 108.57,170.42C108.92,170.52 109.27,170.61 109.62,170.71C109.97,170.8 110.31,170.9 110.66,170.99C111.01,171.08 111.35,171.17 111.7,171.26C112.05,171.35 112.4,171.44 112.75,171.53C113.1,171.62 113.44,171.71 113.79,171.8C114.14,171.89 114.49,171.97 114.84,172.06C115.19,172.15 115.53,172.23 115.88,172.32C116.23,172.4 116.57,172.49 116.92,172.57C117.27,172.65 117.62,172.73 117.97,172.81C118.32,172.89 118.66,172.98 119.01,173.06C119.36,173.14 119.7,173.21 120.05,173.29C120.4,173.37 120.75,173.45 121.1,173.53C121.45,173.61 121.79,173.68 122.14,173.75C122.49,173.83 122.84,173.9 123.19,173.98C123.54,174.05 123.88,174.13 124.23,174.2C124.58,174.27 124.92,174.34 125.27,174.41C125.62,174.48 125.97,174.55 126.32,174.62C126.67,174.69 127.01,174.76 127.36,174.83C127.71,174.9 128.06,174.96 128.41,175.03C128.76,175.1 129.1,175.16 129.45,175.23C129.8,175.29 130.14,175.36 130.49,175.42C130.84,175.48 131.19,175.55 131.54,175.61C131.89,175.67 132.23,175.74 132.58,175.8C132.93,175.86 133.28,175.92 133.63,175.98C133.98,176.04 134.32,176.1 134.67,176.16C135.02,176.22 135.36,176.27 135.71,176.33C136.06,176.39 136.41,176.44 136.76,176.5C137.11,176.56 137.45,176.62 137.8,176.67C138.15,176.73 138.5,176.78 138.85,176.83C139.2,176.88 139.54,176.94 139.89,176.99C140.24,177.04 140.58,177.1 140.93,177.15C141.28,177.2 141.63,177.25 141.98,177.3C142.33,177.35 142.67,177.39 143.02,177.44C143.37,177.49 143.72,177.54 144.07,177.59C144.42,177.64 144.76,177.68 145.11,177.73C145.46,177.77 145.8,177.82 146.15,177.86C146.5,177.91 146.85,177.96 147.2,178C147.55,178.04 147.89,178.08 148.24,178.12C148.59,178.16 148.94,178.21 149.29,178.25C149.64,178.29 149.98,178.33 150.33,178.37C150.68,178.41 151.02,178.45 151.37,178.49C151.72,178.53 152.07,178.56 152.42,178.6C152.77,178.64 153.11,178.68 153.46,178.72C153.81,178.76 154.16,178.78 154.51,178.82C154.86,178.85 155.2,178.89 155.55,178.93C155.9,178.96 156.24,179 156.59,179.03C156.94,179.06 157.29,179.1 157.64,179.13C157.99,179.16 158.33,179.19 158.68,179.22C159.03,179.25 159.38,179.28 159.73,179.31C160.08,179.34 160.42,179.37 160.77,179.4C161.12,179.43 161.46,179.45 161.81,179.48C162.16,179.51 162.51,179.53 162.86,179.56C163.21,179.59 163.55,179.62 163.9,179.64C164.25,179.67 164.6,179.69 164.95,179.71C165.3,179.73 165.64,179.76 165.99,179.78C166.34,179.8 166.68,179.83 167.03,179.85C167.38,179.87 167.73,179.89 168.08,179.91C168.43,179.93 168.77,179.95 169.12,179.97C169.47,179.99 169.81,180.01 170.16,180.03C170.51,180.05 170.86,180.06 171.21,180.08C171.56,180.1 171.9,180.11 172.25,180.13C172.6,180.15 172.95,180.16 173.3,180.18C173.65,180.19 173.99,180.21 174.34,180.22C174.69,180.23 175.03,180.25 175.38,180.26C175.73,180.27 176.08,180.29 176.43,180.3C176.78,180.31 177.12,180.33 177.47,180.34C177.82,180.35 178.17,180.36 178.52,180.37C178.87,180.38 179.21,180.38 179.56,180.39C179.91,180.4 180.25,180.41 180.6,180.42C180.95,180.43 181.3,180.43 181.65,180.44C182,180.45 182.34,180.46 182.69,180.46C183.04,180.47 183.39,180.47 183.74,180.47C184.09,180.47 184.43,180.48 184.78,180.48C185.13,180.48 185.47,180.49 185.82,180.49C186.17,180.49 186.52,180.5 186.87,180.5Q187.22,180.5 187.91,180.5"
+                 style="fill:none;stroke:rgb(0, 0, 0);stroke-opacity:1;stroke-width:3;opacity:1;stroke-dasharray:none"
+                 id="path67" />
+            </g>
+            <g
+               class="points"
+               id="g71" />
+            <g
+               class="text"
+               id="g73" />
+          </g>
+        </g>
+      </g>
+      <g
+         class="overplot"
+         id="g81" />
+      <path
+         class="xlines-above crisp"
+         d="M79,200.5H271M79,9.5H271"
+         style="fill: none; stroke-width: 1px; stroke: rgb(0, 0, 0); stroke-opacity: 1;"
+         id="path83" />
+      <path
+         class="ylines-above crisp"
+         d="M79.5,10V200M270.5,10V200"
+         style="fill: none; stroke-width: 1px; stroke: rgb(0, 0, 0); stroke-opacity: 1;"
+         id="path85" />
+      <g
+         class="overlines-above"
+         id="g87" />
+      <g
+         class="xaxislayer-above"
+         id="g117">
+        <path
+           class="xtick ticks crisp"
+           d="M0,200v-5M0,10v5"
+           transform="translate(126.97999999999999,0)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path89" />
+        <path
+           class="xtick ticks crisp"
+           d="M0,200v-5M0,10v5"
+           transform="translate(173.95999999999998,0)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path91" />
+        <path
+           class="xtick ticks crisp"
+           d="M0,200v-5M0,10v5"
+           transform="translate(220.93,0)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path93" />
+        <path
+           class="xtick ticks crisp"
+           d="M0,200v-5M0,10v5"
+           transform="translate(267.90999999999997,0)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path95" />
+        <g
+           class="xtick"
+           id="g99">
+          <text
+             text-anchor="middle"
+             x="0"
+             y="217.8"
+             transform="translate(80,0)"
+             style="font-family: 'Segoe UI'; font-size: 14px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             id="text97">0</text>
+        </g>
+        <g
+           class="xtick"
+           id="g103">
+          <text
+             text-anchor="middle"
+             x="0"
+             y="217.8"
+             style="font-family: 'Segoe UI'; font-size: 14px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             transform="translate(126.97999999999999,0)"
+             id="text101">45</text>
+        </g>
+        <g
+           class="xtick"
+           id="g107">
+          <text
+             text-anchor="middle"
+             x="0"
+             y="217.8"
+             style="font-family: 'Segoe UI'; font-size: 14px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             transform="translate(173.95999999999998,0)"
+             id="text105">90</text>
+        </g>
+        <g
+           class="xtick"
+           id="g111">
+          <text
+             text-anchor="middle"
+             x="0"
+             y="217.8"
+             style="font-family: 'Segoe UI'; font-size: 14px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             transform="translate(220.93,0)"
+             id="text109">135</text>
+        </g>
+        <g
+           class="xtick"
+           id="g115">
+          <text
+             text-anchor="middle"
+             x="0"
+             y="217.8"
+             style="font-family: 'Segoe UI'; font-size: 14px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             transform="translate(267.90999999999997,0)"
+             id="text113">180</text>
+        </g>
+      </g>
+      <g
+         class="yaxislayer-above"
+         id="g219">
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,195.21)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path119" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,186.65)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path121" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,180.57)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path123" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,175.86)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path125" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,172.01)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path127" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,168.76)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path129" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,165.94)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path131" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,163.45)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path133" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,146.59)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path135" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,138.03)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path137" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,131.95)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path139" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,127.24)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path141" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,123.39)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path143" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,120.13)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path145" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,117.31)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path147" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,114.83)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path149" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,97.96)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path151" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,89.4)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path153" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,83.33)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path155" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,78.61)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path157" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,74.76)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path159" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,71.50999999999999)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path161" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,68.69)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path163" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,66.2)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path165" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,49.34)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path167" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,40.78)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path169" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,34.7)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path171" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,29.99)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path173" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,26.14)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path175" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,22.880000000000003)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path177" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,20.060000000000002)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path179" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h2M270,0h-2"
+           transform="translate(0,17.58)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path181" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h5M270,0h-5"
+           transform="translate(0,161.23)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path183" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h5M270,0h-5"
+           transform="translate(0,112.6)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path185" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h5M270,0h-5"
+           transform="translate(0,63.98)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path187" />
+        <path
+           class="ytick ticks crisp"
+           d="M80,0h5M270,0h-5"
+           transform="translate(0,15.35)"
+           style="stroke: rgb(0, 0, 0); stroke-opacity: 1; stroke-width: 1px;"
+           id="path189" />
+        <g
+           class="ytick"
+           id="g193">
+          <text
+             text-anchor="end"
+             x="76.2"
+             y="6.125"
+             transform="translate(0,161.23)"
+             style="font-family: 'Segoe UI'; font-size: 17.5px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             id="text191">10</text>
+        </g>
+        <g
+           class="ytick"
+           id="g201">
+          <text
+             text-anchor="end"
+             x="76.2"
+             y="6.125"
+             style="font-family: 'Segoe UI'; font-size: 17.5px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             transform="translate(0,112.6)"
+             id="text199">10​<tspan
+   style="font-size:70%"
+   dy="-0.6em"
+   id="tspan195">2</tspan><tspan
+   dy="0.42em"
+   id="tspan197">​</tspan></text>
+        </g>
+        <g
+           class="ytick"
+           id="g209">
+          <text
+             text-anchor="end"
+             x="76.2"
+             y="6.125"
+             style="font-family: 'Segoe UI'; font-size: 17.5px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             transform="translate(0,63.98)"
+             id="text207">10​<tspan
+   style="font-size:70%"
+   dy="-0.6em"
+   id="tspan203">3</tspan><tspan
+   dy="0.42em"
+   id="tspan205">​</tspan></text>
+        </g>
+        <g
+           class="ytick"
+           id="g217">
+          <text
+             text-anchor="end"
+             x="76.2"
+             y="6.125"
+             style="font-family: 'Segoe UI'; font-size: 17.5px; fill: rgb(0, 0, 0); fill-opacity: 1; white-space: pre; opacity: 1;"
+             transform="translate(0,15.35)"
+             id="text215">10​<tspan
+   style="font-size:70%"
+   dy="-0.6em"
+   id="tspan211">4</tspan><tspan
+   dy="0.42em"
+   id="tspan213">​</tspan></text>
+        </g>
+      </g>
+      <g
+         class="overaxes-above"
+         id="g221" />
+    </g>
+  </g>
+  <g
+     class="polarlayer"
+     id="g227" />
+  <g
+     class="smithlayer"
+     id="g229" />
+  <g
+     class="ternarylayer"
+     id="g231" />
+  <g
+     class="geolayer"
+     id="g233" />
+  <g
+     class="funnelarealayer"
+     id="g235" />
+  <g
+     class="pielayer"
+     id="g237" />
+  <g
+     class="iciclelayer"
+     id="g239" />
+  <g
+     class="treemaplayer"
+     id="g241" />
+  <g
+     class="sunburstlayer"
+     id="g243" />
+  <g
+     class="glimages"
+     id="g245" />
+  <defs
+     id="topdefs-87e385">
+    <g
+       class="clips"
+       id="g247" />
+  </defs>
+  <g
+     class="layer-above"
+     id="g254">
+    <g
+       class="imagelayer"
+       id="g250" />
+    <g
+       class="shapelayer"
+       id="g252" />
+  </g>
+  <g
+     class="infolayer"
+     id="g266">
+    <g
+       class="g-gtitle"
+       id="g256" />
+    <g
+       class="g-xtitle"
+       transform="translate(0,6.781640624999994)"
+       id="g260">
+      <text
+         class="xtitle"
+         x="175"
+         y="232.83661117553712"
+         text-anchor="middle"
+         style="font-family: 'Segoe UI'; font-size: 17px; fill: rgb(0, 0, 0); opacity: 1; font-weight: normal; white-space: pre;"
+         id="text258">θ</text>
+    </g>
+    <g
+       class="g-ytitle"
+       id="g264">
+      <text
+         class="ytitle"
+         transform="rotate(-90,39.3177734375,105)"
+         x="39.3177734375"
+         y="105"
+         text-anchor="middle"
+         style="font-family: 'Segoe UI'; font-size: 17px; fill: rgb(0, 0, 0); opacity: 1; font-weight: normal; white-space: pre;"
+         id="text262">Force [N]</text>
+    </g>
+  </g>
+</svg>

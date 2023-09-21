@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   id="svg880"
+   version="1.1"
+   viewBox="0 0 57.906831 38.144445"
+   height="144.16798"
+   width="218.86046"
+   sodipodi:docname="Peeling45Degrees.svg"
+   inkscape:export-filename="Peeling45Degrees.png"
+   inkscape:export-xdpi="1200"
+   inkscape:export-ydpi="1200"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview882"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="4.0336591"
+     inkscape:cx="108.09044"
+     inkscape:cy="61.606594"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs877">
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.3244081"
+       markerHeight="6.155385"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="-271.95036 : 80.025056 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="297.70525 : 223.55647 : 1"
+       inkscape:persp3d-origin="92.60417 : 2.8743737 : 1"
+       id="perspective237" />
+    <pattern
+       id="EMFhbasepattern"
+       patternUnits="userSpaceOnUse"
+       width="6"
+       height="6"
+       x="0"
+       y="0" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-52.081317,-34.077441)">
+    <path
+       id="rect541"
+       style="fill:#808080;stroke:#000000;stroke-width:0.171151;stop-color:#000000"
+       d="M 64.11454,59.031104 H 81.368334 L 95.396098,49.900562 97.906732,52.421663 81.68292,63.353564 64.11454,63.497928 Z"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="rect541.jpg"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <g
+       id="g12684"
+       transform="matrix(0.51436054,0,0,0.63634542,31.994058,18.163353)">
+      <rect
+         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.235717;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+         id="rect541-0"
+         width="63.155075"
+         height="5.364325"
+         x="53.27956"
+         y="71.13308" />
+      <g
+         id="g11945">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 53.281485,76.559024 55.853821,71.07137"
+           id="path10805" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 60.853785,76.559024 63.426122,71.07137"
+           id="path10807" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 68.426184,76.559024 70.998521,71.07137"
+           id="path10809" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 75.998484,76.559024 78.570821,71.07137"
+           id="path10811" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 83.570784,76.559024 86.143121,71.07137"
+           id="path10813" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 91.143185,76.559024 93.715522,71.07137"
+           id="path10815" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 98.715484,76.559024 101.28782,71.07137"
+           id="path10817" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 106.28789,76.559024 2.57233,-5.487654"
+           id="path10819" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+           d="m 113.86019,76.559024 2.57233,-5.487654"
+           id="path10821" />
+      </g>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#TriangleStart)"
+       d="m 96.419505,51.137922 3.29654,-2.917587"
+       id="path17903"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;line-height:1.25;font-family:Times;-inkscape-font-specification:Times;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="95.703278"
+       y="47.597641"
+       id="text18547"><tspan
+         sodipodi:role="line"
+         id="tspan18545"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Times;-inkscape-font-specification:Times;stroke-width:0.264583"
+         x="95.703278"
+         y="47.597641">F</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="56.610329"
+       y="39.366142"
+       id="text43513"><tspan
+         sodipodi:role="line"
+         id="tspan43511"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="56.610329"
+         y="39.366142">Peeling at 45 degrees</tspan></text>
+  </g>
+</svg>
