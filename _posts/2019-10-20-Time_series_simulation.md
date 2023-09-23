@@ -3,7 +3,7 @@ title: Time Series Simulation
 layout: article_post
 section: article
 excerpt: Graphing a time series with variable parameters.
-tags: CHE
+tags: ChemicalEngineering
 ---
 
 

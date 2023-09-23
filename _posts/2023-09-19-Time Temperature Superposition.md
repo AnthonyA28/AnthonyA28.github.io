@@ -45,126 +45,129 @@ Rheological data can be transformed so that the effect of temperature is removed
   <div id="wrapper" style="border: 0px solid #FFFFFF">
 
 
+  
+  <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
+    <h2>
+
+    </h2>
+
     
-    <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
-      <h2>
-
-      </h2>
-
-      
 
 
-      Open<input type="file" id="input_file">
-      <div id="appTTS" ></div>
-      <!-- <br> -->
-        <button type="submit"  id="download" > Export json</button> 
-        <!-- <button type="submit"  id="save_template" > Save Template</button>  -->
-        <!-- <button type="submit"  id="delete_template" > Delete Template</button>  -->
-        <!-- <button type="submit"  id="make_default_template" > Make Default Template</button>  -->
-            <!-- <button type="submit" id="save_template"> Save template </button>  -->
-        <!-- <button type="submit" id="open_templates"> Open templates</button>  -->
-        <div id="template_div" style="display:none"><strong>Choose Template:</strong> 
-        </div>
-        <div style="display:none"><strong>Update:</strong>
-          Trace styles <input type="checkbox"  id="update_trace_styles_check" checked >
-          <!-- Trace names  <input type="checkbox"  id="update_trace_names_check" >
-          Axes labels  <input type="checkbox"  id="update_axes_labels_check" > -->
-        </div>
-
-      <br>
-      
-      <select id="palettes"  style="display:none">
-
-        <option>pyDefault</option>
-        <option>UTcolors</option>
-        <option>Paired</option>
-        <option>Dark2</option>
-        <option>Pastel1</option>
-        <option>Pastel2</option>
-        <option>Set1</option>
-        <option>Set2</option>
-        <option>Set3</option>
-        <option>tab10</option>
-        <option>tab20</option>
-        <option>tab20b</option>
-        <option>tab20c</option>
-
-        <option>viridis_</option>
-        <option>viridis_r_</option>
-        <option>magma_</option>
-        <option>magma_r_</option>
-        <option>plasma_</option>
-        <option>plasma_r_</option>
-        <option>cividis_</option>
-        <option>cividis_r_</option>
-        <option>mako_</option>
-        <option>mako_r_</option>
-        <option>rocket_</option>
-        <option>rocket_r_</option>
-        <option>inferno_</option>
-        <option>inferno_r_</option>
-
-      </select>
-      <input type="number" style="display:none;" id="n_colors">  
-
-      <div style="display:none">
-      <h3>Layout:</h3>
-      <div id="layout">
-        <div id="app" ></div>
+    Open<input type="file" id="input_file">
+    <div id="TTS" ></div>
+    <!-- <div id="appTTS" ></div> -->
+  <!-- </div> -->
+    <!-- <br> -->
+      <button type="submit"  id="download" > Export json</button> 
+      <!-- <button type="submit"  id="save_template" > Save Template</button>  -->
+      <!-- <button type="submit"  id="delete_template" > Delete Template</button>  -->
+      <!-- <button type="submit"  id="make_default_template" > Make Default Template</button>  -->
+          <!-- <button type="submit" id="save_template"> Save template </button>  -->
+      <!-- <button type="submit" id="open_templates"> Open templates</button>  -->
+      <div id="template_div" style="display:none"><strong>Choose Template:</strong> 
       </div>
-      <div style="display:none">
-      <h3>Master Trace:</h3>
-      <div id="appM"></div>
+      <div style="display:none"><strong>Update:</strong>
+        Trace styles <input type="checkbox"  id="update_trace_styles_check" checked >
+        <!-- Trace names  <input type="checkbox"  id="update_trace_names_check" >
+        Axes labels  <input type="checkbox"  id="update_axes_labels_check" > -->
       </div>
-      </div>
+
+    <br>
+    
+    <select id="palettes"  style="display:none">
+
+      <option>pyDefault</option>
+      <option>UTcolors</option>
+      <option>Paired</option>
+      <option>Dark2</option>
+      <option>Pastel1</option>
+      <option>Pastel2</option>
+      <option>Set1</option>
+      <option>Set2</option>
+      <option>Set3</option>
+      <option>tab10</option>
+      <option>tab20</option>
+      <option>tab20b</option>
+      <option>tab20c</option>
+
+      <option>viridis_</option>
+      <option>viridis_r_</option>
+      <option>magma_</option>
+      <option>magma_r_</option>
+      <option>plasma_</option>
+      <option>plasma_r_</option>
+      <option>cividis_</option>
+      <option>cividis_r_</option>
+      <option>mako_</option>
+      <option>mako_r_</option>
+      <option>rocket_</option>
+      <option>rocket_r_</option>
+      <option>inferno_</option>
+      <option>inferno_r_</option>
+
+    </select>
+    <input type="number" style="display:none;" id="n_colors">  
+
+    <div style="display:none">
+    <h3>Layout:</h3>
+    <div id="layout">
+      <div id="app" ></div>
+    </div>
+    <div style="display:none">
+    <h3>Master Trace:</h3>
+    <div id="appM"></div>
+    </div>
+    </div>
 
 
 <!--     <button type="submit" id="helper_reset_colors">Reset Colors</button> 
+  
+  <button type="submit" id="helper_pair_colors">Pair Colors</button> 
+
+
+  <br>
+
+  <button type="submit" id="helper_pair_markers">Pair Markers</button> 
+
+  <button type="submit" id="helper_pair_linestyles">Pair Linestyles</button> 
+  <br> -->
+
+
+  </div>
+
+  <div style="display: inline-block;width:410px;height:410px;border: 0px solid #FFFFFF; vertical-align:  top" id="gd_div">
+    <div id="gd" ></div>
+  </div>
+
+  <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
+
+    <!-- Data -->
+    <div id="data" style="display:none">
+      Data:
+    </div>
+  </div>
+
+
+
+  <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
+
+
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-cly1{text-align:left;vertical-align:middle}
+    .tg .tg-1wig{font-weight:bold;text-align:left;vertical-align:top}
+    .tg .tg-m919{font-family:inherit;font-weight:bold;text-align:left;vertical-align:middle}
+    .tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
+    .tg .tg-0lax{text-align:left;vertical-align:top}
+    </style>
     
-    <button type="submit" id="helper_pair_colors">Pair Colors</button> 
+  </div>
 
-
-    <br>
-
-    <button type="submit" id="helper_pair_markers">Pair Markers</button> 
-
-    <button type="submit" id="helper_pair_linestyles">Pair Linestyles</button> 
-    <br> -->
-
-
-    </div>
-
-    <div style="display: inline-block;width:410px;height:410px;border: 0px solid #FFFFFF; vertical-align:  top" id="gd_div">
-      <div id="gd" ></div>
-    </div>
-
-    <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
-
-      <!-- Data -->
-      <div id="data" style="display:none">
-        Data:
-      </div>
-    </div>
-
-
-
-    <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
-
-
-      <style type="text/css">
-      .tg  {border-collapse:collapse;border-spacing:0;}
-      .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-        overflow:hidden;padding:10px 5px;word-break:normal;}
-      .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-        font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-      .tg .tg-cly1{text-align:left;vertical-align:middle}
-      .tg .tg-1wig{font-weight:bold;text-align:left;vertical-align:top}
-      .tg .tg-m919{font-family:inherit;font-weight:bold;text-align:left;vertical-align:middle}
-      .tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
-      .tg .tg-0lax{text-align:left;vertical-align:top}
-      </style>
-      
-    </div>
   </div>
 
 
@@ -210,20 +213,21 @@ var removeOptions = function (selectElement) {
 var inputer_TTS_init = false
 function make_trace_boxes(){
   inputer_traces = [];
-  
+  inputer_TTS = [];
   for(var j = 0; j< 50; j +=1){
     if( document.getElementById('app'+j.toString()) != null ){
       document.getElementById('app'+j.toString()).remove();
     }
+    if( document.getElementById('appTTS'+j.toString()) != null ){
+      document.getElementById('appTTS'+j.toString()).remove();
+    }
   }
+
   for(var j = 0; j< traces.length; j +=1){
 
     var div = document.createElement('div');  //creating element
     div.id = "app" + j.toString();         //adding text on the element
     document.getElementById("data").appendChild(div);           //appending the element
-
-    
-
 
     var palette = document.getElementById("palettes").options[document.getElementById("palettes").selectedIndex].innerText;
     if(palette.endsWith("_")){
@@ -255,20 +259,24 @@ function make_trace_boxes(){
         }
       ));
 
-      if( j%2 == 0 && inputer_TTS_init == false){
-        inputer_TTS.push(new inputer('appTTS', {
+      if( j%2 == 0){
+
+        var div = document.createElement('div');  //creating element
+        div.id = "appTTS" + j.toString();         //adding text on the element
+        document.getElementById("TTS").appendChild(div);           //appending the element
+
+        inputer_TTS.push(new inputer(div.id, {
           TemperatureC: {it: "number", def: j*(15/2)+30,},
-          a: {it: "slider", def: 2, step: 0.0005, min: 0.000001, max:1 },
-          b: {it: "slider", def: 1, step: 0.0005, min: 0.000001, max:1},
+          a: {it: "slider", def: 2, step: 0.00005, min: 0.000001, max:1 },
+          b: {it: "slider", def: 1, step: 0.00005, min: 0.000001, max:1},
         },
         function(){
           update_TTS();
         })) 
       }
-      if( j == traces.length -1 ){
-        inputer_TTS_init = true
-      }
   }
+
+
 
 } 
 
@@ -416,14 +424,15 @@ function plot(header, data, update_nums=false){
     traces.push(trace)
     }
   }
-  
-
-  make_trace_boxes();
   for(var i = 0; i < traces.length; i ++ ){
     inputer_traces[i].update_data(traces[i]);
     traces[i].base_x = traces[i]['x']
     traces[i].base_y = traces[i]['y']
   }
+  
+
+  make_trace_boxes();
+
   document.getElementById("n_colors").value = traces.length
 
   if(!update_nums){
@@ -677,24 +686,34 @@ function update(){
 
 }
 
-function update_TTS(){
+function update_TTS() {
+  for (var i = 0; i < inputer_TTS.length; i++) {
+    a = inputer_TTS[i].inputs['a'].elem.value;
+    b = inputer_TTS[i].inputs['b'].elem.value;
 
-  for(var i = 0; i < inputer_TTS.length; i ++){
+    if (a > 0) {
+      console.log("i:", i);
+      console.log("traces[i*2]:", traces[i * 2]);
 
-    a = inputer_TTS[i].inputs['a'].elem.value
-    b = inputer_TTS[i].inputs['b'].elem.value
-    if( a > 0 ){
-      traces[i*2]['x'] = multiply(traces[i*2]['base_x'], a)
-      traces[i*2+1]['x'] = multiply(traces[i*2+1]['base_x'], a)
+      if (traces[i * 2] && traces[i * 2].hasOwnProperty('base_x')) {
+        console.log("traces[i*2].base_x:", traces[i * 2].base_x);
+        traces[i * 2]['x'] = multiply(traces[i * 2].base_x, a);
+        traces[i * 2 + 1]['x'] = multiply(traces[i * 2 + 1].base_x, a);
+      } else {
+        console.log("traces[i*2] is undefined or does not have 'base_x'");
+      }
     }
-    if( b > 0 ){
-      traces[i*2]['y'] = multiply(traces[i*2]['base_y'], b)
-      traces[i*2+1]['y'] = multiply(traces[i*2+1]['base_y'], b)
+    if (b > 0) {
+      if (traces[i * 2] && traces[i * 2].hasOwnProperty('base_y')) {
+        traces[i * 2]['y'] = multiply(traces[i * 2].base_y, b);
+        traces[i * 2 + 1]['y'] = multiply(traces[i * 2 + 1].base_y, b);
+      } else {
+        console.log("traces[i*2] is undefined or does not have 'base_y'");
+      }
     }
   }
   update();
 }
-
 function get_template_text(){
 
   for(var i = 0 ; i < traces.length; i ++){

@@ -1,6 +1,5 @@
 
 
-var range_scale = 1;
 
 class inputer {
 
@@ -14,6 +13,7 @@ class inputer {
       button.style.marginLeft = '10px'
       button.tabIndex = "-1";
       parent.appendChild(button)
+      return button
     }
 
     if(!cur_inputs[key].hasOwnProperty('it')){
@@ -57,24 +57,34 @@ class inputer {
       var br = document.createElement("br");
       parent.appendChild(br);
     }else if(cur_inputs[key]['it'] == "slider"){
-      make_input_title(parent, key);
+
+      let title = make_input_title(parent, key);
+      var br = document.createElement("br");
+      parent.appendChild(br);
       const input = document.createElement("Input");
       input.id = key
       input.setAttribute("type", "range");
       cur_inputs[key].hasOwnProperty('def');
-      input.value = cur_inputs[key]['def']*range_scale;
+      input.value = cur_inputs[key]['def'];
+      title.textContent = title.textContent + " " + cur_inputs[key]['def'].toPrecision(3);
       input.style.marginLeft = '15px';
       input.style.width = '300px'
-      input.onchange =  callback;
-      input.oninput =  callback;
+      let fn = function(){
+        let str = title.textContent.split(':')[0];
+        str = str + ": " + parseFloat(input.value).toPrecision(3);
+        title.textContent = str
+        callback();
+      }
+      input.onchange =  fn;
+      input.oninput =  fn;
       if(Object.hasOwn(cur_inputs[key], 'step')){
-        input.step = cur_inputs[key]['step']*range_scale
+        input.step = cur_inputs[key]['step']
       }
       if(Object.hasOwn(cur_inputs[key], 'min')){
-        input.min = cur_inputs[key]['min']*range_scale
+        input.min = cur_inputs[key]['min']
       }
       if(Object.hasOwn(cur_inputs[key], 'max')){
-        input.max = cur_inputs[key]['max']*range_scale
+        input.max = cur_inputs[key]['max']
       }
       parent.appendChild(input);
       cur_inputs[key]["elem"] = input
@@ -163,7 +173,7 @@ class inputer {
           }else if(cur_inputs[key]['it'] == 'number'){
             output[key] = parseFloat(cur_inputs[key]['elem'].value);
           }else if(cur_inputs[key]['it'] == 'slider'){
-            output[key] = cur_inputs[key]['elem'].value/range_scale;
+            output[key] = cur_inputs[key]['elem'].value;
             console.log("Here")
             console.log(cur_inputs[key]['elem'].value);
           }else if(cur_inputs[key]['it'] == 'text'){
@@ -213,7 +223,7 @@ class inputer {
             }else if(cur_inputs[key]['it'] == 'number'){
               output[key] = parseFloat(cur_inputs[key]['elem'].value);
             }else if(cur_inputs[key]['it'] == 'slider'){
-              output[key] = parseFloat(cur_inputs[key]['elem'].value)/range_scale;
+              output[key] = parseFloat(cur_inputs[key]['elem'].value);
             }else if(cur_inputs[key]['it'] == 'text'){
               output[key] = cur_inputs[key]['elem'].value;
             }else if(cur_inputs[key]['it'] == 'option'){
