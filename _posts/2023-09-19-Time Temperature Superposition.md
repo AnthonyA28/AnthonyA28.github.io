@@ -585,9 +585,15 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
       "y": traces[i]['y'],
       'name': traces[i]['name']
     }
-    prev_data.push(trace_data);
-    
+    prev_data.push(trace_data); 
   }
+
+  for(var i = 0; i < traces.length; i ++ ){
+    inputer_traces[i].update_data(traces[i]);
+    traces[i].base_x = traces[i]['x']
+    traces[i].base_y = traces[i]['y']
+  }
+  
   var new_traces = json["traces"];
   for(var i = 0 ; i < new_traces.length &&  i < new_traces.length; i ++ ){
     new_traces[i]['name'] = decodeURIComponent(new_traces[i]['name'])
