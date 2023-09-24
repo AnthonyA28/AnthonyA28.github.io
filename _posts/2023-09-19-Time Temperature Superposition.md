@@ -23,6 +23,10 @@ Rheological data can be transformed so that the effect of temperature is removed
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+
+
+
 <style type="text/css">
 
   .collapsible {
@@ -59,7 +63,8 @@ Rheological data can be transformed so that the effect of temperature is removed
     <!-- <div id="appTTS" ></div> -->
   <!-- </div> -->
     <!-- <br> -->
-      <button type="submit"  id="download" > Export json</button> 
+      <!-- <button type="submit"  id="download" > Export json</button>  -->
+      <!-- <button type="submit"  id="performTTS" > Fit constants</button>  -->
       <!-- <button type="submit"  id="save_template" > Save Template</button>  -->
       <!-- <button type="submit"  id="delete_template" > Delete Template</button>  -->
       <!-- <button type="submit"  id="make_default_template" > Make Default Template</button>  -->
@@ -266,18 +271,15 @@ function make_trace_boxes(){
         document.getElementById("TTS").appendChild(div);           //appending the element
 
         inputer_TTS.push(new inputer(div.id, {
-          TemperatureC: {it: "number", def: j*(15/2)+30,},
-          a: {it: "slider", def: 2, step: 0.00005, min: 0.000001, max:1 },
-          b: {it: "slider", def: 1, step: 0.00005, min: 0.000001, max:1},
+          // TemperatureC: {it: "number", def: j*(15/2)+30,},
+          a: {it: "slider", def: 1, step: 0.00005, min: 0.000001, max:1 },
+          // b: {it: "slider", def: 1, step: 0.00005, min: 0.000001, max:1},
         },
         function(){
           update_TTS();
         })) 
       }
   }
-
-
-
 } 
 
 
@@ -687,9 +689,10 @@ function update(){
 }
 
 function update_TTS() {
+
   for (var i = 0; i < inputer_TTS.length; i++) {
     a = inputer_TTS[i].inputs['a'].elem.value;
-    b = inputer_TTS[i].inputs['b'].elem.value;
+    // b = inputer_TTS[i].inputs['b'].elem.value;
 
     if (a > 0) {
       console.log("i:", i);
@@ -743,21 +746,62 @@ function get_template_text(){
   return text;
 }
 
-document.getElementById('download').addEventListener( 'click', function(){
 
-    var output_file = filename;
-    console.log(output_file);
-    const element = document.createElement('a');
-    var json_text = get_template_text();
+function getBaseLog(x, y) {
+  return Math.log(y) / Math.log(x);
+}
 
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json_text));
-    element.setAttribute('download', output_file.concat(".json"));
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
 
-});
+// document.getElementById('performTTS').addEventListener( 'click', function(){
+//   let As = [];
+//   let Ts = [];
+//   for(let i = 0; i < inputer_TTS.length; i ++){
+//       a = getBaseLog(10, inputer_TTS[i].inputs['a'].elem.value);
+//       T = parseFloat(inputer_TTS[i].inputs['TemperatureC'].elem.value);  
+//       As.push(a);
+//       Ts.push(T);
+//   }
+//   let Tr = Ts[0];
+//   // Define a function for your curve model
+//   const model = (params, t) => {
+//     const [C1, C2] = params;
+//     return -(C1 * (t-Tr))/(C2 + t - Tr) ;
+//   };
+
+//   const initialParams = [15, 1000];
+
+//     // Perform nonlinear curve fitting using numeric.js
+//   const fittedParams = numeric.uncmin((params) => {
+//     const residuals = Ts.map((x, index) => As[index] - model(params, x));
+//     return numeric.norm2(residuals);
+//   }, initialParams).solution;
+
+//   // Display the results
+//   const [C1, C2] = fittedParams;
+//   console.log(fittedParams)
+
+//   console.log(C1)
+//   console.log(C2)
+
+// });
+
+
+
+// document.getElementById('download').addEventListener( 'click', function(){
+
+//     var output_file = filename;
+//     console.log(output_file);
+//     const element = document.createElement('a');
+//     var json_text = get_template_text();
+
+//     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json_text));
+//     element.setAttribute('download', output_file.concat(".json"));
+//     element.style.display = 'none';
+//     document.body.appendChild(element);
+//     element.click();
+//     document.body.removeChild(element);
+
+// });
 
 
 // document.getElementById('save_template').addEventListener( 'click', function(){
