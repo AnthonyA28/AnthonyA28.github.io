@@ -11,8 +11,8 @@ section: article
 
 Rheological data can be transformed so that the effect of temperature is removed. The data is shifted along the time axes, and the effect is quantified by the shifting parameters. The $a_T$s at each temperature are then fit to the following equation: $ Log(a_T) = -\frac{C_1(T-T_r)}{C_2 + T - T_r} $
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+<!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
 
 <!-- <script type="text/x-mathjax-config"> MathJax.Hub.Config({ "HTML-CSS": { scale: 1.3, linebreaks: { automatic: true } },SVG: { font: "STIX General" },displayAlign: "left" });</script> -->
 <script src="/assets/plotter/deps/papaparse.js"></script>
