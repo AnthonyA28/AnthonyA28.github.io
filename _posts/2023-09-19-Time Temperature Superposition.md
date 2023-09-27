@@ -9,7 +9,13 @@ section: article
 # Time Temperature Superposition
 
 
-Rheological data can be transformed so that the effect of temperature is removed. The data is shifted along the time axes, and the effect is quantified by the shifting parameters. The $a_T$s at each temperature are then fit to the following equation: $ Log(a_T) = -\frac{C_1(T-T_r)}{C_2 + T - T_r} $
+Rheological data can be transformed so that the effect of temperature is removed. The data is shifted along the time axes, and the effect is quantified by the shifting variable $a$. The $a_T$s at each temperature are then fit to the following equation: $ Log(a_T) = -\frac{C_1(T-T_r)}{C_2 + T - T_r} $. 
+
+The Data can also be shifted along the vertical axes to with the $b$ variable. I am not sure if these should follow the same equation as the $a$s. 
+
+Use the sliders below to adjust the $a$s and $b$s at different temperatures. The number left to each slider is the base unit that the slider value is multipled by (lower this if a needs to be very small). Export the example data by clicking 'Export Data' to see the formatting convention. Then upload your own data by clicking, or dragging and dropping, the 'Choose File' button.  
+
+
 
 <!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script> -->
@@ -24,6 +30,9 @@ Rheological data can be transformed so that the effect of temperature is removed
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+
+
+
 
 
 
@@ -58,7 +67,8 @@ Rheological data can be transformed so that the effect of temperature is removed
     
 
 
-    Open<input type="file" id="input_file">
+    <h5>Load Data: <input type="file" id="input_file"></h5>
+    <h5>Export Data:  <button type="submit"  id="exportData" > Export Data</button></h5>
     <div id="TTS" ></div>
     <!-- <div id="appTTS" ></div> -->
   <!-- </div> -->
@@ -183,7 +193,76 @@ Rheological data can be transformed so that the effect of temperature is removed
 <script >if (window.module) module = window.module;</script>
 <script src="/assets/plotter/templates.js"></script>
 <script >
-  var filename = "output";
+
+
+let global_header = ["Angular Frequency","Storage Modulus","Loss Modulus","","Angular Frequency","Storage Modulus","Loss Modulus","","Angular Frequency","Storage Modulus","Loss Modulus","","Angular Frequency","Storage Modulus","Loss Modulus"];
+
+document.getElementById('exportData').addEventListener('click', function() {
+
+
+  for(let i = 0; i < inputer_TTS.length; i += 1){
+    let T = inputer_TTS[i].inputs['TemperatureC'].elem.value;
+    let a = (parseFloat(inputer_TTS[i].inputs['a'].elem.value)*parseFloat(inputer_TTS[i].inputs['a'].elem_base.value)).toFixed(4);
+    let b = (parseFloat(inputer_TTS[i].inputs['b'].elem.value)*parseFloat(inputer_TTS[i].inputs['b'].elem_base.value)).toFixed(4);
+    console.log(a);
+    console.log(b);
+    global_header[i*4] = global_header[i*4] + "T: " + T  + " a:" + a + " b:" + b
+  }
+
+  let dataArrays = []
+
+  for(let i = 0; i < traces.length; i += 2){
+    dataArrays.push(traces[i].x)
+    dataArrays.push(traces[i].y)
+    dataArrays.push(traces[i+1].y)
+
+  }
+
+  const combinedData = [];
+
+  for (let i = 0; i < global_header.length; i++) {
+    const rowData = [];
+    for (let j = 0; j < dataArrays.length; j++) {
+       rowData.push(dataArrays[j][i] || ''); // Insert data or an empty string if data is missing
+    if ((j + 1) % 3 === 0 && j !== dataArrays.length - 1) {
+        // Insert an empty column after every 3rd column except the last one
+        rowData.push('');
+      }
+    }
+    combinedData.push(rowData.join(','));
+  }
+
+
+  // Combine headers and rows
+  const csv = [global_header, ...combinedData].join('\n');
+
+  // Create a Blob containing the CSV data
+  const blob = new Blob([csv], { type: 'text/csv' });
+
+  // Create a download link
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  a.download = 'TTS.csv';
+
+  // Trigger the download
+  document.body.appendChild(a);
+  a.click();
+
+  // Clean up
+  URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+});
+
+
+
+
+
+
+
+
+var filename = "output";
 var traces = []
 var inputer_traces = [];
 var inputer_TTS = []
@@ -271,9 +350,9 @@ function make_trace_boxes(){
         document.getElementById("TTS").appendChild(div);           //appending the element
 
         inputer_TTS.push(new inputer(div.id, {
-          // TemperatureC: {it: "number", def: j*(15/2)+30,},
-          a: {it: "slider", def: 1, step: 0.00005, min: 0.000001, max:1 },
-          // b: {it: "slider", def: 1, step: 0.00005, min: 0.000001, max:1},
+          TemperatureC: {it: "number", def: j*(15/2)+30,},
+          a: {it: "slider", def: 1, base: 1, step: 0.00005, min: 0.000001, max:1 },
+          b: {it: "slider", def: 1, base: 1, step: 0.00005, min: 0.000001, max:1},
         },
         function(){
           update_TTS();
@@ -320,6 +399,7 @@ var inputer_master_trace = new inputer("appM", {
 
 
 function plot(header, data, update_nums=false){
+  global_header = header
   var index_header = 0;
   var datas = []
   var xs = [0]
@@ -393,6 +473,8 @@ function plot(header, data, update_nums=false){
     if( j < traces.length){
       traces[j].x = datas[j][0]
       traces[j].y = datas[j][1]
+      traces[j].name = headers[j]
+
     }else{
 
     var marker_shape = marker_shapes[j%marker_shapes.length];
@@ -449,7 +531,8 @@ function plot(header, data, update_nums=false){
     inputer_layout.update_data(layout);
   }
 
-  document.getElementById("palettes").dispatchEvent(new Event('change')); // Force the inputer_traces color options box to update color 
+  /// AJA TODO: this literally cause the inputer names to be set to emppty...???
+  // document.getElementById("palettes").dispatchEvent(new Event('change')); // Force the inputer_traces color options box to update color 
 
 
   Plotly.newPlot(document.getElementById('gd'), traces, inputer_layout.get_data(), {
@@ -697,8 +780,8 @@ function update(){
 function update_TTS() {
 
   for (var i = 0; i < inputer_TTS.length; i++) {
-    a = inputer_TTS[i].inputs['a'].elem.value;
-    // b = inputer_TTS[i].inputs['b'].elem.value;
+    a = parseFloat(inputer_TTS[i].inputs['a'].elem.value)*parseFloat(inputer_TTS[i].inputs['a'].elem_base.value);
+    b = parseFloat(inputer_TTS[i].inputs['b'].elem.value)*parseFloat(inputer_TTS[i].inputs['b'].elem_base.value);
 
     if (a > 0) {
       console.log("i:", i);
