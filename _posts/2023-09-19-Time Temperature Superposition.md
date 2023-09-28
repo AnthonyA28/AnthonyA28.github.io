@@ -69,11 +69,11 @@ Use the sliders below to adjust the $a$s and $b$s at different temperatures. The
 
     <h5>Load Data: <input type="file" id="input_file"></h5>
     <h5>Export Data:  <button type="submit"  id="exportData" > Export Data</button></h5>
+    <button type="submit"  id="download" > Export json</button>
     <div id="TTS" ></div>
     <!-- <div id="appTTS" ></div> -->
   <!-- </div> -->
     <!-- <br> -->
-      <!-- <button type="submit"  id="download" > Export json</button>  -->
       <!-- <button type="submit"  id="performTTS" > Fit constants</button>  -->
       <!-- <button type="submit"  id="save_template" > Save Template</button>  -->
       <!-- <button type="submit"  id="delete_template" > Delete Template</button>  -->
@@ -199,6 +199,7 @@ let global_header = ["Angular Frequency","Storage Modulus","Loss Modulus","","An
 
 document.getElementById('exportData').addEventListener('click', function() {
 
+  let header = [...global_header];
 
   for(let i = 0; i < inputer_TTS.length; i += 1){
     let T = inputer_TTS[i].inputs['TemperatureC'].elem.value;
@@ -206,7 +207,7 @@ document.getElementById('exportData').addEventListener('click', function() {
     let b = (parseFloat(inputer_TTS[i].inputs['b'].elem.value)*parseFloat(inputer_TTS[i].inputs['b'].elem_base.value)).toFixed(4);
     console.log(a);
     console.log(b);
-    global_header[i*4] = global_header[i*4] + "T: " + T  + " a:" + a + " b:" + b
+    header[i*4] = header[i*4] + "T: " + T  + " a:" + a + " b:" + b
   }
 
   let dataArrays = []
@@ -220,7 +221,7 @@ document.getElementById('exportData').addEventListener('click', function() {
 
   const combinedData = [];
 
-  for (let i = 0; i < global_header.length; i++) {
+  for (let i = 0; i < header.length; i++) {
     const rowData = [];
     for (let j = 0; j < dataArrays.length; j++) {
        rowData.push(dataArrays[j][i] || ''); // Insert data or an empty string if data is missing
@@ -234,7 +235,7 @@ document.getElementById('exportData').addEventListener('click', function() {
 
 
   // Combine headers and rows
-  const csv = [global_header, ...combinedData].join('\n');
+  const csv = [header, ...combinedData].join('\n');
 
   // Create a Blob containing the CSV data
   const blob = new Blob([csv], { type: 'text/csv' });
@@ -294,7 +295,6 @@ var removeOptions = function (selectElement) {
 }
 
 
-var inputer_TTS_init = false
 function make_trace_boxes(){
   inputer_traces = [];
   inputer_TTS = [];
@@ -508,15 +508,15 @@ function plot(header, data, update_nums=false){
     traces.push(trace)
     }
   }
+
+  make_trace_boxes();
+
   for(var i = 0; i < traces.length; i ++ ){
     inputer_traces[i].update_data(traces[i]);
     traces[i].base_x = traces[i]['x']
     traces[i].base_y = traces[i]['y']
   }
   
-
-  make_trace_boxes();
-
   document.getElementById("n_colors").value = traces.length
 
   if(!update_nums){
@@ -876,21 +876,21 @@ function getBaseLog(x, y) {
 
 
 
-// document.getElementById('download').addEventListener( 'click', function(){
+document.getElementById('download').addEventListener( 'click', function(){
 
-//     var output_file = filename;
-//     console.log(output_file);
-//     const element = document.createElement('a');
-//     var json_text = get_template_text();
+    var output_file = filename;
+    console.log(output_file);
+    const element = document.createElement('a');
+    var json_text = get_template_text();
 
-//     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json_text));
-//     element.setAttribute('download', output_file.concat(".json"));
-//     element.style.display = 'none';
-//     document.body.appendChild(element);
-//     element.click();
-//     document.body.removeChild(element);
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json_text));
+    element.setAttribute('download', output_file.concat(".json"));
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
 
-// });
+});
 
 
 // document.getElementById('save_template').addEventListener( 'click', function(){
