@@ -69,7 +69,7 @@ Use the sliders below to adjust the $a$s and $b$s at different temperatures. The
 
     <h5>Load Data: <input type="file" id="input_file"></h5>
     <h5>Export Data:  <button type="submit"  id="exportData" > Export Data</button></h5>
-    <button type="submit"  id="download" > Export json</button>
+    <button type="submit" style="display:none" id="download" > Export json</button>
     <div id="TTS" ></div>
     <!-- <div id="appTTS" ></div> -->
   <!-- </div> -->
@@ -324,7 +324,7 @@ function make_trace_boxes(){
         name: {it: "text", def: ""},
         visible: {it: "option", options: ['true' , 'false' , "legendonly" ]},
         line:  { 
-          width: {it: "number", def: 3},
+          width: {it: "number", def: 1},
           shape: {it: "option", options: ["spline", "linear", "hv", "vh", "hvh", "vhv"]},
           dash: {it: "option", options: ["solid", "dot", "dash", "longdash", "dashdot", "longdashdot"]},
           smoothing: {it: "number", def: 0,},
@@ -485,13 +485,14 @@ function plot(header, data, update_nums=false){
     var color = colors_palettes[palette][j%colors_palettes[palette].length];
     
 
+
     var trace = {
         x: datas[j][0],
         y: datas[j][1],
         visible: true,
         name: headers[j],
         type: 'scatter',
-        mode: 'lines',
+        mode: 'lines+markers',
         marker: {
             size: 6,
             symbol: marker_shape,
@@ -501,7 +502,7 @@ function plot(header, data, update_nums=false){
       line: {
         shape: "spline",
         dash: line_shape,
-        width: 3,
+        width: 1,
             color: color,
       },
     }
@@ -552,7 +553,11 @@ function plot(header, data, update_nums=false){
         }
       }]
   },);
-    
+  
+  helper_reset_colors();
+  helper_pair_colors();
+  helper_pair_markers();
+  helper_pair_linestyles();
 };
 
 
@@ -904,64 +909,63 @@ document.getElementById('download').addEventListener( 'click', function(){
 
 
 
-// document.getElement?ById('helper_reset_colors').addEventListener( 'click', function(){
-//   console.log("_reset_colors")
+function helper_reset_colors(){
+  console.log("_reset_colors")
   
-//   for(var i = 0; i < inputer_traces.length; i += 1 ){
-//     inputer_traces[i].inputs.marker.color.elem.selectedIndex = i
-//     inputer_traces[i].inputs.line.color.elem.selectedIndex = i
-//   }
-//   update();
-// });
+  for(var i = 0; i < inputer_traces.length; i += 1 ){
+    inputer_traces[i].inputs.marker.color.elem.selectedIndex = i
+    inputer_traces[i].inputs.line.color.elem.selectedIndex = i
+  }
+  update();
+};
 
-// document.getElementById('helper_pair_colors').addEventListener( 'click', function(){
-//   console.log("helper_pair_colors")
+function helper_pair_colors(){
+  console.log("helper_pair_colors")
   
-//   var j = 0;
-//   for(var i = 0; i < inputer_traces.length; i += 1 ){
-//     inputer_traces[i].inputs.marker.color.elem.selectedIndex = j
-//     inputer_traces[i].inputs.line.color.elem.selectedIndex = j
-//     i += 1
-//     if(i >= inputer_traces.length){
-//       break
-//     }
-//     inputer_traces[i].inputs.marker.color.elem.selectedIndex = j
-//     inputer_traces[i].inputs.line.color.elem.selectedIndex = j
-//     j+=1
-//   }
-//   update();
-// });
+  var j = 0;
+  for(var i = 0; i < inputer_traces.length; i += 1 ){
+    inputer_traces[i].inputs.marker.color.elem.selectedIndex = j
+    inputer_traces[i].inputs.line.color.elem.selectedIndex = j
+    i += 1
+    if(i >= inputer_traces.length){
+      break
+    }
+    inputer_traces[i].inputs.marker.color.elem.selectedIndex = j
+    inputer_traces[i].inputs.line.color.elem.selectedIndex = j
+    j+=1
+  }
+  update();
+};
 
-// document.getElementById('helper_pair_markers').addEventListener( 'click', function(){
-//   console.log("helper_pair_markers")
+function helper_pair_markers(){
+  console.log("helper_pair_markers")
   
-//   var j = 0;
-//   for(var i = 0; i < inputer_traces.length; i += 1 ){
-//     inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = j;
-//     i += 1
-//     if(i >= inputer_traces.length){
-//       break
-//     }
-//     inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = j+8;
-//     j += 1;
-//   }
-//   update();
-// });
+  var j = 0;
+  for(var i = 0; i < inputer_traces.length; i += 1 ){
+    inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = j;
+    i += 1
+    if(i >= inputer_traces.length){
+      break
+    }
+    inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = j+8;
+    j += 1;
+  }
+  update();
+};
 
-// document.getElementById('helper_pair_linestyles').addEventListener( 'click', function(){
-//   console.log("helper_pair_linestyles")
+function helper_pair_linestyles(){
+  console.log("helper_pair_linestyles")
   
-//   for(var i = 0; i < inputer_traces.length; i += 1 ){
-//     inputer_traces[i].inputs.line.dash.elem.selectedIndex = 0;
-//     i += 1
-//     if(i >= inputer_traces.length){
-//       break
-//     }
-//     inputer_traces[i].inputs.line.dash.elem.selectedIndex = 1;
-//   }
-//   update();
-// });
-
+  for(var i = 0; i < inputer_traces.length; i += 1 ){
+    inputer_traces[i].inputs.line.dash.elem.selectedIndex = 0;
+    i += 1
+    if(i >= inputer_traces.length){
+      break
+    }
+    inputer_traces[i].inputs.line.dash.elem.selectedIndex = 1;
+  }
+  update();
+};
 
 
 
@@ -1062,6 +1066,8 @@ function load_file(file){
       plot(header, transpose(data), data[0]);
       load_default_template()
           // event.sender.send('load_file-task-finished', [false, data]); 
+        helper_pair_linestyles();
+        helper_pair_markers();
     }
 
   
@@ -1113,6 +1119,8 @@ function load_file(file){
         import_json(e.target.result, true, true, true, true)
       });reader.readAsBinaryString(file);
   }
+
+
 
 }
 
