@@ -349,14 +349,22 @@ function selectOption(elem, index, trigger=false){
   }
 }
 
-function import_json(json_text, update_data=true, update_trace_styles=true, update_trace_names = false, update_axes_labels=false){
+function import_json(json_text, update_data=true, update_trace_styles=true, update_trace_names = false, update_axes_labels=false, update_size_only=false){
 
 
   var prevLayout = inputer_layout.get_data();
-  var json = JSON.parse(json_text)
-  var l = json["layout"]
+  var json = JSON.parse(json_text);
+  var l = json["layout"];
+
+  if(update_size_only){
+    update_data = false;
+    update_trace_names = false;
+    update_trace_styles = false;
+    update_axes_labels = false;
+  }
 
 
+  if(!update_size_only){
     var elem = document.getElementById("palettes");
     var colors =[...elem.options].map(o => o.value)
     pal = json["palette"]
@@ -371,6 +379,9 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
       pal = pal.slice(0, -1)
       console.log(pal);
     }
+    
+  }
+
 
     
   var prev_data = []
@@ -404,7 +415,15 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
       l.yaxis.title.text  = prevLayout.yaxis.title.text
     }
   }
-  inputer_layout.update_data(l);
+
+  if(update_size_only){
+    prevLayout.margin = l.margin
+    prevLayout.width = l.width
+    prevLayout.height = l.height
+    inputer_layout.update_data(prevLayout);
+  }else{
+    inputer_layout.update_data(l);
+  }
 
   if(update_data){
     traces = structuredClone(new_traces);
@@ -751,7 +770,8 @@ function load_templ(index){
   var update_trace_styles = document.getElementById("update_trace_styles_check").checked;
   var update_trace_names = document.getElementById("update_trace_names_check").checked;
   var update_axes_labels = document.getElementById("update_axes_labels_check").checked;
-  import_json(templates_list[index][1], false, update_trace_styles, update_trace_names, update_axes_labels);
+  var update_size_only = document.getElementById("update_size_only_check").checked;
+  import_json(templates_list[index][1], false, update_trace_styles, update_trace_names, update_axes_labels, update_size_only);
 }
 
 
