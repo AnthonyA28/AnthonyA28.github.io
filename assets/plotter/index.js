@@ -312,20 +312,27 @@ function save_plot(type){
     return;
   }
   if( type == "svg"){
-    // const config={type:'save-file'}
-    // dialog(config)
-    //     .then(file => {
-    //      console.log(file[0])
-          Plotly.downloadImage(gd, {
-              // filename: file[0],
-              format: 'svg',
-            }).then(result => {
-          console.log(result);
-          console.log("Should save a template as well..");
-        });
-        // })
-        // .catch(err => console.log(err))
+    var plot = document.getElementById('gd');
+    var svgContent = plot.querySelector('svg');
+    var json_text = get_template_text();
+    var comment = document.createComment("layout="+json_text+"endlayout");
+    svgContent.appendChild(comment);
+    var svgBlob = new Blob([new XMLSerializer().serializeToString(svgContent)], { type: 'image/svg+xml' });
+    var svgUrl = URL.createObjectURL(svgBlob);
+    var downloadLink = document.createElement('a');
+    downloadLink.href = svgUrl;
 
+      filename = filename.replace('.csv', '');
+      filename = filename.replace('.json', '');
+      filename = filename.replace('.J', '');
+      filename = filename.replace('.svg', '');
+      filename = filename.replace('.xlsx', '');
+
+
+
+    downloadLink.download = filename+".svg";
+    downloadLink.click();
+    URL.revokeObjectURL(svgUrl);
     return
   }
 }
@@ -347,6 +354,13 @@ function selectOption(elem, index, trigger=false){
   else if(trigger) {
     elem.fireEvent("onchange");
   }
+}
+
+function import_svg(svg_text, update_data=true, update_trace_styles=true, update_trace_names = false, update_axes_labels=false, update_size_only=false){
+    var splitStrings = svg_text.split("layout=");
+    var layoutText = splitStrings[1].split("endlayout")[0]
+    console.log(layoutText);
+    import_json(layoutText, update_data, update_trace_styles, update_trace_names , update_axes_labels, update_size_only)
 }
 
 function import_json(json_text, update_data=true, update_trace_styles=true, update_trace_names = false, update_axes_labels=false, update_size_only=false){
@@ -379,7 +393,7 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
       pal = pal.slice(0, -1)
       console.log(pal);
     }
-    
+
   }
 
 
@@ -753,11 +767,18 @@ function load_file(file){
 
   }
 
-    if(name.endsWith(".json")){
-      var reader = new FileReader();
-      reader.addEventListener('load', function (e) {
-        import_json(e.target.result, true, true, true, true)
-      });reader.readAsBinaryString(file);
+  if(name.endsWith(".json")){
+    var reader = new FileReader();
+    reader.addEventListener('load', function (e) {
+      import_json(e.target.result, true, true, true, true)
+    });reader.readAsBinaryString(file);
+  }
+
+  if(name.endsWith(".svg")){
+    var reader = new FileReader();
+    reader.addEventListener('load', function (e) {
+      import_svg(e.target.result, true, true, true, true)
+    });reader.readAsBinaryString(file);
   }
 
 }
@@ -839,6 +860,7 @@ function load_default_template(){
   }
   load_templ(0);
 }
+
 
 document.getElementById("delete_template").addEventListener('click', function(){
   var selectedOption = dropdown.options[dropdown.selectedIndex];
