@@ -770,6 +770,14 @@ function multiply(arr, x) {
 }
 
 function update(){
+
+    // Assuming you have a Plotly plot named 'myPlot'
+  var plot = document.getElementById('gd');
+
+    // Get the x-axis and y-axis ranges
+  var xaxisRange = plot.layout.xaxis.range;
+  var yaxisRange = plot.layout.yaxis.range;
+
   document.getElementById("gd_div").style.width = inputer_layout.get_data()['width'];
   for(var i = 0 ; i < traces.length; i ++){
     traces[i] = inputer_traces[i].fill_json(traces[i]);
@@ -778,7 +786,14 @@ function update(){
   }
 
   var l = inputer_layout.get_data();
+  l.xaxis.range = xaxisRange
+  l.yaxis.range = yaxisRange
+
+
   Plotly.relayout(document.getElementById('gd'), l);
+
+
+  // Plotly.update(document.getElementById('gd'), l)
 
 }
 
