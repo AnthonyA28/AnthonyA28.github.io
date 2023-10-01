@@ -48,22 +48,22 @@ tags: Tools
 
     
     <div style="display: inline-block;width:350px;height:2000px;border: 1px solid #FFFFFF; vertical-align: top;">
-      <h2>
+      <h3>
           <a href="//assets/plotter/assets/PlotterTutorial.html">Help/Documentation</a>
           <br>
-      </h2>
+      </h3>
 
 
-      Open<input type="file" id="input_file">
+      
       <!-- <br> -->
-        <button type="submit" id="download" > Export json</button> 
+            <!-- <button type="submit" id="save_template"> Save template </button>  -->
+        <!-- <button type="submit" id="open_templates"> Open templates</button>  -->
+        <div id="template_div"><strong>Choose Template:</strong> </div>
         <button type="submit" id="save_template" > Save Template</button> 
         <button type="submit" id="delete_template" > Delete Template</button> 
         <button type="submit" id="make_default_template" > Make Default Template</button> 
-            <!-- <button type="submit" id="save_template"> Save template </button>  -->
-        <!-- <button type="submit" id="open_templates"> Open templates</button>  -->
-        <div id="template_div"><strong>Choose Template:</strong> 
-        </div>
+        
+
         <div ><strong>Update:</strong>
           <div style="margin-left: 20px;">
           Styles <input type="checkbox"  id="update_trace_styles_check" checked >
@@ -79,10 +79,10 @@ tags: Tools
         </div>
 
       <br>
+      <strong>Palette:</strong>
       <select id="palettes">
-
-        <option>pyDefault</option>
         <option>UTcolors</option>
+        <option>pyDefault</option>
         <option>Paired</option>
         <option>Dark2</option>
         <option>Pastel1</option>
@@ -120,6 +120,18 @@ tags: Tools
       <h3>Master Trace:</h3>
       <div id="appM"></div>
 
+
+
+    </div>
+
+    <div style="display: inline-block;width:410px;height:410px;border: 1px solid #FFFFFF; vertical-align:  top ; margin-top: 25px" id="gd_div">
+
+      <input type="file" id="input_file" style="color: transparent;font-size: 28px; margin-bottom: 25px; margin-left: 5px; margin-top: 5px" >
+
+
+      <div id="gd" ></div>
+      <br>
+
     <button type="submit" id="helper_reset_colors">Reset Colors</button>
 
     <button type="submit" id="helper_reset_markers">Reset Markers</button> 
@@ -135,11 +147,6 @@ tags: Tools
     <button type="submit" id="helper_pair_linestyles">Pair Linestyles</button> 
     <br>
 
-
-    </div>
-
-    <div style="display: inline-block;width:410px;height:410px;border: 1px solid #FFFFFF; vertical-align:  top ; margin-top: 200px" id="gd_div">
-      <div id="gd" ></div>
     </div>
 
     <div style="display: inline-block;width:350px;height:1000px;border: 1px solid #FFFFFF; vertical-align: top;">
@@ -167,7 +174,7 @@ tags: Tools
       .tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
       .tg .tg-0lax{text-align:left;vertical-align:top}
       </style>
-      <table><thead><tr><th>Ångstrom</th><th>Nu</th></tr></thead><tbody><tr><td>Å</td><td>ν</td></tr><tr><td>Alpha</td><td>Xi</td></tr><tr><td>α</td><td>ξ</td></tr><tr><td>Beta</td><td>Omicron</td></tr><tr><td>β</td><td>ο</td></tr><tr><td>Gamma</td><td>Pi</td></tr><tr><td>γ</td><td>π</td></tr><tr><td>Γ</td><td>Π</td></tr><tr><td>Delta</td><td>Rho</td></tr><tr><td>δ</td><td>ρ</td></tr><tr><td>Δ</td><td>Lambda</td></tr><tr><td>Epsilon</td><td>λ</td></tr><tr><td>ε</td><td>Σ</td></tr><tr><td>ϵ</td><td>Tau</td></tr><tr><td>Eta</td><td>τ</td></tr><tr><td>η</td><td>Upsilon</td></tr><tr><td>Theta</td><td>υ</td></tr><tr><td>θ</td><td>Sigma</td></tr><tr><td>ϴ</td><td>σ</td></tr><tr><td>Iota</td><td>Chi</td></tr><tr><td>ι</td><td>χ</td></tr><tr><td>Kappa</td><td>Psi</td></tr><tr><td>κ</td><td>ψ</td></tr><tr><td>Κ</td><td>Omega</td></tr><tr><td>Zeta</td><td>ω</td></tr><tr><td>ζ</td><td>Ω</td></tr><tr><td>Λ</td><td>Phi</td></tr><tr><td>Mu</td><td>φ</td></tr><tr><td>μ</td><td>Cdot</td></tr></tbody></table>
+            <table><thead> <tr> <th>Name</th> <th>Unicode</th></tr></thead><tbody> <tr> <td>Ångstrom</td> <td>Å</td></tr> <tr> <td>Alpha</td> <td>α</td></tr> <tr> <td>Beta</td> <td>β</td></tr> <tr> <td>Gamma</td> <td>γ, Γ</td></tr> <tr> <td>Delta</td> <td>δ, Δ</td></tr> <tr> <td>Epsilon</td> <td>ε, ϵ</td></tr> <tr> <td>Eta</td> <td>η</td></tr> <tr> <td>Theta</td> <td>θ, ϴ</td></tr> <tr> <td>Iota</td> <td>ι</td></tr> <tr> <td>Kappa</td> <td>κ, Κ</td></tr> <tr> <td>Zeta</td> <td>ζ, Λ</td></tr> <tr> <td>Mu</td> <td>μ</td></tr> <tr> <td>Nu</td> <td>ν</td></tr> <tr> <td>Xi</td> <td>ξ</td></tr> <tr> <td>Omicron</td> <td>ο</td></tr> <tr> <td>Pi</td> <td>π, Π</td></tr> <tr> <td>Rho</td> <td>ρ</td></tr> <tr> <td>Lambda</td> <td>λ, Σ</td></tr> <tr> <td>Tau</td> <td>τ</td></tr> <tr> <td>Upsilon</td> <td>υ</td></tr> <tr> <td>Sigma</td> <td>σ</td></tr> <tr> <td>Chi</td> <td>χ</td></tr> <tr> <td>Psi</td> <td>ψ</td></tr> <tr> <td>Omega</td> <td>ω, Ω</td></tr> <tr> <td>Phi</td> <td>φ</td></tr> <tr> <td>Cdot</td> <td>⋅</td></tr></tbody></table>
     </div>
   </div>
 
@@ -178,17 +185,31 @@ tags: Tools
 <h4 style="font-size: 40px;">Notes</h4>
 <p style="font-size: 28px;">
 
+<section style="font-size: 24px;">
 
-Typically images are rendered at 96 pixels per inch. So a 100x100 px  image will be in actual size 1.042 x 1.042 in  26.458 x 26.458 mm.
-<br>
-A paper is typically 8.6 x 11 in.  
-<br>
-A typical small figure size is 3.35 in (8.5 cm) wide. This will fit in one column. 
-<br>
-A typical large figure size is 6.73 in (17.1 cm) wide. This will fit in two columns.  
+<h2>Figure Sizes:</h2>
+<div style="margin-left: 20px;">
+  Typically images are rendered at 96 pixels per inch. So a 100x100 px  image will be in actual size 1.042 x 1.042 in  26.458 x 26.458 mm.
+  <br>
+  A paper is typically 8.6 x 11 in.  
+  <br>
+  A typical small figure size is 3.35 in (8.5 cm, 321px) wide. This will fit in one column. 
+  <br>
+  A typical large figure size is 6.7 in (17 cm, 642 px) wide. This will fit in two columns.  
+  </p>
+</div>
+<h2>Equations and Special Characters:</h2>
+<div style="margin-left: 20px;">
+  Special characters and mathematial equations can be written with Latex formatting. 
+  Just surround the text with dollar signs for the text to be treated as Latex. 
+  <br>
+  Alternatively, Using HTML markdown style is suitable for simple subscript and superscripts. The benefit to this, is that it will  retain the your font. 
+  <br> 
+  As an example, subscripts are achieved with x&lt;sub&gt;2&lt;/sub&gt; which will result in x<sub>2</sub>, but will render as $x_2$ in Latex.
+  Superscripts are as follows: x&lt;sup&gt;2&lt;/sup&gt; and will result in x<sup>2</sup> which is the equivalent to $x^2$ in Latex.
 
-</p>
-
+</div>
+</section>
 <script >if (window.module) module = window.module;</script>
 <script src="/assets/plotter/templates.js"></script>
 <script src="/assets/plotter/index.js">

@@ -556,21 +556,21 @@ function get_template_text(){
   return text;
 }
 
-document.getElementById('download').addEventListener( 'click', function(){
+// document.getElementById('download').addEventListener( 'click', function(){
 
-    var output_file = filename;
-    console.log(output_file);
-    const element = document.createElement('a');
-    var json_text = get_template_text();
+//     var output_file = filename;
+//     console.log(output_file);
+//     const element = document.createElement('a');
+//     var json_text = get_template_text();
 
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json_text));
-    element.setAttribute('download', output_file.concat(".json"));
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+//     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json_text));
+//     element.setAttribute('download', output_file.concat(".json"));
+//     element.style.display = 'none';
+//     document.body.appendChild(element);
+//     element.click();
+//     document.body.removeChild(element);
 
-});
+// });
 
 
 document.getElementById('save_template').addEventListener( 'click', function(){
@@ -931,3 +931,10 @@ load_default_template()
 document.getElementById('ignore_zoom_check').addEventListener('click', function(){
   update();
 })
+
+
+document.getElementById("n_colors").addEventListener('input', function(){
+  document.getElementById("palettes").dispatchEvent(new Event('change'));
+})
+
+
