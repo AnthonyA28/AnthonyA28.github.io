@@ -307,6 +307,7 @@ function input_csv(selectedFile) {
 
 
 function save_plot(type){
+
   
   filename = filename.replace('.csv', '');
   filename = filename.replace('.json', '');
@@ -321,18 +322,39 @@ function save_plot(type){
     return;
   }
   if( type == "svg"){
+
     var plot = document.getElementById('gd');
-    var svgContent = plot.querySelector('svg');
-    var json_text = get_template_text();
-    var comment = document.createComment("layout="+json_text+"endlayout");
+    var svgContent = plot.querySelector('svg').cloneNode(true);
+
+    var legend = plot.querySelector('.legend');
+    if (legend) {
+      svgContent.appendChild(legend.cloneNode(true));
+    }
+
+    var axesLabels = plot.querySelectorAll('.xtitle, .ytitle');
+    axesLabels.forEach(function (label) {
+      svgContent.appendChild(label.cloneNode(true));
+    });
+
+    var json_text = get_template_text(true);
+
+    var comment = document.createComment("layout=" + json_text + "endlayout");
     svgContent.appendChild(comment);
-    var svgBlob = new Blob([new XMLSerializer().serializeToString(svgContent)], { type: 'image/svg+xml' });
-    var svgUrl = URL.createObjectURL(svgBlob);
+
+    var svgData = new XMLSerializer().serializeToString(svgContent);
+    var svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
+
     var downloadLink = document.createElement('a');
-    downloadLink.href = svgUrl;
-    downloadLink.download = filename+".svg";
+    downloadLink.href = URL.createObjectURL(svgBlob);
+    downloadLink.download = filename + ".svg";
+
     downloadLink.click();
-    URL.revokeObjectURL(svgUrl);
+    URL.revokeObjectURL(downloadLink.href);
+
+
+    // filename = filename
+    // Plotly.downloadImage(gd, {format: 'png', scale:8, filename})
+
     return
   }
 }
@@ -529,7 +551,9 @@ function update(){
 
 }
 
-function get_template_text(){
+function get_template_text(curZoom=false){
+
+
 
   for(var i = 0 ; i < traces.length; i ++){
     traces[i].name = traces[i].name.replace(/\s/g,' ');
@@ -540,6 +564,12 @@ function get_template_text(){
   }
 
   var layout = inputer_layout.get_data();
+
+  if(curZoom){
+    var plot = document.getElementById('gd');
+    layout.xaxis.range = plot.layout.xaxis.range;
+    layout.yaxis.range = plot.layout.yaxis.range;
+  }
 
   layout.xaxis.title.text  = encodeURIComponent(layout.xaxis.title.text);
   layout.yaxis.title.text  = encodeURIComponent(layout.yaxis.title.text);
