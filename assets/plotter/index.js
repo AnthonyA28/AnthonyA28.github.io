@@ -251,15 +251,16 @@ function plot(header, data, update_nums=false){
 
 
   Plotly.newPlot(document.getElementById('gd'), traces, inputer_layout.get_data(), {
+      
       modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d'],
       modeBarButtonsToAdd: [{
-        name: 'to SVG',
+        name: 'To SVG',
         icon: Plotly.Icons.camera,
         click: function(gd) {
           // Plotly.downloadImage(gd, {format: 'svg'})
           save_plot("svg")
         }},{
-        name: 'to png',
+        name: 'To PNG',
         icon: Plotly.Icons.camera,
         click: function(gd) {
           save_plot("png");
@@ -306,8 +307,16 @@ function input_csv(selectedFile) {
 
 
 function save_plot(type){
+  
+  filename = filename.replace('.csv', '');
+  filename = filename.replace('.json', '');
+  filename = filename.replace('.J', '');
+  filename = filename.replace('.svg', '');
+  filename = filename.replace('.xlsx', '');
   console.log(filename)
+  
   if( type == "png"){
+    filename = filename
     Plotly.downloadImage(gd, {format: 'png', scale:8, filename})
     return;
   }
@@ -321,15 +330,6 @@ function save_plot(type){
     var svgUrl = URL.createObjectURL(svgBlob);
     var downloadLink = document.createElement('a');
     downloadLink.href = svgUrl;
-
-      filename = filename.replace('.csv', '');
-      filename = filename.replace('.json', '');
-      filename = filename.replace('.J', '');
-      filename = filename.replace('.svg', '');
-      filename = filename.replace('.xlsx', '');
-
-
-
     downloadLink.download = filename+".svg";
     downloadLink.click();
     URL.revokeObjectURL(svgUrl);
@@ -472,24 +472,26 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
   }
 
   var l = inputer_layout.get_data()
-
+  l.modebar = {}
+  l.modebar.orientation = "v"
 
   Plotly.newPlot(document.getElementById('gd'), traces, l, {
-    modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d'],
+    modeBarButtonsToRemove: ['toImage', 'sendDataToCloud' ],
     modeBarButtonsToAdd: [
+
     {
-      name: 'to SVG',
+      name: 'To SVG',
       icon: Plotly.Icons.camera,
       click: function(gd) {
         save_plot("svg");
       }
     },{
-      name: 'to png',
+      name: 'To png',
       icon: Plotly.Icons.camera,
       click: function(gd) {
         save_plot("png");
       }
-    }] // END modeBarButtonsToAdd
+    }] // END modeBarButtonsToAdd,
     },); // END Plotly.newPlot
 
     update();
@@ -937,4 +939,13 @@ document.getElementById("n_colors").addEventListener('input', function(){
   document.getElementById("palettes").dispatchEvent(new Event('change'));
 })
 
+document.getElementById('helper_save_current_zoom').addEventListener('click', function(){
+  
+  var plot = document.getElementById('gd');
+  var layout = inputer_layout.get_data();
+  layout.xaxis.range = plot.layout.xaxis.range
+  layout.yaxis.range = plot.layout.yaxis.range
+  inputer_layout.update_data(layout);
+
+})
 

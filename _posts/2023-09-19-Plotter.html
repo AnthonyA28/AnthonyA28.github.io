@@ -19,6 +19,8 @@ tags: Tools
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
 
 <style type="text/css">
+
+
   body
   {
     font-size: 13px;
@@ -120,8 +122,26 @@ tags: Tools
       <h3>Master Trace:</h3>
       <div id="appM"></div>
 
-
-
+      <h3 >Notes:</h3>
+        <h4 >Figure Sizes:</h4>
+          <div style="margin-left:15px;">
+          Typically images are rendered at 96 pixels per inch. So a 100x100 px  image will be in actual size 1.042 x 1.042 in  26.458 x 26.458 mm.
+          <br>
+          A typical small figure size is 3.35 in (8.5 cm, 321px) wide. 
+          <br>
+          A typical large figure size is 6.7 in (17 cm, 642 px) wide.  
+          </div>
+        <h4>Equations and Special Characters:</h4>
+          <div style="margin-left:15px;">
+          Special characters and mathematial equations can be written with Latex formatting. 
+          Just surround the text with dollar signs for the text to be treated as Latex. 
+          <br>
+          Alternatively, Using HTML markdown style is suitable for simple subscript and superscripts. The benefit to this, is that it will  retain the your font. 
+          <br> 
+          As an example, subscripts are achieved with x&lt;sub&gt;2&lt;/sub&gt; which will result in x<sub>2</sub>, but will render as $x_2$ in Latex.
+          Superscripts are as follows: x&lt;sup&gt;2&lt;/sup&gt; and will result in x<sup>2</sup> which is the equivalent to $x^2$ in Latex.
+          </div>
+    
     </div>
 
     <div style="display: inline-block;width:410px;height:410px;border: 1px solid #FFFFFF; vertical-align:  top ; margin-top: 25px" id="gd_div">
@@ -145,6 +165,11 @@ tags: Tools
     <button type="submit" id="helper_pair_markers">Pair Markers</button> 
 
     <button type="submit" id="helper_pair_linestyles">Pair Linestyles</button> 
+
+    <br>
+
+    <button type="submit" id="helper_save_current_zoom">Save current range/domain</button> 
+    
     <br>
 
     </div>
@@ -153,7 +178,7 @@ tags: Tools
 
       <!-- Data -->
       <div id="data">
-        Data:
+        <h3>Data:</h3>  
       </div>
     </div>
 
@@ -182,34 +207,7 @@ tags: Tools
 
 </main>
 
-<h4 style="font-size: 40px;">Notes</h4>
-<p style="font-size: 28px;">
 
-<section style="font-size: 24px;">
-
-<h2>Figure Sizes:</h2>
-<div style="margin-left: 20px;">
-  Typically images are rendered at 96 pixels per inch. So a 100x100 px  image will be in actual size 1.042 x 1.042 in  26.458 x 26.458 mm.
-  <br>
-  A paper is typically 8.6 x 11 in.  
-  <br>
-  A typical small figure size is 3.35 in (8.5 cm, 321px) wide. This will fit in one column. 
-  <br>
-  A typical large figure size is 6.7 in (17 cm, 642 px) wide. This will fit in two columns.  
-  </p>
-</div>
-<h2>Equations and Special Characters:</h2>
-<div style="margin-left: 20px;">
-  Special characters and mathematial equations can be written with Latex formatting. 
-  Just surround the text with dollar signs for the text to be treated as Latex. 
-  <br>
-  Alternatively, Using HTML markdown style is suitable for simple subscript and superscripts. The benefit to this, is that it will  retain the your font. 
-  <br> 
-  As an example, subscripts are achieved with x&lt;sub&gt;2&lt;/sub&gt; which will result in x<sub>2</sub>, but will render as $x_2$ in Latex.
-  Superscripts are as follows: x&lt;sup&gt;2&lt;/sup&gt; and will result in x<sup>2</sup> which is the equivalent to $x^2$ in Latex.
-
-</div>
-</section>
 <script >if (window.module) module = window.module;</script>
 <script src="/assets/plotter/templates.js"></script>
 <script src="/assets/plotter/index.js">
