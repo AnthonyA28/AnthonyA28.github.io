@@ -370,6 +370,7 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
   var json = JSON.parse(json_text);
   var l = json["layout"];
 
+
   if(update_size_only){
     update_data = false;
     update_trace_names = false;
@@ -470,7 +471,10 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
     
   }
 
-  Plotly.newPlot(document.getElementById('gd'), traces, inputer_layout.get_data(), {
+  var l = inputer_layout.get_data()
+
+
+  Plotly.newPlot(document.getElementById('gd'), traces, l, {
     modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d'],
     modeBarButtonsToAdd: [
     {
@@ -498,6 +502,13 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
 }
 
 function update(){
+
+  var plot = document.getElementById('gd');
+  var xaxisRange = plot.layout.xaxis.range;
+  var yaxisRange = plot.layout.yaxis.range;
+
+
+
   document.getElementById("gd_div").style.width = inputer_layout.get_data()['width'];
   for(var i = 0 ; i < traces.length; i ++){
     traces[i] = inputer_traces[i].fill_json(traces[i]);
@@ -505,6 +516,13 @@ function update(){
   }
 
   var l = inputer_layout.get_data();
+
+  if(document.getElementById("ignore_zoom_check").checked){
+    l.xaxis.range = xaxisRange
+    l.yaxis.range = yaxisRange
+  }
+
+
   Plotly.relayout(document.getElementById('gd'), l);
 
 }
@@ -565,16 +583,35 @@ document.getElementById('save_template').addEventListener( 'click', function(){
 });
 
 
+document.getElementById('helper_reset_markers').addEventListener( 'click', function(){
+  console.log("helper_reset_markers")
+  
+  for(var i = 0; i < inputer_traces.length; i += 1 ){
+    inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = i%inputer_traces[i].inputs.marker.symbol.elem.options.length
+  }
+  update();
+});
+
 
 document.getElementById('helper_reset_colors').addEventListener( 'click', function(){
   console.log("helper_reset_colors")
   
   for(var i = 0; i < inputer_traces.length; i += 1 ){
-    inputer_traces[i].inputs.marker.color.elem.selectedIndex = i
-    inputer_traces[i].inputs.line.color.elem.selectedIndex = i
+    inputer_traces[i].inputs.marker.color.elem.selectedIndex = i%inputer_traces[i].inputs.marker.color.elem.options.length
+    inputer_traces[i].inputs.line.color.elem.selectedIndex = i%inputer_traces[i].inputs.line.color.elem.options.length
   }
   update();
 });
+
+document.getElementById('helper_reset_linestyles').addEventListener( 'click', function(){
+  console.log("helper_reset_linestyles")
+  
+  for(var i = 0; i < inputer_traces.length; i += 1 ){
+    inputer_traces[i].inputs.line.dash.elem.selectedIndex = i%inputer_traces[i].inputs.line.dash.elem.options.length
+  }
+  update();
+});
+
 
 document.getElementById('helper_pair_colors').addEventListener( 'click', function(){
   console.log("helper_pair_colors")
@@ -792,6 +829,7 @@ function load_templ(index){
   var update_trace_names = document.getElementById("update_trace_names_check").checked;
   var update_axes_labels = document.getElementById("update_axes_labels_check").checked;
   var update_size_only = document.getElementById("update_size_only_check").checked;
+
   import_json(templates_list[index][1], false, update_trace_styles, update_trace_names, update_axes_labels, update_size_only);
 }
 
@@ -889,3 +927,7 @@ document.getElementById('make_default_template').addEventListener( 'click', func
 });
 
 load_default_template()
+
+document.getElementById('ignore_zoom_check').addEventListener('click', function(){
+  update();
+})

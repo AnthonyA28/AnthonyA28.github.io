@@ -47,7 +47,7 @@ tags: Tools
 
 
     
-    <div style="display: inline-block;width:350px;height:1000px;border: 1px solid #FFFFFF; vertical-align: top;">
+    <div style="display: inline-block;width:350px;height:2000px;border: 1px solid #FFFFFF; vertical-align: top;">
       <h2>
           <a href="//assets/plotter/assets/PlotterTutorial.html">Help/Documentation</a>
           <br>
@@ -65,10 +65,17 @@ tags: Tools
         <div id="template_div"><strong>Choose Template:</strong> 
         </div>
         <div ><strong>Update:</strong>
+          <div style="margin-left: 20px;">
           Styles <input type="checkbox"  id="update_trace_styles_check" checked >
+            <br>
           Names  <input type="checkbox"  id="update_trace_names_check" checked>
+            <br>
           Axes<input type="checkbox"  id="update_axes_labels_check" checked>
+            <br>
           Size only <input type="checkbox" id="update_size_only_check" >
+            <br>
+          Ignore Zoom  <input type="checkbox"  id="ignore_zoom_check" checked>
+          </div>
         </div>
 
       <br>
@@ -113,12 +120,15 @@ tags: Tools
       <h3>Master Trace:</h3>
       <div id="appM"></div>
 
-    <button type="submit" id="helper_reset_colors">Reset Colors</button> 
+    <button type="submit" id="helper_reset_colors">Reset Colors</button>
+
+    <button type="submit" id="helper_reset_markers">Reset Markers</button> 
+
+    <button type="submit" id="helper_reset_linestyles">Reset Linestyles</button> 
+    
+    <br> 
     
     <button type="submit" id="helper_pair_colors">Pair Colors</button> 
-
-
-    <br>
 
     <button type="submit" id="helper_pair_markers">Pair Markers</button> 
 
@@ -128,7 +138,7 @@ tags: Tools
 
     </div>
 
-    <div style="display: inline-block;width:410px;height:410px;border: 1px solid #FFFFFF; vertical-align:  top" id="gd_div">
+    <div style="display: inline-block;width:410px;height:410px;border: 1px solid #FFFFFF; vertical-align:  top ; margin-top: 200px" id="gd_div">
       <div id="gd" ></div>
     </div>
 
