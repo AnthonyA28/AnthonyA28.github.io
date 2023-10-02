@@ -252,7 +252,7 @@ function plot(header, data, update_nums=false){
 
   Plotly.newPlot(document.getElementById('gd'), traces, inputer_layout.get_data(), {
       
-      modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d'],
+      modeBarButtonsToRemove: ['toImage', 'sendDataToCloud'],
       modeBarButtonsToAdd: [{
         name: 'To SVG',
         icon: Plotly.Icons.camera,
@@ -978,4 +978,67 @@ document.getElementById('helper_save_current_zoom').addEventListener('click', fu
   inputer_layout.update_data(layout);
 
 })
+
+
+document.getElementById('exportData').addEventListener('click', function() {
+
+var layout = inputer_layout.get_data();
+var x = layout.xaxis.title.text
+var y = layout.yaxis.title.text
+
+const separator = ','; // Change this to your desired separator
+const filename = 'exported_data';
+
+const rows = [];
+
+// Iterate over data points for each trace
+for (let i = 0; i < Math.max(...traces.map(trace => trace.x.length)); i++) {
+  const rowData = [];
+
+  for (const trace of traces) {
+    // Check if the current trace has data for the current index
+    if (i < trace.x.length) {
+      rowData.push(trace.x[i] || ''); // Insert 'x' data or an empty string if data is missing
+      rowData.push(trace.y[i] || ''); // Insert 'y' data or an empty string if data is missing
+    } else {
+      // If no data is available for the current index, insert empty strings
+      rowData.push('');
+      rowData.push('');
+    }
+
+    // Add an empty column after every trace in both header and data
+    rowData.push('');
+  }
+
+  rows.push(rowData.join(separator));
+}
+
+// Add an empty column in headers for every trace
+const header = traces.flatMap(trace => [`${x}`, `${y} (${trace.name})`, '']);
+
+// Create CSV content
+const csvContent = [header.join(separator), ...rows].join('\n');
+
+// Create a Blob containing the CSV data
+const blob = new Blob([csvContent], { type: 'text/csv' });
+
+// Create a download link
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.style.display = 'none';
+a.href = url;
+a.download = `${filename}.csv`;
+
+// Trigger the download
+document.body.appendChild(a);
+a.click();
+
+// Clean up
+URL.revokeObjectURL(url);
+document.body.removeChild(a);
+
+
+});
+
+
 
