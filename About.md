@@ -12,5 +12,5 @@ title: About
 
 # Anthony
 
-I am currently a PhD candidate at The Unversity of Texas at Austin. When I am free, I ride BMX. 
+I am currently a PhD candidate at The Unversity of Texas at Austin in the Sanoja lab.  You can contact me on my personal email which is *FirstName*Arrowood23@gmail.com. 
 

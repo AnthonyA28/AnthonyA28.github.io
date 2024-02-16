@@ -1,16 +1,17 @@
 ---
+title: Introduction
 tags: FractureMechanics
 layout: post
 toc: true
 ---
 
-Fracture mechanics consists of determining the conditions at which objects will fail. Consider an example. You are likely familiar with the Titanic, it was thought that the ship was invulnerable. Yet, after hitting an iceberg. The hull fractured, and the ship sank. Should the ship have been able to withstand hitting the iceberg? Ultimately, it was not understood at the time that metal becomes very brittle when cold. The magnitude of this failure demonstrates the importance of predicting failure. 
+Fracture mechanics consists of determining the conditions at which a material defect will grow. Consider an example.
 
 
 
 We can start any analysis of fracture mechanics by thinking about the energy of creating a surface. The following analysis applies to interfaces (adhesion) and cracks (defects in solids) alike. The analysis in debonding tape is the simplest to demonstrate. 
 
-Imagine you are pulling a tape from a surface at 90 degrees - perpendicular to the surface. See the figure below. The force you apply when pulling is $F$. Initially the free region (not bonded) is of length $L$, so when you pull you change it $dL$. When pulling at 90 degrees, **the decrease in bonded surface is also $dL$.**  The work that you apply when pulling is simply the force times the displacement: 
+Imagine you are pulling a tape from a surface at 90 degrees - perpendicular to the surface. See the figure below. The force you apply when pulling is $F$. Initially the free region (not bonded) is of length $L$, so when you peel, you change it $dL$. When pulling at 90 degrees, **the decrease in bonded surface is also $dL$.**  The work that you apply when pulling is simply the force multiplied by the displacement: 
 
 
 $$
@@ -33,7 +34,7 @@ The area of the exposed surface is equivalent to the width ($b$) times the lengt
 
 $$
 \begin{equation}
-E_{surface} = GdA = bdL \label{surfaceEnergy}
+GdA = GbdL \label{surfaceEnergy}
 \end{equation}
 $$
 
