@@ -1,0 +1,28 @@
+---
+layout: default
+---
+
+
+<style>
+  .center {
+    margin: 0 auto; 
+    width: 50%; 
+  }
+  .larger-text {
+    font-size: larger;
+  }
+</style>
+
+
+<div class="post">
+  
+
+  <!-- <span class="larger-text">Contents:</span> -->
+  <div class="center">
+    {% include toc.html html=content %}
+  </div>
+
+  {{ content }}
+
+
+</div>
