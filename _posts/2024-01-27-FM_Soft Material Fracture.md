@@ -31,7 +31,7 @@ The viscous regime occurs at very low rates, when the adhesive is very soft and 
 
 The rubbery regime exists at intermediate rates, whereby the adhesive behaves as a rubber which is much stiffer than its viscous state. It does not dissipate as much energy which is why it has a much lower peel forces.  This regime is ideal because the peel forces are relatively high and not residue is left on the interface. 
 
-The glassy regime occurs at very high rates, in which the adhesive is in its glassy state. it is typically much stiffer in this regime. Gent makes an interesting point that none of the work applies goes into deforming the adhesive, it goes straight into debonding at the interface. This is why the peel forces are typically very low here. 
+The glassy regime occurs at very high rates, in which the adhesive is in its glassy state. it is typically much stiffer in this regime. Gent makes an interesting point that none of the work applies goes into deforming the adhesive, it goes straight into debonding at the interface. This is why the peel forces are typically very low here. They actually show that if the adhesive is forced to absorb the energy during debonding, then they glassy decrease in peel force disappears - the peel force continues to increase. 
 
 
 
