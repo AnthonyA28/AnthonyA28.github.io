@@ -2,8 +2,8 @@
 title: Soft Material Fracture
 tags: FractureMechanics
 layout: post
-toc: true
 excerpt: Introduction to the unique attributes of fracture in soft materials.
+# layout: article_post_TOC
 ---
 
 

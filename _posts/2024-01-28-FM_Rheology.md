@@ -2,7 +2,6 @@
 title: Rheology
 tags: FractureMechanics
 layout: article_post_TOC
-toc: true
 excerpt: The study of flow and deformation of soft materials.  
 ---
 
