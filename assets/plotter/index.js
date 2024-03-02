@@ -565,13 +565,18 @@ function update(){
 
   document.getElementById("gd_div").style.width = inputer_layout.get_data()['width'];
   for(var i = 0 ; i < traces.length; i ++){
-    traces[i] = inputer_traces[i].fill_json(traces[i]);
+    if(traces[i].dontupdate != true){
+      traces[i] = inputer_traces[i].fill_json(traces[i]);
+    }
     if(document.getElementById("error_bars").checked && i < traces.length-1){
       traces[i]["error_y"] = {
           type: 'data',
           array: traces[i+1].y,
           visible: true
         }
+      traces[i+1].visible = false
+      traces[i+1].dontupdate = true
+      i += 1
     }
     inputer_traces[i].update_data(traces[i]);
   }
