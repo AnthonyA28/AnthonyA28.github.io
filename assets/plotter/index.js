@@ -1,6 +1,7 @@
 var filename = "output";
 var traces = []
 var inputer_traces = [];
+var error_bar = false; 
 
 
 var log10 = function (y) {
@@ -204,25 +205,54 @@ function plot(header, data, update_nums=false){
     var color = colors_palettes[palette][j%colors_palettes[palette].length];
     
 
-    var trace = {
-        x: datas[j][0],
-        y: datas[j][1],
-        visible: true,
-        name: headers[j],
-        type: 'scatter',
-        mode: 'lines',
-        marker: {
-            size: 6,
-            symbol: marker_shape,
-            color: color,
+    trace = {}
+    if(document.getElementById("error_bars").checked){
+        var trace = {
+          x: datas[j][0],
+          y: datas[j][1],
+          visible: true,
+          name: headers[j],
+          type: 'scatter',
+          mode: 'lines',
+          marker: {
+              size: 6,
+              symbol: marker_shape,
+              color: color,
+            },
+          error_y: {
+            type: 'data',
+            array: datas[j+1][1],
+            visible: true
           },
-
-      line: {
-        shape: "spline",
-        dash: line_shape,
-        width: 3,
+          line: {
+            shape: "spline",
+            dash: line_shape,
+            width: 3,
             color: color,
-      },
+        },
+      }
+      j += 1
+    }else{
+      var trace = {
+          x: datas[j][0],
+          y: datas[j][1],
+          visible: true,
+          name: headers[j],
+          type: 'scatter',
+          mode: 'lines',
+          marker: {
+              size: 6,
+              symbol: marker_shape,
+              color: color,
+            },
+
+        line: {
+          shape: "spline",
+          dash: line_shape,
+          width: 3,
+              color: color,
+        },
+      }
     }
     traces.push(trace)
     }
@@ -536,6 +566,13 @@ function update(){
   document.getElementById("gd_div").style.width = inputer_layout.get_data()['width'];
   for(var i = 0 ; i < traces.length; i ++){
     traces[i] = inputer_traces[i].fill_json(traces[i]);
+    if(document.getElementById("error_bars").checked && i < traces.length-1){
+      traces[i]["error_y"] = {
+          type: 'data',
+          array: traces[i+1].y,
+          visible: true
+        }
+    }
     inputer_traces[i].update_data(traces[i]);
   }
 
@@ -715,6 +752,13 @@ document.getElementById("palettes").addEventListener("change", function (){
   if( colors_palettes[color] == undefined ){
     return;
   }
+
+
+
+  document.getElementById("error_bars").addEventListener('change', function() {
+
+    update();
+  });
 
   function set_color_options(inputer){ //todo
     var index_marker_color = inputer.inputs.marker.color.elem.selectedIndex;
@@ -978,6 +1022,7 @@ document.getElementById('helper_save_current_zoom').addEventListener('click', fu
   inputer_layout.update_data(layout);
 
 })
+
 
 
 document.getElementById('exportData').addEventListener('click', function() {
