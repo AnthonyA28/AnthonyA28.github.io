@@ -1,7 +1,7 @@
 var filename = "output";
 var traces = []
 var inputer_traces = [];
-var error_bars = false
+
 
 var log10 = function (y) {
   return Math.log(y) / Math.log(10);
@@ -545,20 +545,25 @@ function update(){
 
   document.getElementById("gd_div").style.width = inputer_layout.get_data()['width'];
   for(var i = 0 ; i < traces.length; i ++){
-    if(traces[i].dontupdate != true){
       traces[i] = inputer_traces[i].fill_json(traces[i]);
-    }
-    if(error_bars && i < traces.length-1){
-      traces[i]["error_y"] = {
-          type: 'data',
-          array: traces[i+1].y,
-          visible: true,
-          thickness: traces[i].line.width,
-          width: traces[i].line.width*2,
-        }
-      traces[i+1].visible = false
-      traces[i+1].dontupdate = true
-      i += 1
+      if(i < traces.length-1 && i % 2 == 0 ){
+        if(document.getElementById("error_bars").checked){
+        traces[i]["error_y"] = {
+            type: 'data',
+            array: traces[i+1].y,
+            visible: true,
+            thickness: traces[i].line.width,
+            width: traces[i].line.width*2,
+          }
+        // traces[i+1].dontupdate = true
+        inputer_traces[i+1].inputs.visible.elem.selectedIndex = 1 
+        traces[i+1].visible = false
+          
+      }else{
+        traces[i]["error_y"] = {}
+        inputer_traces[i+1].inputs.visible.elem.selectedIndex = 0
+        traces[i+1].visible = true
+      }
     }
     inputer_traces[i].update_data(traces[i]);
   }
@@ -741,8 +746,7 @@ document.getElementById("palettes").addEventListener("change", function (){
   }
 
 
-  document.getElementById("error_bars").addEventListener('click', function() {
-    error_bars = true
+  document.getElementById("error_bars").addEventListener('change', function() {
     update();
   });
 

@@ -68,8 +68,10 @@ tags: Tools
         <button type="submit" id="make_default_template" > Make Default Template</button> 
         
 
+        
         <div ><strong>Update:</strong>
           <div style="margin-left: 20px;">
+            <br>
           Line styles <input type="checkbox"  id="update_trace_styles_check" checked >
           <p style="display: none;"> <br> Names  <input type="checkbox"  id="update_trace_names_check" > </p>
             <br>
@@ -96,10 +98,10 @@ tags: Tools
         <option>viridis_r_</option>
         <option>magma_</option>
         <option>magma_r_</option>
-        
       </select>
       <input type="number" style="width:50px;" id="n_colors"> n_colors </input>
       <br>
+      <h6>Show error bars <input type="checkbox" id="error_bars" ></h6>
       <br>
       <h3>Layout:</h3>
       <div id="layout">
@@ -139,8 +141,6 @@ tags: Tools
       <br>
 
 
-    <button type="submit" id="error_bars">Error bars</button>
-    <br>
     <button type="submit" id="helper_reset_colors">Reset Colors</button>
 
     <button type="submit" id="helper_reset_markers">Reset Markers</button> 
