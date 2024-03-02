@@ -55,7 +55,7 @@ function make_trace_boxes(){
       name: {it: "text", def: "",},
       visible: {it: "option", options: ['true' , 'false' , "legendonly" ]},
       line: {
-        width: {it: "number", def: 3,},
+        width: {it: "number", def: default_line_width,},
         shape: {it: "option", options: ["spline", "linear", "hv", "vh", "hvh", "vhv"],},
         dash: {it: "option", options: ["solid", "dot", "dash", "longdash", "dashdot", "longdashdot"],},
         smoothing: {it: "number", def: 0,},
@@ -63,7 +63,7 @@ function make_trace_boxes(){
       },
       mode: {it: "option", options: ['lines',"markers", 'text', 'none', 'lines+markers','lines+markers+text' ]},
       marker: {
-        size: {it: "number", def: 6,},
+        size: {it: "number", def: default_marker_size,},
         symbol: {it: "option", options: marker_shapes,},
         color: {it: "option", options: colors_palettes[palette]},
       },
@@ -88,15 +88,14 @@ function make_trace_boxes(){
 var inputer_master_trace = new inputer("appM", {
     type: {it: "option", options: ["scatter", 'bar']},
     line: {
-      width: {it: "number", def: 3,},
+      width: {it: "number", def: default_line_width,},
       shape: {it: "option", options: ["spline", "linear", "hv", "vh", "hvh", "vhv"],},
       dash: {it: "option", options: ["solid", "dot", "dash", "longdash", "dashdot", "longdashdot"],},
       smoothing: {it: "number", def: 0,},
-      // color: {it: "option", options: colors_palettes["pyDefault"]}, //TODO: 
     },
     mode: {it: "option", options: [ 'lines',"markers", 'text', 'none', 'lines+markers','lines+markers+text' ]},
     marker: {
-      size: {it: "number", def: 6,},
+      size: {it: "number", def: default_marker_size,},
       symbol: {it: "option", options: marker_shapes,},
       // color: {it: "option", options: colors_palettes["pyDefault"]}, //TODO: 
     },
@@ -213,10 +212,10 @@ function plot(header, data, update_nums=false){
           visible: true,
           name: headers[j],
           type: 'scatter',
-          mode: 'lines',
+          mode: 'lines+markers',
           marker: {
               size: 6,
-              symbol: marker_shape,
+              symbol: default_marker_size,
               color: color,
             },
           error_y: {
@@ -227,7 +226,7 @@ function plot(header, data, update_nums=false){
           line: {
             shape: "spline",
             dash: line_shape,
-            width: 3,
+            width: default_line_width,
             color: color,
         },
       }
@@ -239,9 +238,9 @@ function plot(header, data, update_nums=false){
           visible: true,
           name: headers[j],
           type: 'scatter',
-          mode: 'lines',
+          mode: 'lines+markers',
           marker: {
-              size: 6,
+              size: default_marker_size,
               symbol: marker_shape,
               color: color,
             },
@@ -249,7 +248,7 @@ function plot(header, data, update_nums=false){
         line: {
           shape: "spline",
           dash: line_shape,
-          width: 3,
+          width: default_line_width,
               color: color,
         },
       }
@@ -746,8 +745,8 @@ document.getElementById("palettes").addEventListener("change", function (){
   if(color.endsWith("_")){
     var n_colors = document.getElementById("n_colors").value
     console.log("n_colors ", n_colors);
-    if(n_colors>12){
-      n_colors = 12;
+    if(n_colors>50){
+      n_colors = 50;
     }
     else if(n_colors<2){
       n_colors = 2;
@@ -970,7 +969,7 @@ function load_default_template(){
     var optionValue = option.value;
     var optionText = option.text;
     console.log("Option " + i + ": Value=" + optionValue + ", Text=" + optionText);
-    if( optionText == "default"){
+    if( optionText == "user-default"){
       load_templ(i);
       console.log("Loading default")
       dropdown.selectedIndex = i
@@ -1002,7 +1001,7 @@ document.getElementById("delete_template").addEventListener('click', function(){
 document.getElementById('make_default_template').addEventListener( 'click', function(){
 
     var json_text = get_template_text();
-    var name_ = "default"
+    var name_ = "user-default"
     localStorage.setItem("LocalStorage_".concat(name_), json_text);
 
 });
