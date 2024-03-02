@@ -1,8 +1,7 @@
 var filename = "output";
 var traces = []
 var inputer_traces = [];
-var error_bar = false; 
-
+var error_bars = false
 
 var log10 = function (y) {
   return Math.log(y) / Math.log(10);
@@ -204,34 +203,7 @@ function plot(header, data, update_nums=false){
     var color = colors_palettes[palette][j%colors_palettes[palette].length];
     
 
-    trace = {}
-    if(document.getElementById("error_bars").checked){
-        var trace = {
-          x: datas[j][0],
-          y: datas[j][1],
-          visible: true,
-          name: headers[j],
-          type: 'scatter',
-          mode: 'lines+markers',
-          marker: {
-              size: 6,
-              symbol: default_marker_size,
-              color: color,
-            },
-          error_y: {
-            type: 'data',
-            array: datas[j+1][1],
-            visible: true
-          },
-          line: {
-            shape: "spline",
-            dash: line_shape,
-            width: default_line_width,
-            color: color,
-        },
-      }
-      j += 1
-    }else{
+
       var trace = {
           x: datas[j][0],
           y: datas[j][1],
@@ -252,7 +224,7 @@ function plot(header, data, update_nums=false){
               color: color,
         },
       }
-    }
+
     traces.push(trace)
     }
   }
@@ -369,6 +341,15 @@ function save_plot(type){
 
     var comment = document.createComment("layout=" + json_text + "endlayout");
     svgContent.appendChild(comment);
+
+    var classesToRemove = ['nsewdrag', 'nwdrag', 'nedrag', 'swdrag', 'sedrag', 'ewdrag', 'wdrag', 'edrag', 'nsdrag', 'sdrag', 'ndrag'];
+    classesToRemove.forEach(function(className) {
+      var elementsToRemove = svgContent.querySelectorAll('.' + className);
+      elementsToRemove.forEach(function(element) {
+        element.remove();
+      });
+    });
+
 
     var svgData = new XMLSerializer().serializeToString(svgContent);
     var svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
@@ -567,11 +548,13 @@ function update(){
     if(traces[i].dontupdate != true){
       traces[i] = inputer_traces[i].fill_json(traces[i]);
     }
-    if(document.getElementById("error_bars").checked && i < traces.length-1){
+    if(error_bars && i < traces.length-1){
       traces[i]["error_y"] = {
           type: 'data',
           array: traces[i+1].y,
-          visible: true
+          visible: true,
+          thickness: traces[i].line.width,
+          width: traces[i].line.width*2,
         }
       traces[i+1].visible = false
       traces[i+1].dontupdate = true
@@ -758,9 +741,8 @@ document.getElementById("palettes").addEventListener("change", function (){
   }
 
 
-
-  document.getElementById("error_bars").addEventListener('change', function() {
-
+  document.getElementById("error_bars").addEventListener('click', function() {
+    error_bars = true
     update();
   });
 
