@@ -202,7 +202,7 @@ document.getElementById('exportData').addEventListener('click', function() {
   let header = [...global_header];
 
   for(let i = 0; i < inputer_TTS.length; i += 1){
-    let T = inputer_TTS[i].inputs['TemperatureC'].elem.value;
+    let T = inputer_TTS[i].inputs['Temperature [C]'].elem.value;
     let a = (parseFloat(inputer_TTS[i].inputs['a'].elem.value)*parseFloat(inputer_TTS[i].inputs['a'].elem_base.value)).toFixed(4);
     let b = (parseFloat(inputer_TTS[i].inputs['b'].elem.value)*parseFloat(inputer_TTS[i].inputs['b'].elem_base.value)).toFixed(4);
     console.log(a);
@@ -350,7 +350,7 @@ function make_trace_boxes(){
         document.getElementById("TTS").appendChild(div);           //appending the element
 
         inputer_TTS.push(new inputer(div.id, {
-          TemperatureC: {it: "number", def: j*(15/2)+30,},
+          "Temperature [C]": {it: "number", def: j*(15/2)+30,},
           a: {it: "slider", def: 1, base: 1, step: 0.00005, min: 0.000001, max:1 },
           b: {it: "slider", def: 1, base: 1, step: 0.00005, min: 0.000001, max:1},
         },
@@ -360,41 +360,6 @@ function make_trace_boxes(){
       }
   }
 } 
-
-
-
-var inputer_master_trace = new inputer("appM", {
-    line: {
-      width: {it: "number", def: 3,},
-      shape: {it: "option", options: ["spline", "linear", "hv", "vh", "hvh", "vhv"],},
-      dash: {it: "option", options: ["solid", "dot", "dash", "longdash", "dashdot", "longdashdot"],},
-      smoothing: {it: "number", def: 0,},
-      // color: {it: "option", options: colors_palettes["pyDefault"]}, //TODO: 
-    },
-    mode: {it: "option", options: [ 'lines',"markers", 'text', 'none', 'lines+markers','lines+markers+text' ]},
-    marker: {
-      size: {it: "number", def: 6,},
-      symbol: {it: "option", options: marker_shapes,},
-      // color: {it: "option", options: colors_palettes["pyDefault"]}, //TODO: 
-    },
-  }, function(e){
-      var caller = e.target || e.srcElement || window.event.target || window.event.srcElement;
-      console.log("callback id: ", caller.id);
-      var value = e.target.value
-      var key = e.target.id
-      console.log("parent",parent );
-      for(var j = 0; j< traces.length; j +=1){
-        if(e.target.parentElement.previousElementSibling.innerHTML == "Master Trace:"){
-          traces[j][key] = value
-        }else{
-          var parent_key = e.target.parentElement.previousElementSibling.previousElementSibling.innerHTML;
-          parent_key = parent_key.slice(0, parent_key.length-1);
-          traces[j][parent_key][key] = value;
-        }
-        inputer_traces[j].update_data(traces[j]);
-      }
-      update();
-});
 
 
 
@@ -531,9 +496,6 @@ function plot(header, data, update_nums=false){
     }
     inputer_layout.update_data(layout);
   }
-
-  /// AJA TODO: this literally cause the inputer names to be set to emppty...???
-  // document.getElementById("palettes").dispatchEvent(new Event('change')); // Force the inputer_traces color options box to update color 
 
 
   Plotly.newPlot(document.getElementById('gd'), traces, inputer_layout.get_data(), {
@@ -826,73 +788,11 @@ function update_TTS() {
   }
   update();
 }
-function get_template_text(){
-
-  for(var i = 0 ; i < traces.length; i ++){
-    traces[i].name = traces[i].name.replace(/\s/g,' ');
-    traces[i].name = encodeURIComponent(traces[i].name)
-  }
-  if ( !filename.endsWith(".json")){
-    filename = filename.concat(".json")
-  }
-
-  var layout = inputer_layout.get_data();
-
-  layout.xaxis.title.text  = encodeURIComponent(layout.xaxis.title.text);
-  layout.yaxis.title.text  = encodeURIComponent(layout.yaxis.title.text);
-  var index = document.getElementById("palettes").selectedIndex
-  var palette = document.getElementById("palettes").options[index].innerText;
-  if(palette.endsWith("_")){
-    palette = document.getElementById("n_colors").value.concat("_").concat(palette);
-  }
-
-  var json = {layout, traces, palette}
-  var text = JSON.stringify(json);
-
-  for(var i = 0 ; i < traces.length; i ++){
-    traces[i].name = decodeURIComponent(traces[i].name);
-  }
-  return text;
-}
 
 
 function getBaseLog(x, y) {
   return Math.log(y) / Math.log(x);
 }
-
-
-// document.getElementById('performTTS').addEventListener( 'click', function(){
-//   let As = [];
-//   let Ts = [];
-//   for(let i = 0; i < inputer_TTS.length; i ++){
-//       a = getBaseLog(10, inputer_TTS[i].inputs['a'].elem.value);
-//       T = parseFloat(inputer_TTS[i].inputs['TemperatureC'].elem.value);  
-//       As.push(a);
-//       Ts.push(T);
-//   }
-//   let Tr = Ts[0];
-//   // Define a function for your curve model
-//   const model = (params, t) => {
-//     const [C1, C2] = params;
-//     return -(C1 * (t-Tr))/(C2 + t - Tr) ;
-//   };
-
-//   const initialParams = [15, 1000];
-
-//     // Perform nonlinear curve fitting using numeric.js
-//   const fittedParams = numeric.uncmin((params) => {
-//     const residuals = Ts.map((x, index) => As[index] - model(params, x));
-//     return numeric.norm2(residuals);
-//   }, initialParams).solution;
-
-//   // Display the results
-//   const [C1, C2] = fittedParams;
-//   console.log(fittedParams)
-
-//   console.log(C1)
-//   console.log(C2)
-
-// });
 
 
 
@@ -911,76 +811,6 @@ document.getElementById('download').addEventListener( 'click', function(){
     document.body.removeChild(element);
 
 });
-
-
-// document.getElementById('save_template').addEventListener( 'click', function(){
-
-//     var json_text = get_template_text();
-//     var name_ = prompt("Enter name of template to save:");
-
-//     localStorage.setItem("LocalStorage_".concat(name_), json_text);
-
-// });
-
-
-
-function helper_reset_colors(){
-  console.log("_reset_colors")
-  
-  for(var i = 0; i < inputer_traces.length; i += 1 ){
-    inputer_traces[i].inputs.marker.color.elem.selectedIndex = i
-    inputer_traces[i].inputs.line.color.elem.selectedIndex = i
-  }
-  update();
-};
-
-function helper_pair_colors(){
-  console.log("helper_pair_colors")
-  
-  var j = 0;
-  for(var i = 0; i < inputer_traces.length; i += 1 ){
-    inputer_traces[i].inputs.marker.color.elem.selectedIndex = j
-    inputer_traces[i].inputs.line.color.elem.selectedIndex = j
-    i += 1
-    if(i >= inputer_traces.length){
-      break
-    }
-    inputer_traces[i].inputs.marker.color.elem.selectedIndex = j
-    inputer_traces[i].inputs.line.color.elem.selectedIndex = j
-    j+=1
-  }
-  update();
-};
-
-function helper_pair_markers(){
-  console.log("helper_pair_markers")
-  
-  var j = 0;
-  for(var i = 0; i < inputer_traces.length; i += 1 ){
-    inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = j;
-    i += 1
-    if(i >= inputer_traces.length){
-      break
-    }
-    inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = j+8;
-    j += 1;
-  }
-  update();
-};
-
-function helper_pair_linestyles(){
-  console.log("helper_pair_linestyles")
-  
-  for(var i = 0; i < inputer_traces.length; i += 1 ){
-    inputer_traces[i].inputs.line.dash.elem.selectedIndex = 0;
-    i += 1
-    if(i >= inputer_traces.length){
-      break
-    }
-    inputer_traces[i].inputs.line.dash.elem.selectedIndex = 1;
-  }
-  update();
-};
 
 
 
@@ -1213,32 +1043,6 @@ function load_default_template(update_data=false){
   }
   load_templ(0);
 }
-
-// document.getElementById("delete_template").addEventListener('click', function(){
-//   var selectedOption = dropdown.options[dropdown.selectedIndex];
-//   var selectedText = selectedOption.text;
-
-//   var name = "LocalStorage_" + selectedText;
-//   console.log("Deleting " + name)
-
-//   var item = localStorage.getItem(name);
-
-//   if (item !== null) {
-//     console.log('Item exists in localStorage');
-//     localStorage.removeItem(name);
-//     dropdown.options[dropdown.selectedIndex].remove();
-//   } else {
-//     console.log('Item does not exist in localStorage');
-//   }
-// });
-
-// document.getElementById('make_default_template').addEventListener( 'click', function(){
-
-//     var json_text = get_template_text();
-//     var name_ = "default"
-//     localStorage.setItem("LocalStorage_".concat(name_), json_text);
-
-// });
 
 load_default_template(true)
 
