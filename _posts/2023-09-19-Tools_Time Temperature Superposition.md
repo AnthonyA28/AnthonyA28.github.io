@@ -59,7 +59,7 @@ Use the sliders below to adjust the $a$s and $b$s at different temperatures. The
 
 
   
-  <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
+  <div style="display: inline-block;width:350px;height:3000px;border: 0px solid #FFFFFF; vertical-align: top;">
     <h2>
 
     </h2>
@@ -155,7 +155,7 @@ Use the sliders below to adjust the $a$s and $b$s at different temperatures. The
     <div id="gd" ></div>
   </div>
 
-  <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
+  <div style="display: inline-block;width:350px;height:3000px;border: 0px solid #FFFFFF; vertical-align: top;">
 
     <!-- Data -->
     <div id="data" style="display:none">
@@ -165,7 +165,7 @@ Use the sliders below to adjust the $a$s and $b$s at different temperatures. The
 
 
 
-  <div style="display: inline-block;width:350px;height:1000px;border: 0px solid #FFFFFF; vertical-align: top;">
+  <div style="display: inline-block;width:350px;height:3000px;border: 0px solid #FFFFFF; vertical-align: top;">
 
 
     <style type="text/css">
