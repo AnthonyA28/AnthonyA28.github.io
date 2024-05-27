@@ -117,18 +117,13 @@ This is not quite what was tabulated but that could be attributed to a density b
 
 We can look at some research papers to confirm what theory tells us. For butyl acrylate  $M_e=28kg/mol$ according to [^PBA]. If we plug this into eq $\ref{M_e}$ to determine the plateau modulus $G_e^*$ we compute $G_o^E \approx 0.08MPa$  which is close to what is shown [^UHMW][in this paper] where they measure the rheology of butyl acrylate polymer melts having very different molecular weights. It is consistent with our theory that regardless of the molecular weight, the plateau modulus is the same.  
 
+# References
 
-
-
-[^Fetters]: L. Fetters, et al.. Packing Length Influence in Linear Polymer Melts on the Entanglement, Critical, and Reptation Molecular Weights, Macromolecules, 1999
-
-[^hair]:  https://pubmed.ncbi.nlm.nih.gov/27125013/
-
-[rubbery regime]: {{site.baseurl}}/2024/01/28/FM_Rheology.html
-
-[^Mark]: Physical Properties of Polymers, 3rd ed.,2003,  James Mark, **Equation 3.44**
-
-[^Markid]: [^Mark]  Id., **pg. 191**
-[^Rubinstein]: Polymer Physics, 2003, Rubinstein & Colby, 2003
-[^PBA]: 
-[^UHMW]:  Diodati, L. E., Wong, A. J., Lott, M. E., Carter, A. G. &amp; Sumerlin, B. S. Unraveling the Properties of Ultrahigh Molecular Weight Polyacrylates. ACS Appl. Polym. Mater. 5, 9714–9720 (2023).]: https://www.osti.gov/servlets/purl/1407777
+[^Fetters]: Fetters, et al., *Packing Length Influence in Linear Polymer Melts on the Entanglement, Critical, and Reptation Molecular Weights*, *Macromolecules*, 1999.
+[^hair]: McMullen et al., *Quantifying Hair Shape and Hair Damage Induced During Reshaping of Hair,* *J Cosmet. Sci.*, 2015.
+[^rubbery regime]: [Link to FM Rheology Post]({{site.baseurl}}/2024/01/28/FM_Rheology.html)
+[^Mark]: Mark, *Physical Properties of Polymers*, 3rd ed., 2003, Equation 3.44.
+[^Markid]: [^Mark], pg. 191.
+[^Rubinstein]: Rubinstein & Colby, *Polymer Physics*, 2003.
+[^PBA]: Lu et al., *All Acrylic-Based Thermoplastic Elastomers with High Upper Service Temperature and Superior Mechanical Properties,* *Polymer Chemistry*, 2017.
+[^UHMW]: Diodati et al., *Unraveling the Properties of Ultrahigh Molecular Weight Polyacrylates,* *ACS Appl. Polym. Mater.*, 5, 9714–9720 (2023).

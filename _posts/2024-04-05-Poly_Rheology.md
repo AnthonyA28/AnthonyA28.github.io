@@ -1,12 +1,10 @@
 ---
 title: Rheology
-tags: FractureMechanics
 layout: article_post_TOC
-excerpt: The study of flow and deformation of soft materials.  
+section: article
+excerpt: Plastics and rubbers are composed of long molecules which become entangled
+tags: Polymers
 ---
-
-
-
 
 # Rheology
 

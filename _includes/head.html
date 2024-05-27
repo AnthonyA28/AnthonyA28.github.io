@@ -145,28 +145,25 @@
       </div>
     {% endif %}
 
-    {% if item.name == "Fracture Mechanics"%}
+    {% if item.name == "Fracture Mechanics" %}
       <div class="dropdown-content">
-      {% for post in site.tags.FractureMechanics %}
+        {% assign sorted_posts = site.tags.FractureMechanics | sort: 'date' %}
+        {% for post in sorted_posts %}
+          <a href="{{ post.url }}">{{ post.title }}</a>
+        {% endfor %}
+      </div>
+  {% endif %}
+
+  {% if item.name == "Polymers" %}
+    <div class="dropdown-content">
+      {% assign sorted_posts = site.tags.Polymers | sort: 'date' %}
+      {% for post in sorted_posts %}
         <a href="{{ post.url }}">{{ post.title }}</a>
       {% endfor %}
-      </div>
-    {% endif %}
-    {% if item.name == "Polymers"%}
-      <div class="dropdown-content">
-      {% for post in site.tags.Polymers %}
-        <a href="{{ post.url }}">{{ post.title }}</a>
-      {% endfor %}
-      </div>
-    {% endif %}
-<!-- 
-    {% if item.name == "News"%}
-      <div class="dropdown-content">
-      {% for post in site.tags.News %}
-        <a href="{{ post.url }}">{{ post.title }}</a>  
-      {% endfor %}
-      </div>
-    {% endif %} -->
+    </div>
+  {% endif %}
+
+
     {% if item.name == "Tools"%}
       <div class="dropdown-content">
       {% for post in site.tags.Tools %}
