@@ -352,7 +352,7 @@ function make_trace_boxes(){
         document.getElementById("TTS").appendChild(div);           //appending the element
 
         inputer_TTS.push(new inputer(div.id, {
-          "Temperature [C]": {it: "number", def: j*(15/2)+30,},
+          "Temperature [C]": {it: "number", def: 0,},
           a: {it: "slider", def: 1, base: 1, step: 0.00005, min: 0.000001, max:1 },
           b: {it: "slider", def: 1, base: 1, step: 0.00005, min: 0.000001, max:1},
         },
@@ -928,14 +928,28 @@ function load_file(file){
       const wb = XLSX.read(data, {type: 'binary'});
       const sheet = wb.Sheets[wb.SheetNames[0]]
       console.log(sheet);
-      for(var n =0; n < 25; n ++ ) {
-        var cell = String.fromCharCode(65 + n);
-        if( sheet[cell.concat("1")] == undefined){
-          header.push('');
-        }else{
-          header.push(sheet[cell.concat("1")].v)
-        }
+      function getColumnName(index) {
+          let columnName = '';
+          while (index >= 0) {
+              columnName = String.fromCharCode((index % 26) + 65) + columnName;
+              index = Math.floor(index / 26) - 1;
+          }
+          return columnName;
       }
+
+      // Assuming `sheet` is already defined and contains the Excel sheet data
+      var header = [];
+
+      for (var n = 0; n < 100; n++) {
+          var cell = getColumnName(n).concat("1");
+          if (sheet[cell] === undefined) {
+              header.push('');
+          } else {
+              header.push(sheet[cell].v);
+          }
+      }
+
+      console.log(header);
 
       console.log(header) 
 
