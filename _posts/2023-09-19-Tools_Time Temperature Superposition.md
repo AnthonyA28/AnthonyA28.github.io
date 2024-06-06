@@ -11,7 +11,7 @@ section: article
 
 Rheological data can be transformed so that the effect of temperature is removed. The data is shifted along the time axes, and the effect is quantified by the shifting variable $a$. The $a_T$s at each temperature are then fit to the following equation [^WLF]: $ Log(a_T) = -\frac{C_1(T-T_r)}{C_2 + T - T_r} $. 
 
-The Data can also be shifted along the vertical axes to with the $b$ variable. I am not sure if these should follow the same equation as the $a$s. 
+The data can also be shifted along the vertical axes to with the $b$ variable. 
 
 Use the sliders below to adjust the $a$s and $b$s at different temperatures. The number left to each slider is the base unit that the slider value is multipled by (lower this if a needs to be very small). Export the example data by clicking 'Export Data' to see the formatting convention. Then upload your own data by clicking, or dragging and dropping, the 'Choose File' button.  
 
