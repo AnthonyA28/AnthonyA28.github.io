@@ -205,8 +205,8 @@ document.getElementById('exportData').addEventListener('click', function() {
 
   for(let i = 0; i < inputer_TTS.length; i += 1){
     let T = inputer_TTS[i].inputs['Temperature [C]'].elem.value;
-    let a = (parseFloat(inputer_TTS[i].inputs['a'].elem.value)*parseFloat(inputer_TTS[i].inputs['a'].elem_base.value)).toFixed(4);
-    let b = (parseFloat(inputer_TTS[i].inputs['b'].elem.value)*parseFloat(inputer_TTS[i].inputs['b'].elem_base.value)).toFixed(4);
+    let a = (parseFloat(inputer_TTS[i].inputs['a'].elem.value)*parseFloat(inputer_TTS[i].inputs['a'].elem_base.value)).toFixed(10);
+    let b = (parseFloat(inputer_TTS[i].inputs['b'].elem.value)*parseFloat(inputer_TTS[i].inputs['b'].elem_base.value)).toFixed(10);
     console.log(a);
     console.log(b);
     header[i*4] = header[i*4] + "T: " + T  + " a:" + a + " b:" + b
