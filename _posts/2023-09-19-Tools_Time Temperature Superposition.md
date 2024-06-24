@@ -262,13 +262,15 @@ document.getElementById('exportData').addEventListener('click', function() {
 
 
 
-
-
-
 var filename = "output";
 var traces = []
 var inputer_traces = [];
 var inputer_TTS = []
+
+
+
+
+
 
 
 var log10 = function (y) {
@@ -518,10 +520,11 @@ function plot(header, data, update_nums=false){
       }]
   },);
   
-  helper_reset_colors();
-  helper_pair_colors();
-  helper_pair_markers();
-  helper_pair_linestyles();
+  // helper_reset_colors();
+  // helper_pair_colors();
+  // helper_pair_markers();
+  // helper_pair_linestyles();
+  update_TTS();
 };
 
 
@@ -735,6 +738,8 @@ function multiply(arr, x) {
 
 function update(){
 
+
+    
     // Assuming you have a Plotly plot named 'myPlot'
   var plot = document.getElementById('gd');
 
@@ -744,10 +749,32 @@ function update(){
 
   document.getElementById("gd_div").style.width = inputer_layout.get_data()['width'];
   for(var i = 0 ; i < traces.length; i ++){
+
     traces[i] = inputer_traces[i].fill_json(traces[i]);
+    
+    if(i % 2 == 0){
+          traces[i].marker.symbol = "square";
+      }else{
+          traces[i].marker.symbol = "square-open";
+      }
+
+    len =  Math.floor(traces.length / 2);
+    name = len.toString() + "_magma_r"
+    traces[i].marker.color = colors_palettes[name][Math.floor(i/2)]
+
+    traces[i].line.color = colors_palettes[name][Math.floor(i/2)]
+
     inputer_traces[i].update_data(traces[i]);
+
     console.log(traces[i]['a'])
   }
+
+
+  // for(var i = 0 ; i < traces.length; i ++){
+  //   traces[i] = inputer_traces[i].fill_json(traces[i]);
+  //   inputer_traces[i].update_data(traces[i]);
+  //   console.log(traces[i]['a'])
+  // }
 
   var l = inputer_layout.get_data();
   l.xaxis.range = xaxisRange
@@ -757,7 +784,7 @@ function update(){
   Plotly.relayout(document.getElementById('gd'), l);
 
 
-  // Plotly.update(document.getElementById('gd'), l)
+  Plotly.update(document.getElementById('gd'), l)
 
 }
 
@@ -911,10 +938,12 @@ function load_file(file){
       var header = data[0];
       var data = data.slice(1, data.length);
       plot(header, transpose(data), data[0]);
-      load_default_template()
+      
+
+      // load_default_template()
           // event.sender.send('load_file-task-finished', [false, data]); 
-        helper_pair_linestyles();
-        helper_pair_markers();
+        // helper_pair_linestyles();
+        // helper_pair_markers();
     }
 
   
@@ -968,7 +997,7 @@ function load_file(file){
 
     console.log(cells);
     plot(header, cells);
-    load_default_template()
+    // load_default_template()
   }
     reader.readAsBinaryString(file);
 
@@ -981,7 +1010,7 @@ function load_file(file){
       });reader.readAsBinaryString(file);
   }
 
-
+update_TTS();
 
 }
 
@@ -992,6 +1021,7 @@ function load_file(file){
 function load_templ(index, with_data=false){
   var update_trace_styles = document.getElementById("update_trace_styles_check").checked;
   import_json(templates_list[index][1], with_data, update_trace_styles, false, false);
+
 }
 
 
@@ -1054,10 +1084,13 @@ function load_default_template(update_data=false){
       load_templ(i, update_data);
       console.log("Loading default")
       dropdown.selectedIndex = i
+
+
       return;
     }  
   }
   load_templ(0);
+  
 }
 
 load_default_template(true)
