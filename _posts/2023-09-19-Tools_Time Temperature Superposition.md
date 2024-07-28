@@ -214,16 +214,20 @@ document.getElementById('exportData').addEventListener('click', function() {
 
   let dataArrays = []
 
+  let max_trace_length = 0;
   for(let i = 0; i < traces.length; i += 2){
     dataArrays.push(traces[i].x)
     dataArrays.push(traces[i].y)
     dataArrays.push(traces[i+1].y)
-
+    let len = traces[i].x.length;
+    if(len > max_trace_length){
+      max_trace_length = len;
+    }
   }
 
   const combinedData = [];
 
-  for (let i = 0; i < header.length; i++) {
+  for (let i = 0; i < max_trace_length; i++) {
     const rowData = [];
     for (let j = 0; j < dataArrays.length; j++) {
        rowData.push(dataArrays[j][i] || ''); // Insert data or an empty string if data is missing
