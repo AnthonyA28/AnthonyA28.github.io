@@ -6,6 +6,10 @@ layout: post
 
 # Polymer Introduction
 
-Polymers are found everywhere in our daily lives, from plastic containers and clothing to medical devices and automotive components. These versatile molecules are made up of repeating units called monomers, which link together to form long chains or networks. The unique properties of polymers, such as flexibility and strength, stem from their molecular structure. By manipulating this structure, scientists can tailor polymers to meet specific requirements.
+Polymers are found everywhere in our daily lives, from plastic bags to automotive components. Many of them are used simply because they are cheap but others because no other materials posess the required properties, such as rubber gaskets or gel contact lenses. 
 
- Nearly all inorganic, naturally occuring materials are composed of tightly bound regularly aranged atoms, such as crystals, metals, ceramics. 
+<!-- 
+# The original polymers
+
+Your body almost entirely made of polymers. Protiens for example are long chains of amino acids.
+ -->
