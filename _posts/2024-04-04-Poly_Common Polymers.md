@@ -9,97 +9,158 @@ layout: post
 
 <img src="\assets\images\Types Of Polymers.jpg" alt="Types Of Polymers" width="700" height="400" />
 
-# Polyethylene 
+<body>
+    <table id="sortableTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Polymer</th>
+                <th onclick="sortTable(1)">Tg (°C)</th>
+                <th onclick="sortTable(2)">Entanglement Mw (g/mol)</th>
+                <th onclick="sortTable(3)">Tm (°C)</th>
+                <th onclick="sortTable(4)">Crystallinity</th>
+                <th onclick="sortTable(5)">Common Uses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Low-Density Polyethylene (LDPE)</td>
+                <td>-110</td>
+                <td>1,300</td>
+                <td>110</td>
+                <td>55%</td>
+                <td>Plastic bags and films, Containers and bottles, Coatings for paper and textiles</td>
+            </tr>
+            <tr>
+                <td>High-Density Polyethylene (HDPE)</td>
+                <td>-120</td>
+                <td>1,600</td>
+                <td>130-137</td>
+                <td>75%</td>
+                <td>Plastic bottles and containers, Piping and tubing, Plastic lumber and furniture</td>
+            </tr>
+            <tr>
+                <td>Polypropylene (PP)</td>
+                <td>-20</td>
+                <td>3,000</td>
+                <td>150</td>
+                <td>60%</td>
+                <td>Packaging (food containers, bottle caps), Textiles (ropes, thermal underwear), Automotive parts (bumpers, dashboards)</td>
+            </tr>
+            <tr>
+                <td>Polyvinyl Chloride (PVC)</td>
+                <td>81</td>
+                <td>2,500</td>
+                <td>185</td>
+                <td>Mostly amorphous (<10%)</td>
+                <td>Pipes and fittings, Vinyl siding and window frames, Electrical cable insulation</td>
+            </tr>
+            <tr>
+                <td>Polyethylene Terephthalate (PET)</td>
+                <td>75</td>
+                <td>20,000</td>
+                <td>255</td>
+                <td>Amorphous or crystalline.</td>
+                <td>Beverage bottles, Food packaging, Synthetic fibers (e.g., polyester clothing), Engineering plastics</td>
+            </tr>
+            <tr>
+                <td>Polyurethane (PU)</td>
+                <td>-10</td>
+                <td>3,500</td>
+                <td>Varies widely</td>
+                <td>Amorphous to semi-crystalline</td>
+                <td>Foam cushioning (furniture, mattresses), Insulation panels, Coatings and adhesives, Elastomers (wheels, tires, seals)</td>
+            </tr>
+            <tr>
+                <td>Polystyrene (PS)</td>
+                <td>100</td>
+                <td>17,500</td>
+                <td>N/A</td>
+                <td>Mostly amorphous (<10%)</td>
+                <td>Packaging (disposable cutlery, plastic cups, food containers), Insulation (expanded polystyrene - EPS), Consumer products (CD/DVD cases, toys, model kits)</td>
+            </tr>
+        </tbody>
+    </table>
 
-## Low-Density Polyethylene (LDPE)
+    <script>
+       function sortTable(columnIndex) {
+    const table = document.getElementById("sortableTable");
+    let rows, switching, i, x, y, shouldSwitch, dir, switchCount = 0;
+    switching = true;
+    dir = "asc";
 
-- **Glass Transition Temperature (Tg):** -110°C
-- **Crystallinity:** Semi-crystalline (~50-60%)
-- **Melting Temperature (Tm):** 105-115°C
-* Common Uses:
-  * Plastic bags and films
-  * Containers and bottles
-  * Coatings for paper and textiles
-- **Typical Critical Energy Release Rate (Gc):** 0.5 to 3 kJ/m²
-- **Entanglement Molecular Weight**: Approximately 1,300 g/mol
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[columnIndex];
+            y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+            
+            const xValue = x.innerHTML.trim();
+            const yValue = y.innerHTML.trim();
+            
+            // Remove commas and parse numeric values
+            const xNumeric = parseFloat(xValue.replace(/,/g, ''));
+            const yNumeric = parseFloat(yValue.replace(/,/g, ''));
+            
+            // Determine if the content is numeric
+            const xIsNumeric = !isNaN(xNumeric) && isFinite(xNumeric);
+            const yIsNumeric = !isNaN(yNumeric) && isFinite(yNumeric);
+            
+            if (xIsNumeric && yIsNumeric) {
+                // Both values are numeric
+                if (dir === "asc") {
+                    if (xNumeric > yNumeric) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir === "desc") {
+                    if (xNumeric < yNumeric) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            } else if (xIsNumeric && !yIsNumeric) {
+                // Numeric comes before non-numeric
+                if (dir === "asc") {
+                    shouldSwitch = true;
+                    break;
+                }
+            } else if (!xIsNumeric && yIsNumeric) {
+                // Non-numeric comes after numeric
+                if (dir === "desc") {
+                    shouldSwitch = true;
+                    break;
+                }
+            } else {
+                // Both are non-numeric
+                if (dir === "asc") {
+                    if (xValue.toLowerCase() > yValue.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir === "desc") {
+                    if (xValue.toLowerCase() < yValue.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+        }
 
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchCount++;
+        } else {
+            if (switchCount === 0 && dir === "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+}
 
-## High-Density Polyethylene (HDPE)
-
-- **Glass Transition Temperature (Tg):** -120°C
-- **Crystallinity:** Semi-crystalline
-- **Melting Temperature (Tm):** 130-137°C
-* Common Uses:
-  * Plastic bottles and containers
-  * Piping and tubing
-  * Plastic lumber and furniture
-- **Typical Critical Energy Release Rate (Gc):** 0.6 to 3 kJ/m²
-- **Entanglement Molecular Weight**: Approximately 1,600 g/mol
-
-
-# Polypropylene (PP)
-
-- **Glass Transition Temperature (Tg):** -20°C
-- **Melting Temperature (Tm):** 130-171°C
-- **Crystallinity:** Semi-crystalline (~50-70%)
-* Common Uses:
-  * Packaging (food containers, bottle caps)
-  * Textiles (ropes, thermal underwear)
-  * Automotive parts (bumpers, dashboards)
-- **Typical Critical Energy Release Rate (Gc):** 0.5 to 2.0 kJ/m²
-- **Entanglement Molecular Weight**: Approximately 3,000 g/mol
-
-
-
-
-# Polyvinyl Chloride (PVC)
-
-- **Glass Transition Temperature (Tg):** 81°C
-- **Melting Temperature (Tm):** 160-210°C
-- **Crystallinity:** Mostly amorphous, with low crystallinity (typically <10%)
-* Common Uses:
-  * Pipes and fittings
-  * Vinyl siding and window frames
-  * Electrical cable insulation
-- **Typical Critical Energy Release Rate (Gc):** 1 to 4 kJ/m²
-- **Entanglement Molecular Weight**: Approximately 2,500 g/mol
-
-
-
-# Polyethylene Terephthalate (PET)
-
-- **Glass Transition Temperature (Tg):** 67-81°C
-- **Melting Temperature (Tm):** 250-260°C
-- **Crystallinity:** Amorphous or crystalline - depending upon thermal history. 
-- **Common Uses:**
-  - Beverage bottles
-  - Food packaging
-  - Synthetic fibers (e.g., polyester clothing)
-  - Engineering plastics
-- **Typical Critical Energy Release Rate (Gc):** 1.6 to 5 kJ/m²
-- **Entanglement Molecular Weight:** Approximately 20,000 g/mol
-
-
-# Polyurethane (PU)
-
-- **Glass Transition Temperature (Tg):** -20 to 0°C, depending on formulation
-- **Melting Temperature (Tm):** Varies widely depending on specific type
-- **Crystallinity:** Amorphous to semi-crystalline
-- **Common Uses:**
-  - Foam cushioning (furniture, mattresses)
-  - Insulation panels
-  - Coatings and adhesives
-  - Elastomers (wheels, tires, seals)
-- **Typical Critical Energy Release Rate (Gc):** 0.5 to 3 kJ/m²
-- **Entanglement Molecular Weight:** Approximately 3,000 to 4,000 g/mol
-
-# Polystyrene (PS)
-
-- **Glass Transition Temperature (Tg):** ~100°C
-- **Crystallinity:** Mostly amorphous
-* Common Uses:
-  * Packaging (disposable cutlery, plastic cups, food containers)
-  * Insulation (expanded polystyrene - EPS)
-  * Consumer products (CD/DVD cases, toys, model kits)
-- **Typical Critical Energy Release Rate (Gc):** 0.1 to 0.3 kJ/m²
-- **Entanglement Molecular Weight**: Approximately 17,500 g/mol
+    </script>
+</body>
