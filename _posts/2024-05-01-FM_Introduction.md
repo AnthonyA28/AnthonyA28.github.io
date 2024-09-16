@@ -34,9 +34,9 @@ Material failure is a  perpetual problem - with us for all of history. When oil 
 </div>
 
 
-# Measuring Fracture Toughness
+# Measuring Fracture Energy
 
-To quantify the strength of a material or its resistance to fracture,  we measure the fracture toughness. We can do an energy balance on a stressed specimen to do this. We simply stretch the specimen and measure the force required to do this.  
+To quantify the strength of a material or its resistance to fracture,  we measure the *fracture energy*. We can do an energy balance on a stressed specimen to do this. We simply stretch the specimen and measure the force required to do this.  
 
 
 
@@ -81,9 +81,9 @@ where $a$ is the surface area of a crack.
 <div style="display: flex; justify-content: center; align-items: center;">
     <img src="\assets\images\FM\EnergyReleaseRate.jpg" alt="EnergyReleaseRate" style="height: 200px; object-fit: cover;" />
 </div>
-We should not that $G$ is the amount of energy if the crack grows. The *Critical Energy Release Rate* $G_c$ is the value at which the crack actually propogates is frequently reffered to as the toughness $\Gamma$ .
+We should not that $G$ is the amount of energy if the crack grows. The *Critical Energy Release Rate* $G_c$ is the value at which the crack actually propogates is frequently reffered to as the fracture energy $\Gamma$ .
 
-Now we can consider an experiment to measure the toughness ($G_c$ or $\Gamma$). We can simply determine the $\Pi$ at the instant of crack growth for different crack lengths. Simply stretch a number of samples each with different initial crack lengths and determine the $\Pi$ at which the crack grows. This is what Rivlin and Thomas did in 1952. The following figure shows the potential energy at which the crack grows for different initial crack lengths. They use $W$ in place of $\Pi$ and $c$ in place of $a$.
+Now we can consider an experiment to measure the fracture energy ($G_c$ or $\Gamma$). We can simply determine the $\Pi$ at the instant of crack growth for different crack lengths. Simply stretch a number of samples each with different initial crack lengths and determine the $\Pi$ at which the crack grows. This is what Rivlin and Thomas did in 1952. The following figure shows the potential energy at which the crack grows for different initial crack lengths. They use $W$ in place of $\Pi$ and $c$ in place of $a$.
 
 <div style="display: flex; justify-content: center; align-items: center;">
     <img src="\assets\images\FM\RivlinThomas1953.jpg" alt="Rivlin and Thomas" style="height: 200px; object-fit: cover;" />
@@ -99,7 +99,7 @@ $$
 $$
 
 
-Thus we can measure the material toughness by cutting a number of samples, stretching them until the notch propagates, then determining the change in potential energy with initial notch size. 
+Thus we can measure the material fracture energy by cutting a number of samples, stretching them until the notch propagates, then determining the change in potential energy with initial notch size. 
 
 ## Greensmith 
 
@@ -120,7 +120,7 @@ $$
 
 With this we only have to do two tests to measure the fracture energy. Simply stretch a notched sample until the fracture propagates, then stretch an unnotched sample up until $\lambda_c$.
 
-# Predicting Toughness
+# Predicting Fracture Energy
 
 ## Griffith Approach
 
