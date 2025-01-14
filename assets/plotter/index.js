@@ -414,11 +414,11 @@ function save_plot(type){
     console.log(currentDateTimeString);
 
     const svgName = currentDateTimeString.concat("_").concat(filename).concat(".svg")
-    ipcRenderer.send("archive_plot", [svgData, svgName]);
-    var dropdown = document.getElementById("archive_dropdown");
-    var opt = document.createElement("option");
-    opt.text = svgName;
-    dropdown.options.add(opt);  
+    // ipcRenderer.send("archive_plot", [svgData, svgName]);
+    // var dropdown = document.getElementById("archive_dropdown");
+    // var opt = document.createElement("option");
+    // opt.text = svgName;
+    // dropdown.options.add(opt);  
 
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
