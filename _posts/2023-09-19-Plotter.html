@@ -6,48 +6,118 @@ tags: Tools
 {% include head.html %}
 
 <script>
-document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey) {
-        const selection = window.getSelection();
-        const range = selection.getRangeAt(0);
-        let tag;
+document.addEventListener('keydown', function (event) {
+    const activeElement = document.activeElement;
 
-        // Handle cases without Shift
-        if (!event.shiftKey) {
-            if (event.key === '<') {
-                event.preventDefault();
-                tag = '<sub>';
-            } else if (event.key === '>') {
-                event.preventDefault();
-                tag = '<sup>';
+    // Handle <input> and <textarea> fields
+    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+        if (event.ctrlKey && event.shiftKey && event.key === 'R') {
+            event.preventDefault();
+            console.log("Replacing Greek letter name in input/textarea");
+
+            const greekMap = {
+                "angstrom": "Å",
+                "alpha": "α",
+                "beta": "β",
+                "gamma": "γ",
+                "delta": "δ",
+                "epsilon": "ε",
+                "eta": "η",
+                "theta": "θ",
+                "iota": "ι",
+                "kappa": "κ",
+                "zeta": "ζ",
+                "mu": "μ",
+                "nu": "ν",
+                "xi": "ξ",
+                "omicron": "ο",
+                "pi": "π",
+                "rho": "ρ",
+                "lambda": "λ",
+                "tau": "τ",
+                "upsilon": "υ",
+                "sigma": "σ",
+                "chi": "χ",
+                "psi": "ψ",
+                "omega": "ω",
+                "phi": "φ",
+                "cdot": "⋅",
+                "Alpha": "Α",
+                "Beta": "Β",
+                "Gamma": "Γ",
+                "Delta": "Δ",
+                "Epsilon": "ϵ",
+                "Eta": "Η",
+                "Theta": "ϴ",
+                "Iota": "Ι",
+                "Kappa": "Κ",
+                "Zeta": "Ζ",
+                "Mu": "Μ",
+                "Nu": "Ν",
+                "Xi": "Ξ",
+                "Omicron": "Ο",
+                "Pi": "Π",
+                "Rho": "Ρ",
+                "Lambda": "Λ",
+                "Tau": "Τ",
+                "Upsilon": "Υ",
+                "Sigma": "Σ",
+                "Chi": "Χ",
+                "Psi": "Ψ",
+                "Omega": "Ω",
+                "Phi": "Φ",
+
+                "<": "<sub></sub>",
+                ">": "<sup></sup>"
+
+            };
+
+            // Get the value and caret position
+            const value = activeElement.value;
+            const caretPosition = activeElement.selectionStart;
+
+            // Extract text before caret
+            const textBeforeCaret = value.slice(0, caretPosition).trimEnd();
+
+            // Find the last word using a loop
+
+            let lastWord = "";
+            for (let i = textBeforeCaret.length - 1; i >= 0; i--) {
+                const char = textBeforeCaret[i];
+                if (char === " " || char === "\t" || char === "\n") break;
+                lastWord = char + lastWord;
+            }
+
+            // Replace the last word with the corresponding Greek character
+            const greekChar = greekMap[lastWord];
+            if (greekChar) {
+                const newText =
+                    textBeforeCaret.slice(0, textBeforeCaret.length - lastWord.length) +
+                    greekChar +
+                    value.slice(caretPosition);
+
+                // Update the input value and caret position
+                activeElement.value = newText;
+                var newCaretPosition = textBeforeCaret.length - lastWord.length + greekChar.length;
+                
+                console.log(lastWord)
+                if(lastWord == "<" || lastWord == ">" ){
+                  newCaretPosition = newCaretPosition -12;
+                  const updatedValue = newText.slice(0, newCaretPosition) + newText.slice(newCaretPosition + 1);
+                  activeElement.value = updatedValue;
+                  newCaretPosition = newCaretPosition + 4;
+
+                }
+                activeElement.setSelectionRange(newCaretPosition, newCaretPosition);
+
             }
         }
-
-        // Handle cases with Shift
-        if (event.shiftKey) {
-            if (event.key === '<') {
-                event.preventDefault();
-                tag = '</sub>';
-            } else if (event.key === '>') {
-                event.preventDefault();
-                tag = '</sup>';
-            }
-        }
-
-        if (tag) {
-            // Insert the tag as text at the cursor position
-            const textNode = document.createTextNode(tag);
-            range.insertNode(textNode);
-
-            // Move the cursor after the inserted text
-            const newRange = document.createRange();
-            newRange.setStartAfter(textNode);
-            newRange.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(newRange);
-        }
+        return; // Exit to avoid handling other cases
     }
+
 });
+
+
 </script>
 
 
@@ -70,10 +140,10 @@ document.addEventListener('keydown', function(event) {
 
   body
   {
-    font-size: 13px;
+    font-size: 17px;
     margin-top: 0px;
     margin-bottom: 0px;
-    background-color: #D7DFD7;
+    background-color: #CCDECC;
   }
 
   .collapsible {
