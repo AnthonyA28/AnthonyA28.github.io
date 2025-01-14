@@ -163,6 +163,15 @@
     </div>
   {% endif %}
 
+    {% if item.name == "Adhesives" %}
+    <div class="dropdown-content">
+      {% assign sorted_posts = site.tags.Adhesives | sort: 'date' %}
+      {% for post in sorted_posts %}
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
 
     {% if item.name == "Tools"%}
       <div class="dropdown-content">

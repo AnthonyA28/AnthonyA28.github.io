@@ -29,6 +29,20 @@
  */
 
 
+
+<p class="citations">
+    <span class="citation">Citation 1</span>
+    <span class="citation">Citation 2</span>
+    <span class="citation">Citation 3</span>
+</p>
+.citation::after {
+    content: ", ";
+}
+
+.citation:last-child::after {
+    content: ""; /* Remove the comma after the last citation */
+}
+
 /*
  * Body resets
  *
