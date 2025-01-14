@@ -3,6 +3,20 @@ var traces = []
 var inputer_traces = [];
 
 
+
+var templates_list = [
+    ["default",           '{"layout":{"showlegend":false,"legend":{"bordercolor":"#444","bgcolor":"#FFFFFF","xanchor":"left","yanchor":"middle","x":1.1,"y":0.5,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","font":{"color":"#000000"},"standoff":0},"range":[null,null],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"minor":{"dtick":"","showgrid":false,"ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis":{"title":{"text":"y","font":{"color":"#000000"},"standoff":0},"range":[null,null],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"minor":{"showgrid":false,"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis2":{"title":{"text":"headerY","font":{"color":"#000000"},"standoff":25},"overlaying":"y","side":"right","range":[null,null],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"minor":{"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"margin":{"b":80,"l":80,"r":230,"t":30},"font":{"family":"Segoe UI","size":14,"color":"#000000"},"width":530,"height":330,"paper_bgcolor":"#FFFFFF","plot_bgcolor":"#FFFFFF"},"traces":[{"x":[0,1],"y":[2,4],"visible":true,"name":"y","type":"scattergl","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"circle","color":"#e41a1c"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#e41a1c"}}],"palette":"Set1"}'],
+]
+// localStorage.clear()
+
+
+
+// const {ipcRenderer}       = require('electron');
+
+document.getElementById('gd').n_data_lim = 1000;
+
+
+
 var log10 = function (y) {
   return Math.log(y) / Math.log(10);
 }
@@ -29,7 +43,6 @@ var removeOptions = function (selectElement) {
 }
 
 
-
 function make_trace_boxes(){
   inputer_traces = [];
   for(var j = 0; j< 50; j +=1){
@@ -53,6 +66,7 @@ function make_trace_boxes(){
     inputer_traces.push(new inputer(div.id, {
       name: {it: "text", def: "",},
       visible: {it: "option", options: ['true' , 'false' , "legendonly" ]},
+      yaxis: {it: "option", options: ['y' , 'y2']},
       line: {
         width: {it: "number", def: default_line_width,},
         shape: {it: "option", options: ["spline", "linear", "hv", "vh", "hvh", "vhv"],},
@@ -66,7 +80,7 @@ function make_trace_boxes(){
         symbol: {it: "option", options: marker_shapes,},
         color: {it: "option", options: colors_palettes[palette]},
       },
-      type: {it: "option", options: ["scatter", 'bar']},
+      type: {it: "option", options: ["scattergl", 'bar']},
     },function(e){
         update();
         if(e.target.id == 'color'){
@@ -85,18 +99,19 @@ function make_trace_boxes(){
 
 
 var inputer_master_trace = new inputer("appM", {
-    type: {it: "option", options: ["scatter", 'bar']},
+    type: {it: "option", options: ["scattergl", 'bar']},
+    yaxis: {it: "option", options: ['y' , 'y2']},
     line: {
       width: {it: "number", def: default_line_width,},
       shape: {it: "option", options: ["spline", "linear", "hv", "vh", "hvh", "vhv"],},
       dash: {it: "option", options: ["solid", "dot", "dash", "longdash", "dashdot", "longdashdot"],},
       smoothing: {it: "number", def: 0,},
     },
-    mode: {it: "option", options: [ 'lines',"markers", 'text', 'none', 'lines+markers','lines+markers+text' ]},
+    mode: {it: "option", options: [ 'lines+markers', 'lines',"markers", 'text', 'none', 'lines+markers+text' ]},
     marker: {
       size: {it: "number", def: default_marker_size,},
       symbol: {it: "option", options: marker_shapes,},
-      // color: {it: "option", options: colors_palettes["pyDefault"]}, //TODO: 
+      // color: {it: "option", options: colors_palettes["pyDefault"]},
     },
   }, function(e){
       var caller = e.target || e.srcElement || window.event.target || window.event.srcElement;
@@ -181,7 +196,17 @@ function plot(header, data, update_nums=false){
     traces = traces.slice(0, datas.length);
   }
 
-  var palette = document.getElementById("palettes").options[document.getElementById("palettes").selectedIndex].innerText;
+  var palette_obj = document.getElementById("palettes")
+  if (!palette_obj || palette_obj.options.length === 0) {
+    console.error("Palette dropdown is empty or not initialized correctly.");
+    // Initialize or set default options as needed
+  }
+  var palindex = palette_obj.selectedIndex;
+  if(palindex == -1){
+    palette_obj.selectedIndex = 0;
+    palindex = 0;
+  }
+  var palette = document.getElementById("palettes").options[palindex].innerText;
   if(palette.endsWith("_")){
     palette = document.getElementById("n_colors").value.concat("_").concat(palette);
     palette = palette.slice(0, -1);
@@ -190,9 +215,14 @@ function plot(header, data, update_nums=false){
 
 
   for(var j = 0; j< datas.length; j +=1){
+    datas[j][0] = datas[j][0].map(value => typeof value === 'string' ? parseFloat(value) : value);
+    datas[j][1] = datas[j][1].map(value => typeof value === 'string' ? parseFloat(value) : value);
+
     if( j < traces.length){
-      traces[j].x = datas[j][0]
-      traces[j].y = datas[j][1]
+      // Around the line where data is assigned to traces
+      traces[j].x = datas[j][0];
+      traces[j].y = datas[j][1];
+      console.log('After assignment:', traces[0].x['length'], traces[0].y['length']); // Verify the data remains intact
     }else{
 
     var marker_shape = marker_shapes[j%marker_shapes.length];
@@ -209,8 +239,9 @@ function plot(header, data, update_nums=false){
           y: datas[j][1],
           visible: true,
           name: headers[j],
-          type: 'scatter',
+          type: 'scattergl',
           mode: 'lines+markers',
+          yaxis: "y",
           marker: {
               size: default_marker_size,
               symbol: marker_shape,
@@ -251,7 +282,10 @@ function plot(header, data, update_nums=false){
   document.getElementById("palettes").dispatchEvent(new Event('change')); // Force the inputer_traces color options box to update color 
 
 
-  Plotly.newPlot(document.getElementById('gd'), traces, inputer_layout.get_data(), {
+  // traces = downSample(traces) // this just updates the downsample info 
+  console.log('before plot:', traces[0].x['length'], traces[0].y['length']); // Verify the data remains intact
+  // Plotly.newPlot(document.getElementById('gd'), traces, inputer_layout.get_data(), {
+  Plotly.newPlot(document.getElementById('gd'), traces, layout, {
       
       modeBarButtonsToRemove: ['toImage', 'sendDataToCloud'],
       modeBarButtonsToAdd: [{
@@ -269,7 +303,7 @@ function plot(header, data, update_nums=false){
         }
       }]
   },);
-    
+    console.log('after plot plot:', traces[0].x['length'], traces[0].y['length']); // Verify the data remains intact
 };
 
 
@@ -279,35 +313,39 @@ var inputer_layout = new inputer("app", OPT_inputer_layout , function(e){
 });
 
 
-function input_csv(selectedFile) {
-  Papa.parse(selectedFile, {
-    dynamicTyping: false,
-    complete: function(results) {
-      header = results.data[0]
-      datapoints = []
+// function input_csv(selectedFile) {
+//   Papa.parse(selectedFile, {
+//     dynamicTyping: false,
+//     complete: function(results) {
+//       header = results.data[0]
+//       datapoints = []
 
-      for(var i = 1; i < results.data.length; i ++){
-        row = []
-        for(var j = 0; j< header.length; j +=1){
-          x = parseFloat(results.data[i][j])
-          row.push(x)
-        }
-        datapoints.push(row)
-      }
-      datapoints = transpose(datapoints)
-      var update_date = false;
-      if( traces.length > 0){
-        update_date = true;
-      }
-      plot(header, datapoints, update_date)
-      update();
-    }
-  })
-};
+//       for(var i = 1; i < results.data.length; i ++){
+//         row = []
+//         for(var j = 0; j< header.length; j +=1){
+//           x = parseFloat(results.data[i][j])
+//           row.push(x)
+//         }
+//         datapoints.push(row)
+//       }
+//       datapoints = transpose(datapoints)
+//       var update_date = false;
+//       if( traces.length > 0){
+//         update_date = true;
+//       }
+//       plot(header, datapoints, update_date)
+//       update();
+//       console.log("Loading csv")
+//       // load_default_template()
+//     }
+//   })
+// };
 
 
 
 function save_plot(type){
+
+
 
   
   filename = filename.replace('.csv', '');
@@ -324,7 +362,16 @@ function save_plot(type){
   }
   if( type == "svg"){
 
+  	// scattergl does not seem to save properly.... But it is FAST rendering!
     var plot = document.getElementById('gd');
+    for (let i = 0; i < plot.data.length; i++) {
+        if (plot.data[i].type === 'scattergl') {
+            plot.data[i].type = 'scatter';
+        }
+    }
+	 Plotly.redraw(plot);
+
+
     var svgContent = plot.querySelector('svg').cloneNode(true);
 
     var legend = plot.querySelector('.legend');
@@ -332,7 +379,7 @@ function save_plot(type){
       svgContent.appendChild(legend.cloneNode(true));
     }
 
-    var axesLabels = plot.querySelectorAll('.xtitle, .ytitle');
+    var axesLabels = plot.querySelectorAll('.xtitle, .ytitle, .y2title');
     axesLabels.forEach(function (label) {
       svgContent.appendChild(label.cloneNode(true));
     });
@@ -349,17 +396,43 @@ function save_plot(type){
         element.remove();
       });
     });
-
-
+    
     var svgData = new XMLSerializer().serializeToString(svgContent);
+    // Replace all occurrences of vector-effect:non-scaling-stroke with an empty string
+    //vector-effect:non-scaling-stroke
+    svgData = svgData.replace(/vector-effect:\s*non-scaling-stroke;/g, '');
+
     var svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
 
     var downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(svgBlob);
     downloadLink.download = filename + ".svg";
 
+    const currentDate = new Date(); const year = currentDate.getFullYear(); const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); const day = currentDate.getDate().toString().padStart(2, '0'); const hour = currentDate.getHours().toString().padStart(2, '0'); const minute = currentDate.getMinutes().toString().padStart(2, '0');
+    const currentDateTimeString = `${year}-${month}-${day}--${hour}-${minute}`;
+    
+    console.log(currentDateTimeString);
+
+    const svgName = currentDateTimeString.concat("_").concat(filename).concat(".svg")
+    ipcRenderer.send("archive_plot", [svgData, svgName]);
+    var dropdown = document.getElementById("archive_dropdown");
+    var opt = document.createElement("option");
+    opt.text = svgName;
+    dropdown.options.add(opt);  
+
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
+
+
+    // Lets convert back to scattergl
+    var plot = document.getElementById('gd');
+    for (let i = 0; i < plot.data.length; i++) {
+        if (plot.data[i].type == 'scatter') {
+            plot.data[i].type = 'scattergl';
+        }
+    }
+   Plotly.redraw(plot);
+
 
 
     // filename = filename
@@ -411,23 +484,29 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
   }
 
 
-  if(!update_size_only){
+if (!update_size_only) {
     var elem = document.getElementById("palettes");
-    var colors =[...elem.options].map(o => o.value)
-    pal = json["palette"]
-    if( pal.endsWith("_")){
-      document.getElementById("n_colors").value = parseInt(pal.slice(0,1))
-      pal = pal.slice(2)
-      console.log(pal);
-    }
-    selectOption(elem, colors.indexOf(pal));
-    pal = json["palette"]
-    if( pal.endsWith("_")){
-      pal = pal.slice(0, -1)
-      console.log(pal);
+    var colors = [...elem.options].map(o => o.value);
+    pal = json["palette"];
+
+    // Slice until the first underscore
+    const underscoreIndex = pal.indexOf('_');
+    if (underscoreIndex !== -1) {
+        // Extract the number before the underscore and set it to the value
+        document.getElementById("n_colors").value = parseInt(pal.slice(0, underscoreIndex));
+        pal = pal.slice(underscoreIndex + 1);  // Slice after the underscore
+        console.log(pal);
     }
 
-  }
+    selectOption(elem, colors.indexOf(pal));
+
+    // Reset pal to json value and trim the trailing underscore if it exists
+    pal = json["palette"];
+    if (pal.endsWith("_")) {
+        pal = pal.slice(0, -1);
+        console.log(pal);
+    }
+}
 
 
     
@@ -442,8 +521,15 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
     
   }
   var new_traces = json["traces"];
+
+
   for(var i = 0 ; i < new_traces.length &&  i < new_traces.length; i ++ ){
     new_traces[i]['name'] = decodeURIComponent(new_traces[i]['name'])
+    if( i % 2 == 0 && new_traces[i].hasOwnProperty("error_y") && new_traces[i]["error_y"].hasOwnProperty("array")  && new_traces[i]["error_y"]["array"].length > 0 ){
+        document.getElementById("error_bars").checked = true
+    } else if (i % 2 == 0 && ( (!new_traces[i].hasOwnProperty("error_y") ) || (new_traces[i].hasOwnProperty("error_y") && !new_traces[i]["error_y"].hasOwnProperty("array"))  ) ){
+        document.getElementById("error_bars").checked = false
+    }
   }
   if(!update_data){
     for(var i = 0 ; i < prev_data.length && i < new_traces.length &&  i < traces.length; i ++ ){
@@ -456,6 +542,8 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
   }
   l.xaxis.title.text  = decodeURIComponent(l.xaxis.title.text);
   l.yaxis.title.text  = decodeURIComponent(l.yaxis.title.text);
+  l.yaxis2.title.text  = decodeURIComponent(l.yaxis2.title.text);
+  
   if(prev_data.length > 0 ){
     if( !update_axes_labels ){
       l.xaxis.title.text  = prevLayout.xaxis.title.text
@@ -503,11 +591,11 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
     
   }
 
-  var l = inputer_layout.get_data()
-  l.modebar = {}
-  l.modebar.orientation = "v"
+  var la = inputer_layout.get_data()
+  la.modebar = {}
+  la.modebar.orientation = "v"
 
-  Plotly.newPlot(document.getElementById('gd'), traces, l, {
+  Plotly.newPlot(document.getElementById('gd'), traces, la, {
     modeBarButtonsToRemove: ['toImage', 'sendDataToCloud' ],
     modeBarButtonsToAdd: [
 
@@ -524,7 +612,7 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
         save_plot("png");
       }
     }] // END modeBarButtonsToAdd,
-    },); // END Plotly.newPlot
+    },); // END 
 
     update();
 
@@ -532,14 +620,23 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
     // Update the colors in the color options dropdowns by triggering palette changed 
     var event = new Event('change');
     document.getElementById("palettes").dispatchEvent(event);
-  
+ 
+
+    const inputElement = document.getElementById('error_bars');
+    const changeEvent = new Event('change');
+    inputElement.dispatchEvent(changeEvent);
+
+      
 }
 
 function update(){
 
+  // set_y2_color();
+
   var plot = document.getElementById('gd');
   var xaxisRange = plot.layout.xaxis.range;
   var yaxisRange = plot.layout.yaxis.range;
+  var y2axisRange = plot.layout.yaxis2.range;
 
 
 
@@ -554,14 +651,14 @@ function update(){
             visible: true,
             thickness: traces[i].line.width,
             width: traces[i].line.width*2,
+            color: traces[i].marker.color, 
           }
-        // traces[i+1].dontupdate = true
-        inputer_traces[i+1].inputs.visible.elem.selectedIndex = 1 
+        // inputer_traces[i+1].inputs.visible.elem.selectedIndex = 1 
         traces[i+1].visible = false
           
       }else{
         traces[i]["error_y"] = {}
-        inputer_traces[i+1].inputs.visible.elem.selectedIndex = 0
+        // inputer_traces[i+1].inputs.visible.elem.selectedIndex = 0
         traces[i+1].visible = true
       }
     }
@@ -573,10 +670,13 @@ function update(){
   if(document.getElementById("ignore_zoom_check").checked){
     l.xaxis.range = xaxisRange
     l.yaxis.range = yaxisRange
+    l.yaxis2.range = y2axisRange
   }
 
 
   Plotly.relayout(document.getElementById('gd'), l);
+
+
 
 }
 
@@ -588,20 +688,22 @@ function get_template_text(curZoom=false){
     traces[i].name = traces[i].name.replace(/\s/g,' ');
     traces[i].name = encodeURIComponent(traces[i].name)
   }
-  if ( !filename.endsWith(".json")){
-    filename = filename.concat(".json")
-  }
-
+  
   var layout = inputer_layout.get_data();
 
   if(curZoom){
     var plot = document.getElementById('gd');
     layout.xaxis.range = plot.layout.xaxis.range;
     layout.yaxis.range = plot.layout.yaxis.range;
+
+    layout.yaxis2.range = plot.layout.yaxis2.range;
   }
 
   layout.xaxis.title.text  = encodeURIComponent(layout.xaxis.title.text);
   layout.yaxis.title.text  = encodeURIComponent(layout.yaxis.title.text);
+  layout.yaxis2.title.text  = encodeURIComponent(layout.yaxis2.title.text);
+
+
   var index = document.getElementById("palettes").selectedIndex
   var palette = document.getElementById("palettes").options[index].innerText;
   if(palette.endsWith("_")){
@@ -617,31 +719,9 @@ function get_template_text(curZoom=false){
   return text;
 }
 
-// document.getElementById('download').addEventListener( 'click', function(){
-
-//     var output_file = filename;
-//     console.log(output_file);
-//     const element = document.createElement('a');
-//     var json_text = get_template_text();
-
-//     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(json_text));
-//     element.setAttribute('download', output_file.concat(".json"));
-//     element.style.display = 'none';
-//     document.body.appendChild(element);
-//     element.click();
-//     document.body.removeChild(element);
-
-// });
 
 
-document.getElementById('save_template').addEventListener( 'click', function(){
 
-    var json_text = get_template_text();
-    var name_ = prompt("Enter name of template to save:");
-
-    localStorage.setItem("LocalStorage_".concat(name_), json_text);
-
-});
 
 
 document.getElementById('helper_reset_markers').addEventListener( 'click', function(){
@@ -708,36 +788,129 @@ document.getElementById('helper_pair_markers').addEventListener( 'click', functi
   update();
 });
 
-document.getElementById('helper_pair_linestyles').addEventListener( 'click', function(){
-  console.log("helper_pair_linestyles")
+
+document.getElementById('helper_alternate_markers').addEventListener( 'click', function(){
+  console.log("helper_alternate_markers")
   
-  for(var i = 0; i < inputer_traces.length; i += 1 ){
-    inputer_traces[i].inputs.line.dash.elem.selectedIndex = 0;
+  var j = 0;
+  for(var i = 2; i < inputer_traces.length; i += 1 ){
+    inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = inputer_traces[0].inputs.marker.symbol.elem.selectedIndex;
     i += 1
     if(i >= inputer_traces.length){
       break
     }
-    inputer_traces[i].inputs.line.dash.elem.selectedIndex = 1;
+    inputer_traces[i].inputs.marker.symbol.elem.selectedIndex = inputer_traces[1].inputs.marker.symbol.elem.selectedIndex;
+    j += 1;
   }
   update();
+});
+
+document.getElementById('helper_alternate_linestyles').addEventListener( 'click', function(){
+  console.log("helper_alternate_linestyles")
+  
+  for(var i = 0; i < inputer_traces.length; i += 1 ){
+    inputer_traces[i].inputs.line.dash.elem.selectedIndex = inputer_traces[0].inputs.line.dash.elem.selectedIndex;
+    i += 1
+    if(i >= inputer_traces.length){
+      break
+    }
+    inputer_traces[i].inputs.line.dash.elem.selectedIndex = inputer_traces[1].inputs.line.dash.elem.selectedIndex;
+  }
+  update();
+});
+
+
+document.getElementById('helper_to_log').addEventListener( 'click', function(){
+  console.log("helper_to_log")
+  var layout = inputer_layout.get_data();
+  layout.xaxis.type = "log"
+  layout.xaxis.dtick = "1"
+  layout.yaxis.type = "log"
+  layout.yaxis.dtick = "1"
+  layout.yaxis2.type = "log"
+  layout.yaxis2.dtick = "1"
+  inputer_layout.update_data(layout);
+  update();
+  Plotly.relayout('gd', {
+      'xaxis.autorange': true,  // Autoscale the x-axis
+      'yaxis.autorange': true   // Autoscale the y-axis
+  });
+});
+
+
+document.getElementById('helper_to_lin').addEventListener( 'click', function(){
+  console.log("helper_to_lin")
+  var layout = inputer_layout.get_data();
+  layout.xaxis.type = "lin"
+  layout.xaxis.dtick = ""
+  layout.yaxis.type = "lin"
+  layout.yaxis.dtick = ""
+  layout.yaxis2.type = "lin"
+  layout.yaxis2.dtick = ""
+  inputer_layout.update_data(layout);
+  update();
+  Plotly.relayout('gd', {
+      'xaxis.autorange': true,  // Autoscale the x-axis
+      'yaxis.autorange': true   // Autoscale the y-axis
+  });
 });
 
 
 
 
 
+// document.getElementById('helper_set_y2_color').addEventListener( 'change',  function(){set_y2_color(); update();});
+  
+
+// function set_y2_color(){
+//     if(document.getElementById('helper_set_y2_color').checked == false){
+//       return;
+//     }
+//     for(var i = 0; i < inputer_traces.length; i += 1 ){
+//     var axis = inputer_traces[i].inputs.yaxis.elem[inputer_traces[i].inputs.yaxis.elem.selectedIndex].text
+//     if(axis == "y2"){
+//       var color = inputer_traces[i].inputs.marker.color.elem[inputer_traces[i].inputs.marker.color.elem.selectedIndex].text
+//       var layout = inputer_layout.get_data();
+
+//       layout.yaxis2.tickcolor = color
+//       layout.yaxis2.linecolor = color
+//       layout.yaxis2.tickfont.color = color
+//       // layout.yaxis2.title.font.color = color
+//       inputer_layout.update_data(layout);
+//     }
+//   }
+// }
+
+
+
 document.getElementById("palettes").addEventListener("change", function (){
-  console.log("Color Palette selected ")
-  var index = document.getElementById("palettes").selectedIndex
-  var color = document.getElementById("palettes").options[index].innerText
+   console.log("Color Palette selected ");
+   var index = document.getElementById("palettes").selectedIndex;
+   
+   // Ensure there's always a valid selection
+   if(index === -1){
+     index = 0;  // Set to first index if none is selected
+     document.getElementById("palettes").selectedIndex = index;
+   }
+   
+   var colorObj = document.getElementById("palettes").options[index];
+   // Check if colorObj is a valid object
+   if (!colorObj || typeof colorObj !== 'object') {
+       console.log("invalid color object");
+       return; // Exit if not valid
+   }
+
+   var color = colorObj.innerText;
+
+  var color = colorObj.innerText
   if(color.endsWith("_")){
     var n_colors = document.getElementById("n_colors").value
     console.log("n_colors ", n_colors);
     if(n_colors>50){
       n_colors = 50;
     }
-    else if(n_colors<2){
-      n_colors = 2;
+    else if(n_colors<3){
+      n_colors = 3;
     }
     color = n_colors.toString().concat("_").concat(color.slice(0, color.length-1));
   }
@@ -747,6 +920,22 @@ document.getElementById("palettes").addEventListener("change", function (){
 
 
   document.getElementById("error_bars").addEventListener('change', function() {
+      
+      
+      var layout = inputer_layout.get_data();
+      layout.error_bars = document.getElementById("error_bars").checked;
+      inputer_layout.update_data(layout);
+
+      for(var i = 0 ; i < traces.length; i ++){
+        if(i < traces.length-1 && i % 2 == 0 ){
+          if(document.getElementById("error_bars").checked){
+          inputer_traces[i+1].inputs.visible.elem.selectedIndex = 1 
+            
+        }else{
+          inputer_traces[i+1].inputs.visible.elem.selectedIndex = 0
+        }
+      }
+    }
     update();
   });
 
@@ -780,14 +969,26 @@ document.getElementById("palettes").addEventListener("change", function (){
 });
 
 
-function resetFileInput() {
-    var fileInput = document.getElementById('input_file');
-    fileInput.type = 'text';  // Change the type temporarily to allow cloning
-    var newFileInput = fileInput.cloneNode(true);
-    newFileInput.type = 'file';  // Change the type temporarily to allow cloning
-    fileInput.parentNode.replaceChild(newFileInput, fileInput);
-  newFileInput.addEventListener('change', input_file_event);
-}
+
+var input = document.getElementById('input_file')
+input.addEventListener("change", function (){
+	if (!this.files && !this.files[0]) {
+		return;
+	}
+	console.log("Inputting file")
+	console.log(this.files[0]);
+	filename = this.files[0].name
+	load_file(this.files[0])
+});
+
+// function resetFileInput() {
+//     var fileInput = document.getElementById('input_file');
+//     fileInput.type = 'text';  // Change the type temporarily to allow cloning
+//     var newFileInput = fileInput.cloneNode(true);
+//     newFileInput.type = 'file';  // Change the type temporarily to allow cloning
+//     fileInput.parentNode.replaceChild(newFileInput, fileInput);
+//   newFileInput.addEventListener('change', input_file_event);
+// }
 
 
 function  input_file_event(){
@@ -798,7 +999,7 @@ function  input_file_event(){
   console.log(this.files[0]);
   filename = this.files[0].name
   load_file(this.files[0])
-  resetFileInput();
+  // resetFileInput();
 }
 var input = document.getElementById('input_file')
 input.addEventListener("change", input_file_event);
@@ -826,6 +1027,7 @@ function load_file(file){
       var data = data.slice(1, data.length);
       plot(header, transpose(data), data[0]);
           // event.sender.send('load_file-task-finished', [false, data]); 
+      load_default_template();
     }
 
   
@@ -886,9 +1088,79 @@ function load_file(file){
 
 }
 
+// ipcRenderer.on("load_ArchivedPlots", function(event, arg){
+//   import_svg(arg, true, true, true, true)
+// });
+
+// ipcRenderer.on("load_templ", function(event, arg){
+// 	var update_trace_styles = document.getElementById("update_trace_styles_check").checked;
+// 	var update_trace_names = document.getElementById("update_trace_names_check").checked;
+// 	var update_axes_labels = document.getElementById("update_axes_labels_check").checked;
+// 	import_json(arg, false, update_trace_styles, update_trace_names, update_axes_labels);
+// });
+
+// ipcRenderer.send("get_templates");
+// ipcRenderer.on('available_templates', function(event, arg){
+// 	console.log(event, arg);
+// 	var dropdown = document.createElement("select");
+// 	dropdown.id = 'template_dropdown';
+// 	var opt = document.createElement("option");
+
+// 	for(var i=0;i<arg.length;i++){
+// 		var opt = document.createElement("option");
+// 		opt.text = arg[i];
+// 		dropdown.options.add(opt);
+// 	}
+// 	dropdown.onchange =  change_template;
+// 	document.getElementById("template_div").appendChild(dropdown);
+
+// 	// Get the dropdown element
+// 	var dropdown = document.getElementById("template_dropdown");
+
+// 	// Loop through the options to find the index of the item with the title "default.json"
+// 	for (var i = 0; i < dropdown.options.length; i++) {
+// 	    if (dropdown.options[i].text === "default.json") {
+// 	        // Set the selectedIndex to the index of the item with the title "default.json"
+// 	        dropdown.selectedIndex = i;
+// 	        break; // Exit the loop once found
+// 	    }
+// 	}
+
+// });
+
+
+// ipcRenderer.send("get_archived_plots");
+// ipcRenderer.on('available_plots', function(event, arg){
+//   console.log(event, arg);
+//   var dropdown = document.createElement("select");
+//   dropdown.id = 'archive_dropdown';
+//   var opt = document.createElement("option");
+
+//   for(var i=0;i<arg.length;i++){
+//     var opt = document.createElement("option");
+//     opt.text = arg[i];
+//     dropdown.options.add(opt);
+//   }
+//   dropdown.onchange =  plot_archived;
+//   document.getElementById("archive_div").appendChild(dropdown);
+// });
+
+
+// ipcRenderer.send("get_colorSchemes");
+// ipcRenderer.on('available_colorSchemes', function(event, arg){
+//   console.log(arg);
+// })
 
 
 
+document.getElementById('save_template').addEventListener( 'click', function(){
+
+    var json_text = get_template_text();
+    var name_ = prompt("Enter name of template to save:");
+
+    localStorage.setItem("LocalStorage_".concat(name_), json_text);
+
+});
 
 function load_templ(index){
   var update_trace_styles = document.getElementById("update_trace_styles_check").checked;
@@ -984,15 +1256,16 @@ document.getElementById("delete_template").addEventListener('click', function(){
   }
 });
 
-document.getElementById('make_default_template').addEventListener( 'click', function(){
+// document.getElementById('make_default_template').addEventListener( 'click', function(){
 
-    var json_text = get_template_text();
-    var name_ = "user-default"
-    localStorage.setItem("LocalStorage_".concat(name_), json_text);
+//     var json_text = get_template_text();
+//     var name_ = "user-default"
+//     localStorage.setItem("LocalStorage_".concat(name_), json_text);
 
-});
+// });
 
 load_default_template()
+
 
 document.getElementById('ignore_zoom_check').addEventListener('click', function(){
   update();
@@ -1007,73 +1280,86 @@ document.getElementById('helper_save_current_zoom').addEventListener('click', fu
   
   var plot = document.getElementById('gd');
   var layout = inputer_layout.get_data();
+  
   layout.xaxis.range = plot.layout.xaxis.range
   layout.yaxis.range = plot.layout.yaxis.range
-  inputer_layout.update_data(layout);
 
+  layout.yaxis2.range = plot.layout.yaxis2.range
+
+  inputer_layout.update_data(layout);
 })
 
 
 
 document.getElementById('exportData').addEventListener('click', function() {
 
-var layout = inputer_layout.get_data();
-var x = layout.xaxis.title.text
-var y = layout.yaxis.title.text
+	var layout = inputer_layout.get_data();
+	var x = layout.xaxis.title.text
+	var y = layout.yaxis.title.text
 
-const separator = ','; // Change this to your desired separator
-const filename = 'exported_data';
+	const separator = ','; // Change this to your desired separator
+	const filename = 'exported_data';
 
-const rows = [];
+	const rows = [];
 
-// Iterate over data points for each trace
-for (let i = 0; i < Math.max(...traces.map(trace => trace.x.length)); i++) {
-  const rowData = [];
+	// Iterate over data points for each trace
+	for (let i = 0; i < Math.max(...traces.map(trace => trace.x.length)); i++) {
+	  const rowData = [];
 
-  for (const trace of traces) {
-    // Check if the current trace has data for the current index
-    if (i < trace.x.length) {
-      rowData.push(trace.x[i] || ''); // Insert 'x' data or an empty string if data is missing
-      rowData.push(trace.y[i] || ''); // Insert 'y' data or an empty string if data is missing
-    } else {
-      // If no data is available for the current index, insert empty strings
-      rowData.push('');
-      rowData.push('');
-    }
+	  for (const trace of traces) {
+	    // Check if the current trace has data for the current index
+	    if (i < trace.x.length) {
+	      rowData.push(trace.x[i] || ''); // Insert 'x' data or an empty string if data is missing
+	      rowData.push(trace.y[i] || ''); // Insert 'y' data or an empty string if data is missing
+	    } else {
+	      // If no data is available for the current index, insert empty strings
+	      rowData.push('');
+	      rowData.push('');
+	    }
 
-    // Add an empty column after every trace in both header and data
-    rowData.push('');
-  }
+	    // Add an empty column after every trace in both header and data
+	    rowData.push('');
+	  }
 
-  rows.push(rowData.join(separator));
-}
+	  rows.push(rowData.join(separator));
+	}
 
-// Add an empty column in headers for every trace
-const header = traces.flatMap(trace => [`${x}`, `${y} (${trace.name})`, '']);
+	// Add an empty column in headers for every trace
+	const header = traces.flatMap(trace => [`${x}`, `${y} (${trace.name})`, '']);
 
-// Create CSV content
-const csvContent = [header.join(separator), ...rows].join('\n');
+	// Create CSV content
+	const csvContent = [header.join(separator), ...rows].join('\n');
 
-// Create a Blob containing the CSV data
-const blob = new Blob([csvContent], { type: 'text/csv' });
+	// Create a Blob containing the CSV data
+	const blob = new Blob([csvContent], { type: 'text/csv' });
 
-// Create a download link
-const url = URL.createObjectURL(blob);
-const a = document.createElement('a');
-a.style.display = 'none';
-a.href = url;
-a.download = `${filename}.csv`;
+	// Create a download link
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.style.display = 'none';
+	a.href = url;
+	a.download = `${filename}.csv`;
 
-// Trigger the download
-document.body.appendChild(a);
-a.click();
+	// Trigger the download
+	document.body.appendChild(a);
+	a.click();
 
-// Clean up
-URL.revokeObjectURL(url);
-document.body.removeChild(a);
-
-
+	// Clean up
+	URL.revokeObjectURL(url);
+	document.body.removeChild(a);
 });
+
+
+// // document.getElementById('downsample_size').addEventListener('change', function() {
+// //     // Get the current value of the input
+// //     let currentValue = parseInt(document.getElementById('downsample_size').value);
+// //     // If the value is NaN or negative, set it to 1000
+// //     if (isNaN(currentValue) || currentValue <= 0) {
+// //         currentValue = 10000;
+// //     }
+// //     document.getElementById('gd').n_data_lim = currentValue;
+// //     update();
+// // });
 
 
 

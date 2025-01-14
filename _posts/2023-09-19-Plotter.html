@@ -12,8 +12,9 @@ tags: Tools
 <script src="/assets/plotter/deps/papaparse.js"></script>
 <script src="/assets/plotter/deps/Inputer.js"></script>
 <script src="/assets/plotter/deps/Options.js"></script>
+<script src="/assets/plotter/deps/plotly-basic.2.29.1.js"></script>
 <!-- <script type="text/javascript">window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);</script> NOT SURE WHY I EVERY HAD THIS --> 
-<script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>
+<!-- <script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script> -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
@@ -26,7 +27,7 @@ tags: Tools
     font-size: 13px;
     margin-top: 0px;
     margin-bottom: 0px;
-    background-color: #ededed;
+    background-color: #D7DFD7;
   }
 
   .collapsible {
@@ -50,42 +51,42 @@ tags: Tools
 
     
     <div style="display: inline-block;width:350px;height:2000px;border: 1px solid #FFFFFF; vertical-align: top;">
+
+
+  <input type="file" id="input_file" style="color: transparent; font-size: 17px; margin-bottom: 1px; margin-left: 5px; margin-top: 5px; width: 300px; height: 50px;">
+
       <h3>
-          <a href="//assets/plotter/assets/PlotterTutorial.html">Help/Documentation</a>
-          <br>
+          <!-- <a href="docs/index.html">Help/Documentation</a> -->
       </h3>
 
-
-      
       <!-- <br> -->
             <!-- <button type="submit" id="save_template"> Save template </button>  -->
         <!-- <button type="submit" id="open_templates"> Open templates</button>  -->
 
-          
         <div id="template_div"><strong>Choose Template:</strong> </div>
         <button type="submit" id="save_template" > Save Template</button> 
         <button type="submit" id="delete_template" > Delete Template</button> 
-        <button type="submit" id="make_default_template" > Make Default Template</button> 
+        <!-- <button type="submit" id="open_templates"> Open templates</button>  -->
         
 
         
+        <br>
+        <br>
+
         <div ><strong>Update:</strong>
           <div style="margin-left: 20px;">
-            <br>
-          Line styles <input type="checkbox"  id="update_trace_styles_check" checked >
-          <p style="display: none;"> <br> Names  <input type="checkbox"  id="update_trace_names_check" > </p>
-            <br>
-          Axes<input type="checkbox"  id="update_axes_labels_check" checked>
-            <br>
-          Size only <input type="checkbox" id="update_size_only_check" >
-            <br>
           Ignore Zoom  <input type="checkbox"  id="ignore_zoom_check" checked>
+          <br> Line styles <input type="checkbox"  id="update_trace_styles_check" checked >
+          <br> Names  <input type="checkbox"  id="update_trace_names_check" >
+          <br> Axes<input type="checkbox"  id="update_axes_labels_check">
+          <br> Size only <input type="checkbox" id="update_size_only_check" >
           </div>
         </div>
 
       <br>
       <strong>Palette:</strong>
       <select id="palettes">
+        <option>redBlue</option>
         <option>UTcolors</option>
         <option>pyDefault</option>
         <option>Paired</option>
@@ -98,11 +99,42 @@ tags: Tools
         <option>viridis_r_</option>
         <option>magma_</option>
         <option>magma_r_</option>
+        
+        <option>Yellow_Green</option>
+        <option>Yellow_Green_Blue</option>
+        <option>Green_Blue</option>
+        <option>Blue_Green</option>
+        <option>Purple_Blue_Green</option>
+        <option>Purple_Blue</option>
+        <option>Blue_Purple</option>
+        <option>Red_Purple</option>
+        <option>Purple_Red</option>
+        <option>Orange_Red</option>
+        <option>Yellow_Orange_Red</option>
+        <option>Yellow_Orange_Brown</option>
+        <option>Brown_Blue_Green</option>
+        <option>Purple_Green</option>
+        <option>Pink_Yellow_Green</option>
+        <option>Red_Blue</option>
+        <option>Red_Grey</option>
+        <option>Red_Yellow_Blue</option>
+        <option>Spectral</option>
+        <option>Accent</option>
+        <option>Dark2</option>
+        <option>Paired</option>
+        
+        <option>Pastel2</option>
+        <option>Set2</option>
+        <option>Set3</option>
+
+
+
       </select>
       <input type="number" style="width:50px;" id="n_colors"> n_colors </input>
       <br>
-      <h6>Show error bars <input type="checkbox" id="error_bars" ></h6>
-      <br>
+      <h3>Use error bars:  <input type="checkbox" id="error_bars" ></h3>
+      <!-- <h3>Set Y2 color:    <input type="checkbox" id="helper_set_y2_color" ></h3> -->
+      <!-- <h3>downsample size: <input type="number" style="width:100px;" id="downsample_size" value="1000" min="100" max="1000000" > </input></h3> -->
       <h3>Layout:</h3>
       <div id="layout">
         <div id="app" ></div>
@@ -110,7 +142,12 @@ tags: Tools
       <h3>Master Trace:</h3>
       <div id="appM"></div>
 
-      <h3 >Notes:</h3>
+
+      <br>
+      <div id="archive_div"><strong>Choose Archived plot:</strong> </div>  
+
+
+
         <h4 >Figure Sizes:</h4>
           <div style="margin-left:15px;">
           Typically images are rendered at 96 pixels per inch. So a 100x100 px  image will be in actual size 1.042 x 1.042 in  26.458 x 26.458 mm.
@@ -134,7 +171,6 @@ tags: Tools
 
     <div style="display: inline-block;width:410px;height:410px;border: 1px solid #FFFFFF; vertical-align:  top ; margin-top: 25px" id="gd_div">
 
-      <input type="file" id="input_file" style="color: transparent;font-size: 28px; margin-bottom: 25px; margin-left: 5px; margin-top: 5px" >
 
 
       <div id="gd" ></div>
@@ -153,13 +189,19 @@ tags: Tools
 
     <button type="submit" id="helper_pair_markers">Pair Markers</button> 
 
-    <button type="submit" id="helper_pair_linestyles">Pair Linestyles</button> 
+    <button type="submit" id="helper_alternate_markers">Alternate Markers</button>     
+
+    <button type="submit" id="helper_alternate_linestyles">Alternate Linestyles</button>     
 
     <br>
 
     <button type="submit" id="helper_save_current_zoom">Save current range/domain</button> 
-    
+
+    <button type="submit" id="helper_to_log">to log</button>
+    <button type="submit" id="helper_to_lin">to linear</button>
     <br>
+    
+    
 
     <button type="submit" id="exportData">Export Data</button> 
 
@@ -193,7 +235,7 @@ tags: Tools
       .tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
       .tg .tg-0lax{text-align:left;vertical-align:top}
       </style>
-            <table><thead> <tr> <th>Name</th> <th>Unicode</th></tr></thead><tbody> <tr> <td>Ångstrom</td> <td>Å</td></tr> <tr> <td>Alpha</td> <td>α</td></tr> <tr> <td>Beta</td> <td>β</td></tr> <tr> <td>Gamma</td> <td>γ, Γ</td></tr> <tr> <td>Delta</td> <td>δ, Δ</td></tr> <tr> <td>Epsilon</td> <td>ε, ϵ</td></tr> <tr> <td>Eta</td> <td>η</td></tr> <tr> <td>Theta</td> <td>θ, ϴ</td></tr> <tr> <td>Iota</td> <td>ι</td></tr> <tr> <td>Kappa</td> <td>κ, Κ</td></tr> <tr> <td>Zeta</td> <td>ζ, Λ</td></tr> <tr> <td>Mu</td> <td>μ</td></tr> <tr> <td>Nu</td> <td>ν</td></tr> <tr> <td>Xi</td> <td>ξ</td></tr> <tr> <td>Omicron</td> <td>ο</td></tr> <tr> <td>Pi</td> <td>π, Π</td></tr> <tr> <td>Rho</td> <td>ρ</td></tr> <tr> <td>Lambda</td> <td>λ, Σ</td></tr> <tr> <td>Tau</td> <td>τ</td></tr> <tr> <td>Upsilon</td> <td>υ</td></tr> <tr> <td>Sigma</td> <td>σ</td></tr> <tr> <td>Chi</td> <td>χ</td></tr> <tr> <td>Psi</td> <td>ψ</td></tr> <tr> <td>Omega</td> <td>ω, Ω</td></tr> <tr> <td>Phi</td> <td>φ, Φ</td></tr> <tr> <td>Cdot</td> <td>⋅</td></tr></tbody></table>
+            <table><thead> <tr> <th>Name</th> <th>Symbol</th></tr></thead><tbody> <tr> <td>Ångstrom</td>   <td>Å</td></tr> <tr><tr><td>Alpha</td><td>α, Α</td> </tr> <tr><td>Beta</td><td>β, Β</td> </tr> <tr><td>Gamma</td><td>γ, Γ</td> </tr> <tr><td>Delta</td><td>δ, Δ</td> </tr> <tr><td>Epsilon</td><td>ε, ϵ</td> </tr> <tr><td>Eta</td><td>η, Η</td> </tr> <tr><td>Theta</td><td>θ, ϴ</td> </tr> <tr><td>Iota</td><td>ι, Ι</td> </tr> <tr><td>Kappa</td><td>κ, Κ</td> </tr> <tr><td>Zeta</td><td>ζ, Ζ</td> </tr> <tr><td>Mu</td><td>μ, Μ</td> </tr> <tr><td>Nu</td><td>ν, Ν</td> </tr> <tr><td>Xi</td><td>ξ, Ξ</td> </tr> <tr><td>Omicron</td><td>ο, Ο</td> </tr> <tr><td>Pi</td><td>π, Π</td> </tr> <tr><td>Rho</td><td>ρ, Ρ</td> </tr> <tr><td>Lambda</td><td>λ, Λ</td> </tr> <tr><td>Tau</td><td>τ, Τ</td> </tr> <tr><td>Upsilon</td><td>υ, Υ</td> </tr> <tr><td>Sigma</td><td>σ, Σ</td> </tr> <tr><td>Chi</td><td>χ, Χ</td> </tr> <tr><td>Psi</td><td>ψ, Ψ</td> </tr> <tr><td>Omega</td><td>ω, Ω</td> </tr> <tr><td>Phi</td><td>φ, Φ</td> </tr> <td>Cdot</td>     <td>⋅</td></tr></tbody></table>
     </div>
   </div>
 

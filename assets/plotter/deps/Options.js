@@ -1,8 +1,8 @@
 var OPT_inputer_layout = {
     showlegend: {it: 'boolean', 'def': true},
     legend: {
-      // bordercolor: {it: "text",def: '#444',},
-      // bgcolor: {it: "text", def:'#FFFFFF'},
+      bordercolor: {it: "text",def: '#444',},
+      bgcolor: {it: "text", def:'#FFFFFF'},
       xanchor: {it: "option", options: ["left", "auto", "center", "right"],},
       yanchor: {it: 'option', options: ["middle", "auto", "top", "bottom"],},
       // borderwidth: 0,
@@ -30,24 +30,29 @@ var OPT_inputer_layout = {
     xaxis: 
 {      title: {
         text: {it: "text",def: 'headerX',},
+        font: {
+          color: {it: 'text', def:'#000000'},
+        },
         standoff: {it: "number",def: 0,},
       },
+      // overlaying: {it: "option",options: ['y', 'free']},
+      // side: {it: 'option',options: ["right", 'left']},
       range: {
         it: "array", def:['',''],
       },
       type: {it: 'option',options: ["linear", 'log']},
+      mirror: {it: "option",options: ["false", "ticks","true" ],},
       zeroline: {it: 'boolean', 'def': false},
       dtick:  {it: "text",def: '',},
       // tickformat: {it: "text",def: '',}, // https://github.com/d3/d3-format/blob/main/README.md#locale_format
-      exponentformat: {it: "option",options: ["power", "none" , "e" , "E" , "SI" , "B"],},
       ticks: {it: "option",options: ["inside", "outside", ""],},
+      exponentformat: {it: "option",options: ["power", "none" , "e" , "E" , "SI" , "B"],},
       ticklen: {it: "text",def: 5,},
       // tickwidth: {it: "number",def: 1,},
       tickcolor: {it: "text",def: "#000000",},
-      // tickprefix: {it: "text", def: ""},
-      // ticksuffix: {it: "text", def: ""},
       linecolor: {it: "text",def: "#000000",},
-      mirror: {it: "option",options: ["false", "ticks","true" ],},
+      tickprefix: {it: "text", def: ""},
+      ticksuffix: {it: "text", def: ""},
       showgrid: {it: 'boolean', 'def': false},
       // tickfont: {
       //     family: {it: "text",def: 'Segoe UI',},
@@ -56,34 +61,82 @@ var OPT_inputer_layout = {
       // },
       minor:{
         dtick:  {it: "text",def: '',},
+        showgrid: {it: 'boolean', 'def': false},
         // tickmode: {it: "text",def: 'auto',},
         ticks: {it: "option",options: ["inside", "outside", ""],},
         ticklen: {it: "number",def: 2,},
         // tickwidth: {it: "number",def: 1,},
         tickcolor: {it: "text",def: "#000000",},
+        linecolor: {it: "text",def: "#000000",},
       },
     },
     yaxis: {
       title: {
         text:{it: "text",def: 'headerY',},
+        font: {
+          color: {it: 'text', def:'#000000'},
+        },
         standoff: {it: "number",def: 0,},
       },
       range: {
         it: "array", def:['',''],
       },
-      "type": {it: 'option',options: ["linear", 'log']},
-      zeroline: {it: 'boolean', 'def': true},
+      type: {it: 'option',options: ["linear", 'log']},
+      mirror: {it: "option",options: ["false", "ticks","true" ],},
+      zeroline: {it: 'boolean', 'def': false},
       dtick: {it: "text",def: '',},
-      tickformat: {it: "text",def: "",}, // https://github.com/d3/d3-format/blob/main/README.md#locale_format
-      exponentformat: {it: "option", options: ["power", "none" , "e" , "E" , "SI" , "B"],},
+      // tickformat: {it: "text",def: "",}, // https://github.com/d3/d3-format/blob/main/README.md#locale_format
       ticks: {it: "option",options: ["inside", "outside", ""],},
+      exponentformat: {it: "option", options: ["power", "none" , "e" , "E" , "SI" , "B"],},
       ticklen: {it: "number",def: 5,},
       // tickwidth: {it: "number",def: 1,},
       tickcolor: {it: "text",def: "#000000",},
-      // tickprefix: {it: "text", def: ""},
-      // ticksuffix: {it: "text", def: ""},
       linecolor: {it: "text",def: "#000000",},
+      tickprefix: {it: "text", def: ""},
+      ticksuffix: {it: "text", def: ""},
+      showgrid: {it: 'boolean', 'def': false},
+      // tickfont: {
+      //     family: {it: "text",def: 'Segoe UI',},
+      //     size: {it: "number",def: 10,},
+      //     color: {it: 'text', def:'#000000'},
+      // },
+      minor:{
+        showgrid: {it: 'boolean', 'def': false},
+        dtick: {it: "text",def: '',},
+        // tickmode: {it: "text",def: 'auto',},
+        ticks: {it: "option",options: ["inside", "outside", ""],},
+        ticklen: {it: "number",def: 2,},
+        // tickwidth: {it: "number",def: 1,},
+        tickcolor: {it: "text",def: "#000000",},
+        linecolor: {it: "text",def: "#000000",},
+      },
+    },
+    yaxis2: {
+      title: {
+        text:{it: "text",def: 'headerY',},
+        font: {
+          color: {it: 'text', def:'#000000'},
+        },
+        standoff: {it: "number",def: 25,},
+      },
+      overlaying: {it: "option",options: ['y', 'free']},
+      side: {it: 'option',options: ["right", 'left']},
+      range: {
+        it: "array", def:['',''],
+      },
+      type: {it: 'option',options: ["linear", 'log']},
       mirror: {it: "option",options: ["false", "ticks","true" ],},
+      zeroline: {it: 'boolean', 'def': false},
+      dtick: {it: "text",def: '',},
+      // tickformat: {it: "text",def: "",}, // https://github.com/d3/d3-format/blob/main/README.md#locale_format
+      ticks: {it: "option",options: ["inside", "outside", ""],},
+      exponentformat: {it: "option", options: ["power", "none" , "e" , "E" , "SI" , "B"],},
+      ticklen: {it: "number",def: 5,},
+      // tickwidth: {it: "number",def: 1,},
+      tickcolor: {it: "text",def: "#000000",},
+      linecolor: {it: "text",def: "#000000",},
+      tickprefix: {it: "text", def: ""},
+      ticksuffix: {it: "text", def: ""},
       showgrid: {it: 'boolean', 'def': false},
       // tickfont: {
       //     family: {it: "text",def: 'Segoe UI',},
@@ -97,6 +150,7 @@ var OPT_inputer_layout = {
         ticklen: {it: "number",def: 2,},
         // tickwidth: {it: "number",def: 1,},
         tickcolor: {it: "text",def: "#000000",},
+        linecolor: {it: "text",def: "#000000",},
       },
     },
     margin:{
@@ -114,8 +168,8 @@ var OPT_inputer_layout = {
 
     width: {it: "number",def: 530,},
     height: {it: "number",def: 330,},
-    // paper_bgcolor: {it: "text",def:'#FFFFFF',},
-    // plot_bgcolor: {it: "text",def:'#FFFFFF',},
+    paper_bgcolor: {it: "text",def:'#FFFFFF',},
+    plot_bgcolor: {it: "text",def:'#FFFFFF',},
 }
 
 var default_line_width = 2;
@@ -144,6 +198,7 @@ var marker_shapes = [
 var line_shapes = ["solid", "dot", "dash", "longdashdot", "dashdot", "longdash" ]
 
 var colors_palettes = {
+  "redBlue": ["#375E97", "#FB6542"],
   "pyDefault": ["#0000ff","#00ff00","#ff0000","#00ffff","#ff00ff","#ffff00", "#000000", "#0000aa","#00aa00","#aa0000","#00aaaa","#aa00aa","#aaaa00"],
   "UTcolors":[ '#333f48','#005f86', '#579d42', '#f8971f', '#9cadb7', '#00a9b7', '#a6cd57', '#ffd600', '#d6d2c4'],
   "Accent" : ['#7fc97f', '#beaed4', '#fdc086', '#ffff99', '#386cb0', '#f0027f', '#bf5b17', '#666666', '#7fc97f', '#beaed4', '#fdc086', '#ffff99'],
@@ -152,6 +207,7 @@ var colors_palettes = {
   "Pastel1" : ['#fbb4ae', '#b3cde3', '#ccebc5', '#decbe4', '#fed9a6', '#ffffcc', '#e5d8bd', '#fddaec', '#f2f2f2', '#fbb4ae', '#b3cde3', '#ccebc5'],
   "Set1" : ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999', '#e41a1c', '#377eb8', '#4daf4a'],
   "tab10" : ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#1f77b4', '#ff7f0e'],
+  "3_cbd-spectral" : ['#FC8D59', '#FFFFBF', '#99D594'],
   "2_viridis" :['#31688e', '#35b779'],
   "2_viridis_r" :['#35b779', '#31688e'],
   "2_magma" :['#721f81', '#f1605d'],
@@ -348,5 +404,34 @@ var colors_palettes = {
   "50_viridis_r": ['#fde724', '#f1e51c', '#e4e318', '#d7e219', '#cae01e', '#bade27', '#addc30', '#9fd938', '#92d741', '#83d34b', '#77d052', '#6bcd59', '#60c960', '#55c666', '#49c16d', '#40bd72', '#38b976', '#30b47a', '#29af7f', '#24aa82', '#21a685', '#1fa187', '#1e9c89', '#1e978a', '#1f928c', '#218d8c', '#23898d', '#25838d', '#277e8e', '#287a8e', '#2a758e', '#2c708e', '#2f6a8d', '#31658d', '#33608d', '#365b8c', '#39558b', '#3b508a', '#3d4a89', '#404487', '#423e85', '#443781', '#46317e', '#472b7a', '#472575', '#481d6f', '#471669', '#470f62', '#45085b', '#440154'],
   "50_magma": ['#000003', '#01010b', '#040415', '#09071f', '#0e0a2a', '#150e38', '#1b1044', '#221150', '#2a115c', '#341068', '#3c0f71', '#450f76', '#4d117a', '#55137d', '#5e177f', '#661a80', '#6e1e81', '#762181', '#7f2481', '#872781', '#8f2a80', '#972c7f', '#9f2f7e', '#a9327c', '#b1357a', '#b93778', '#c23a75', '#cb3e71', '#d3426d', '#da4769', '#e14c66', '#e75262', '#ee5b5e', '#f2635c', '#f56c5b', '#f8755c', '#fa805e', '#fb8a62', '#fc9366', '#fd9d6b', '#fea671', '#feb179', '#febb80', '#fec488', '#fdcd90', '#fdd89a', '#fde1a3', '#fceaac', '#fcf3b5', '#fbfcbf'],
   "50_magma_r": ['#fbfcbf', '#fcf3b5', '#fceaac', '#fde1a3', '#fdd89a', '#fdcd90', '#fec488', '#febb80', '#feb179', '#fea671', '#fd9d6b', '#fc9366', '#fb8a62', '#fa805e', '#f8755c', '#f56c5b', '#f2635c', '#ee5b5e', '#e75262', '#e14c66', '#da4769', '#d3426d', '#cb3e71', '#c23a75', '#b93778', '#b1357a', '#a9327c', '#9f2f7e', '#972c7f', '#8f2a80', '#872781', '#7f2481', '#762181', '#6e1e81', '#661a80', '#5e177f', '#55137d', '#4d117a', '#450f76', '#3c0f71', '#341068', '#2a115c', '#221150', '#1b1044', '#150e38', '#0e0a2a', '#09071f', '#040415', '#01010b', '#000003'],
+
+// ****   Color Brewer colors      ****//
+
+
+"Yellow_Green": ["#ffffe5","#f7fcb9","#d9f0a3","#addd8e","#78c679","#41ab5d","#238443","#006837","#004529"],
+"Yellow_Green_Blue": ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"],
+"Green_Blue": ["#f7fcf0","#e0f3db","#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#0868ac","#084081"],
+"Blue_Green": ["#f7fcfd","#e5f5f9","#ccece6","#99d8c9","#66c2a4","#41ae76","#238b45","#006d2c","#00441b"],
+"Purple_Blue_Green": ["#fff7fb","#ece2f0","#d0d1e6","#a6bddb","#67a9cf","#3690c0","#02818a","#016c59","#014636"],
+"Purple_Blue": ["#fff7fb","#ece7f2","#d0d1e6","#a6bddb","#74a9cf","#3690c0","#0570b0","#045a8d","#023858"],
+"Blue_Purple": ["#f7fcfd","#e0ecf4","#bfd3e6","#9ebcda","#8c96c6","#8c6bb1","#88419d","#810f7c","#4d004b"],
+"Red_Purple": ["#fff7f3","#fde0dd","#fcc5c0","#fa9fb5","#f768a1","#dd3497","#ae017e","#7a0177","#49006a"],
+"Purple_Red": ["#f7f4f9","#e7e1ef","#d4b9da","#c994c7","#df65b0","#e7298a","#ce1256","#980043","#67001f"],
+"Orange_Red": ["#fff7ec","#fee8c8","#fdd49e","#fdbb84","#fc8d59","#ef6548","#d7301f","#b30000","#7f0000"],
+"Yellow_Orange_Red": ["#ffffcc","#ffeda0","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#bd0026","#800026"],
+"Yellow_Orange_Brown": ["#ffffe5","#fff7bc","#fee391","#fec44f","#fe9929","#ec7014","#cc4c02","#993404","#662506"],
+"Brown_Blue_Green": ["#543005","#8c510a","#bf812d","#dfc27d","#f6e8c3","#f5f5f5","#c7eae5","#80cdc1","#35978f","#01665e","#003c30"],
+"Purple_Green": ["#40004b","#762a83","#9970ab","#c2a5cf","#e7d4e8","#f7f7f7","#d9f0d3","#a6dba0","#5aae61","#1b7837","#00441b"],
+"Pink_Yellow_Green": ["#8e0152","#c51b7d","#de77ae","#f1b6da","#fde0ef","#f7f7f7","#e6f5d0","#b8e186","#7fbc41","#4d9221","#276419"],
+"Red_Blue": ["#67001f","#b2182b","#d6604d","#f4a582","#fddbc7","#f7f7f7","#d1e5f0","#92c5de","#4393c3","#2166ac","#053061"],
+"Red_Grey": ["#67001f","#b2182b","#d6604d","#f4a582","#fddbc7","#ffffff","#e0e0e0","#bababa","#878787","#4d4d4d","#1a1a1a"],
+"Red_Yellow_Blue": ["#a50026","#d73027","#f46d43","#fdae61","#fee090","#ffffbf","#e0f3f8","#abd9e9","#74add1","#4575b4","#313695"],
+"Spectral": ["#9e0142","#d53e4f","#f46d43","#fdae61","#fee08b","#ffffbf","#e6f598","#abdda4","#66c2a5","#3288bd","#5e4fa2"],
+"Accent": ["#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0","#f0027f","#bf5b17","#666666"],
+"Dark2": ["#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e","#e6ab02","#a6761d","#666666"],
+"Paired": ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928"],
+"Pastel2": ["#b3e2cd","#fdcdac","#cbd5e8","#f4cae4","#e6f5c9","#fff2ae","#f1e2cc","#cccccc"],
+"Set2": ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"],
+"Set3": ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]
 
 }
