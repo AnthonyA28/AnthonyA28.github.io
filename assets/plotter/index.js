@@ -57,8 +57,8 @@ function convertHtmlToLatex(html) {
             event.preventDefault();
 
             let value = activeElement.value;
-            if (value.startsWith('$')) value = value.slice(1);
-            if (value.endsWith('$')) value = value.slice(0, -1);
+            if (value.startsWith('$\\mathrm{')) value = value.slice(9);
+            if (value.endsWith('}$')) value = value.slice(0, -2);
 
             Object.keys(greekMap).slice(0, -2).forEach(key => {
                 const regex = new RegExp(key.replace(/\\/g, '\\\\'), 'g'); // Escape the backslash for regex
@@ -85,9 +85,9 @@ function convertHtmlToLatex(html) {
                 value = value.replace(regex, reversedMap[char]);
             });
 
-            if (value.startsWith('$')) value = value.slice(1);
-            if (value.endsWith('$')) value = value.slice(0, -1);
-            activeElement.value = convertHtmlToLatex(`$${value}$`);
+            if (value.startsWith('$\\mathrm{'))value = value.slice(9);
+            if (value.endsWith('}$')) value = value.slice(0, -2);
+            activeElement.value = convertHtmlToLatex(`$\\mathrm\{${value}\}$`);
             update();
         }
 
