@@ -475,6 +475,10 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
   var json = JSON.parse(json_text);
   var l = json["layout"];
 
+  if(l.use_error_bars){
+    document.getElementById("error_bars").checked = l.use_error_bars
+  }
+
 
   if(update_size_only){
     update_data = false;
@@ -525,11 +529,11 @@ if (!update_size_only) {
 
   for(var i = 0 ; i < new_traces.length &&  i < new_traces.length; i ++ ){
     new_traces[i]['name'] = decodeURIComponent(new_traces[i]['name'])
-    if( i % 2 == 0 && new_traces[i].hasOwnProperty("error_y") && new_traces[i]["error_y"].hasOwnProperty("array")  && new_traces[i]["error_y"]["array"].length > 0 ){
-        document.getElementById("error_bars").checked = true
-    } else if (i % 2 == 0 && ( (!new_traces[i].hasOwnProperty("error_y") ) || (new_traces[i].hasOwnProperty("error_y") && !new_traces[i]["error_y"].hasOwnProperty("array"))  ) ){
-        document.getElementById("error_bars").checked = false
-    }
+    // if( i % 2 == 0 && new_traces[i].hasOwnProperty("error_y") && new_traces[i]["error_y"].hasOwnProperty("array")  && new_traces[i]["error_y"]["array"].length > 0 ){
+    //     document.getElementById("error_bars").checked = true
+    // } else if (i % 2 == 0 && ( (!new_traces[i].hasOwnProperty("error_y") ) || (new_traces[i].hasOwnProperty("error_y") && !new_traces[i]["error_y"].hasOwnProperty("array"))  ) ){
+    //     document.getElementById("error_bars").checked = false
+    // }
   }
   if(!update_data){
     for(var i = 0 ; i < prev_data.length && i < new_traces.length &&  i < traces.length; i ++ ){
@@ -626,6 +630,7 @@ if (!update_size_only) {
     const changeEvent = new Event('change');
     inputElement.dispatchEvent(changeEvent);
 
+
       
 }
 
@@ -709,6 +714,10 @@ function get_template_text(curZoom=false){
   if(palette.endsWith("_")){
     palette = document.getElementById("n_colors").value.concat("_").concat(palette);
   }
+
+  var use_error_bars  = document.getElementById("error_bars").checked
+  console.log("saving svg with error bars " + use_error_bars);
+  layout.use_error_bars = use_error_bars
 
   var json = {layout, traces, palette}
   var text = JSON.stringify(json);
