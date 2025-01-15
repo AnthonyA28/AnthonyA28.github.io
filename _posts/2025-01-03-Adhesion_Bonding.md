@@ -1,5 +1,5 @@
 ---
-title: Bondiing of Pressure Sensitive Adhesives
+title: Bonding of Pressure Sensitive Adhesives
 tags: Adhesives
 layout: post
 
