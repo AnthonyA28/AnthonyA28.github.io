@@ -5,120 +5,99 @@ tags: Tools
 
 {% include head.html %}
 
-<script>
+<!-- <script>
 document.addEventListener('keydown', function (event) {
     const activeElement = document.activeElement;
 
-    // Handle <input> and <textarea> fields
-    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
-        if (event.ctrlKey && event.shiftKey && event.key === 'R') {
-            event.preventDefault();
-            console.log("Replacing Greek letter name in input/textarea");
+    // Function to convert LaTeX math to HTML
+    function convertLatexToHtml(latex) {
+        const superscriptRegex = /\^(\{.*?\}|.)/g;
+        const subscriptRegex = /_(\{.*?\}|.)/g;
 
-            const greekMap = {
-                "angstrom": "Å",
-                "alpha": "α",
-                "beta": "β",
-                "gamma": "γ",
-                "delta": "δ",
-                "epsilon": "ε",
-                "eta": "η",
-                "theta": "θ",
-                "iota": "ι",
-                "kappa": "κ",
-                "zeta": "ζ",
-                "mu": "μ",
-                "nu": "ν",
-                "xi": "ξ",
-                "omicron": "ο",
-                "pi": "π",
-                "rho": "ρ",
-                "lambda": "λ",
-                "tau": "τ",
-                "upsilon": "υ",
-                "sigma": "σ",
-                "chi": "χ",
-                "psi": "ψ",
-                "omega": "ω",
-                "phi": "φ",
-                "cdot": "⋅",
-                "Alpha": "Α",
-                "Beta": "Β",
-                "Gamma": "Γ",
-                "Delta": "Δ",
-                "Epsilon": "ϵ",
-                "Eta": "Η",
-                "Theta": "ϴ",
-                "Iota": "Ι",
-                "Kappa": "Κ",
-                "Zeta": "Ζ",
-                "Mu": "Μ",
-                "Nu": "Ν",
-                "Xi": "Ξ",
-                "Omicron": "Ο",
-                "Pi": "Π",
-                "Rho": "Ρ",
-                "Lambda": "Λ",
-                "Tau": "Τ",
-                "Upsilon": "Υ",
-                "Sigma": "Σ",
-                "Chi": "Χ",
-                "Psi": "Ψ",
-                "Omega": "Ω",
-                "Phi": "Φ",
+        latex = latex.replace(superscriptRegex, (match, p1) => {
+            const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
+            return `<sup>${content}</sup>`;
+        });
 
-                "<": "<sub></sub>",
-                ">": "<sup></sup>"
+        latex = latex.replace(subscriptRegex, (match, p1) => {
+            const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
+            return `<sub>${content}</sub>`;
+        });
 
-            };
-
-            // Get the value and caret position
-            const value = activeElement.value;
-            const caretPosition = activeElement.selectionStart;
-
-            // Extract text before caret
-            const textBeforeCaret = value.slice(0, caretPosition).trimEnd();
-
-            // Find the last word using a loop
-
-            let lastWord = "";
-            for (let i = textBeforeCaret.length - 1; i >= 0; i--) {
-                const char = textBeforeCaret[i];
-                if (char === " " || char === "\t" || char === "\n") break;
-                lastWord = char + lastWord;
-            }
-
-            // Replace the last word with the corresponding Greek character
-            const greekChar = greekMap[lastWord];
-            if (greekChar) {
-                const newText =
-                    textBeforeCaret.slice(0, textBeforeCaret.length - lastWord.length) +
-                    greekChar +
-                    value.slice(caretPosition);
-
-                // Update the input value and caret position
-                activeElement.value = newText;
-                var newCaretPosition = textBeforeCaret.length - lastWord.length + greekChar.length;
-                
-                console.log(lastWord)
-                if(lastWord == "<" || lastWord == ">" ){
-                  newCaretPosition = newCaretPosition -12;
-                  const updatedValue = newText.slice(0, newCaretPosition) + newText.slice(newCaretPosition + 1);
-                  activeElement.value = updatedValue;
-                  newCaretPosition = newCaretPosition + 5;
-
-                }
-                activeElement.setSelectionRange(newCaretPosition, newCaretPosition);
-
-            }
-        }
-        return; // Exit to avoid handling other cases
+        return latex;
     }
 
+    // Function to convert HTML to LaTeX math
+    function convertHtmlToLatex(html) {
+        const supRegex = /<sup>(.*?)<\/sup>/g;
+        const subRegex = /<sub>(.*?)<\/sub>/g;
+
+        html = html.replace(supRegex, (match, p1) => `^${p1.length > 1 ? `{${p1}}` : p1}`);
+        html = html.replace(subRegex, (match, p1) => `_${p1.length > 1 ? `{${p1}}` : p1}`);
+        return html;
+    }
+
+    const greekMap = {
+        "\\alpha": "α", "\\beta": "β", "\\gamma": "γ", "\\delta": "δ", "\\epsilon": "ε",
+        "\\eta": "η", "\\theta": "θ", "\\iota": "ι", "\\kappa": "κ", "\\zeta": "ζ",
+        "\\mu": "μ", "\\nu": "ν", "\\xi": "ξ", "\\omicron": "ο", "\\pi": "π",
+        "\\rho": "ρ", "\\lambda": "λ", "\\tau": "τ", "\\upsilon": "υ", "\\sigma": "σ",
+        "\\chi": "χ", "\\psi": "ψ", "\\omega": "ω", "\\phi": "φ", "\\cdot": "⋅",
+        "\\Alpha": "Α", "\\Beta": "Β", "\\Gamma": "Γ", "\\Delta": "Δ", "\\Epsilon": "ϵ",
+        "\\Eta": "Η", "\\Theta": "ϴ", "\\Iota": "Ι", "\\Kappa": "Κ", "\\Zeta": "Ζ",
+        "\\Mu": "Μ", "\\Nu": "Ν", "\\Xi": "Ξ", "\\Omicron": "Ο", "\\Pi": "Π",
+        "\\Rho": "Ρ", "\\Lambda": "Λ", "\\Tau": "Τ", "\\Upsilon": "Υ", "\\Sigma": "Σ",
+        "\\Chi": "Χ", "\\Psi": "Ψ", "\\Omega": "Ω", "\\Phi": "Φ",
+        "<": "<sub></sub>", ">": "<sup></sup>"
+    };
+
+    // Handle input and textarea fields
+    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+
+        if (event.ctrlKey && event.shiftKey && event.key === 'R') {
+            event.preventDefault();
+
+            let value = activeElement.value;
+            if (value.startsWith('$')) value = value.slice(1);
+            if (value.endsWith('$')) value = value.slice(0, -1);
+
+            Object.keys(greekMap).slice(0, -2).forEach(key => {
+                const regex = new RegExp(key.replace(/\\/g, '\\\\'), 'g'); // Escape the backslash for regex
+                value = value.replace(regex, greekMap[key]);
+            });
+
+            activeElement.value = convertLatexToHtml(value);
+            update();
+        }
+        if (event.ctrlKey && event.shiftKey && event.key === 'E') {
+            event.preventDefault();
+
+            const reversedMap = Object.entries(greekMap)
+                .slice(0, -2)
+                .reduce((acc, [key, value]) => {
+                    acc[value] = key;
+                    return acc;
+                }, {});
+
+            let value = activeElement.value;
+
+            Object.keys(reversedMap).forEach(char => {
+                const regex = new RegExp(char, 'g');
+                value = value.replace(regex, reversedMap[char]);
+            });
+
+            if (value.startsWith('$')) value = value.slice(1);
+            if (value.endsWith('$')) value = value.slice(0, -1);
+            activeElement.value = convertHtmlToLatex(`$${value}$`);
+            update();
+        }
+
+    }
 });
 
 
-</script>
+
+</script> -->
 
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
