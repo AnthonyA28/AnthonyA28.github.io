@@ -21,13 +21,13 @@ Acrylic-based PSAs are the most widely used class of PSAs, primarily due to thei
 Natural rubber-based PSAs are composed of cis-1,4 polyisoprene and tackifier additives, which soften the PSA [^4]‧[^5]‧[^6]. 
 Natural rubber-based PSAs exhibit high cohesive strength due to strain-induced crystallization, and in contrast to acrylics, they can adhere to low surface energy substrates such as plastics [^5]‧[^6]. Natural rubber-based PSAs were the earliest PSAs in production and are still very common as they are the simplest and cheapest to produce [^7].
 
-<img src="\assets\images\Adhesion\natural rubber.jpg" alt="natural rubber" style="zoom:25%; margin-left: auto; margin-right: auto;" />
+<img src="\assets\images\Adhesion\natural_rubber.jpg" alt="natural rubber" style="zoom:25%; margin-left: auto; margin-right: auto;" />
 
 ### Styrenic Block Copolymer-based PSAs
 
 Styrenic block copolymer (SBC) based PSAs are typically formulated as blends of styrene-isoprene-styrene triblocks and styrene-isoprene diblocks combined with tackifier resin. These PSAs exhibit nanophase separation, with styrene domains dispersed within an isoprene matrix, where the styrene domains act as physical cross-links [^7]. The adhesive properties are tailored by controlling the characteristics of the nanophase domains [^8]‧[^9]. The physically cross-linked nature of SBC-based PSAs makes them thermoplastic elastomers, which can be processed above the order-disorder temperature of the block copolymer [^8].
 
-<img src="\assets\images\Adhesion\styrene isoprene.jpg" alt="Styrene Isoprene" style="zoom:25%; margin-left: auto; margin-right: auto;" />
+<img src="\assets\images\Adhesion\styrene_isoprene.jpg" alt="Styrene Isoprene" style="zoom:25%; margin-left: auto; margin-right: auto;" />
 
 
 ### Silicone-based PSAs
