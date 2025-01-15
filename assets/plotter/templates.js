@@ -1,5 +1,0 @@
-
-var templates_list = [
-    ["default",           '{"layout":{"showlegend":true,"legend":{"xanchor":"auto","yanchor":"auto","x":0.05,"y":0.95,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","standoff":0},"range":[null,null],"type":"linear","zeroline":false,"dtick":"","exponentformat":"power","ticks":"inside","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","mirror":"ticks","showgrid":false,"minor":{"dtick":"","ticks":"inside","ticklen":3,"tickcolor":"#000000"}},"yaxis":{"title":{"text":"3.5%22","standoff":0},"range":[null, null],"type":"linear","zeroline":false,"dtick":"","tickformat":"","exponentformat":"power","ticks":"inside","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","mirror":"ticks","showgrid":false,"minor":{"dtick":"","ticks":"inside","ticklen":3,"tickcolor":"#000000"}},"margin":{"b":80,"l":80,"r":30,"t":30},"font":{"family":"Segoe UI","size":16,"color":"#000000"}, "width":330,"height":330},"traces":[],"palette":"Set1"}'],
-]
-

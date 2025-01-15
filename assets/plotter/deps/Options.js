@@ -32,6 +32,7 @@ var OPT_inputer_layout = {
         text: {it: "text",def: 'headerX',},
         font: {
           color: {it: 'text', def:'#000000'},
+          size: {it: "number",def: 18},
         },
         standoff: {it: "number",def: 0,},
       },
@@ -54,11 +55,11 @@ var OPT_inputer_layout = {
       tickprefix: {it: "text", def: ""},
       ticksuffix: {it: "text", def: ""},
       showgrid: {it: 'boolean', 'def': false},
-      // tickfont: {
-      //     family: {it: "text",def: 'Segoe UI',},
-      //     size: {it: "number",def: 10,},
-      //     color: {it: 'text', def:'#000000'},
-      // },
+      tickfont: {
+          // family: {it: "text",def: 'Segoe UI',},
+          // size: {it: "number",def: 10,},
+          color: {it: 'text', def:'#000000'},
+      },
       minor:{
         dtick:  {it: "text",def: '',},
         showgrid: {it: 'boolean', 'def': false},
@@ -75,6 +76,7 @@ var OPT_inputer_layout = {
         text:{it: "text",def: 'headerY',},
         font: {
           color: {it: 'text', def:'#000000'},
+          size: {it: "number",def: 18},
         },
         standoff: {it: "number",def: 0,},
       },
@@ -95,11 +97,11 @@ var OPT_inputer_layout = {
       tickprefix: {it: "text", def: ""},
       ticksuffix: {it: "text", def: ""},
       showgrid: {it: 'boolean', 'def': false},
-      // tickfont: {
-      //     family: {it: "text",def: 'Segoe UI',},
-      //     size: {it: "number",def: 10,},
-      //     color: {it: 'text', def:'#000000'},
-      // },
+      tickfont: {
+          // family: {it: "text",def: 'Segoe UI',},
+          // size: {it: "number",def: 10,},
+          color: {it: 'text', def:'#000000'},
+      },
       minor:{
         showgrid: {it: 'boolean', 'def': false},
         dtick: {it: "text",def: '',},
@@ -116,6 +118,7 @@ var OPT_inputer_layout = {
         text:{it: "text",def: 'headerY',},
         font: {
           color: {it: 'text', def:'#000000'},
+          size: {it: "number",def: 18},
         },
         standoff: {it: "number",def: 25,},
       },
@@ -138,11 +141,11 @@ var OPT_inputer_layout = {
       tickprefix: {it: "text", def: ""},
       ticksuffix: {it: "text", def: ""},
       showgrid: {it: 'boolean', 'def': false},
-      // tickfont: {
-      //     family: {it: "text",def: 'Segoe UI',},
-      //     size: {it: "number",def: 10,},
-      //     color: {it: 'text', def:'#000000'},
-      // },
+      tickfont: {
+          // family: {it: "text",def: 'Segoe UI',},
+          // size: {it: "number",def: 10,},
+          color: {it: 'text', def:'#000000'},
+      },
       minor:{
         dtick: {it: "text",def: '',},
         // tickmode: {it: "text",def: 'auto',},
@@ -198,9 +201,9 @@ var marker_shapes = [
 var line_shapes = ["solid", "dot", "dash", "longdashdot", "dashdot", "longdash" ]
 
 var colors_palettes = {
-  "redBlue": ["#375E97", "#FB6542"],
   "pyDefault": ["#0000ff","#00ff00","#ff0000","#00ffff","#ff00ff","#ffff00", "#000000", "#0000aa","#00aa00","#aa0000","#00aaaa","#aa00aa","#aaaa00"],
   "UTcolors":[ '#333f48','#005f86', '#579d42', '#f8971f', '#9cadb7', '#00a9b7', '#a6cd57', '#ffd600', '#d6d2c4'],
+  // "redBlue": ["#375E97", "#FB6542"],
   "Accent" : ['#7fc97f', '#beaed4', '#fdc086', '#ffff99', '#386cb0', '#f0027f', '#bf5b17', '#666666', '#7fc97f', '#beaed4', '#fdc086', '#ffff99'],
   "Paired" : ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928'],
   "Dark2" : ['#1b9e77', '#d95f02', '#7570b3', '#e7298a', '#66a61e', '#e6ab02', '#a6761d', '#666666', '#1b9e77', '#d95f02', '#7570b3', '#e7298a'],

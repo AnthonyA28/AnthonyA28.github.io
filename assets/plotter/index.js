@@ -1,33 +1,40 @@
 document.addEventListener('keydown', function (event) {
     const activeElement = document.activeElement;
 
-    // Function to convert LaTeX math to HTML
-    function convertLatexToHtml(latex) {
-        const superscriptRegex = /\^(\{.*?\}|.)/g;
-        const subscriptRegex = /_(\{.*?\}|.)/g;
+function convertLatexToHtml(latex) {
+    const superscriptRegex = /\^(\{.*?\}|.)/;
+    const subscriptRegex = /_(\{.*?\}|.)/;
 
+    while (superscriptRegex.test(latex) || subscriptRegex.test(latex)) {
+        // Replace superscripts
         latex = latex.replace(superscriptRegex, (match, p1) => {
             const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
             return `<sup>${content}</sup>`;
         });
 
+        // Replace subscripts
         latex = latex.replace(subscriptRegex, (match, p1) => {
             const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
             return `<sub>${content}</sub>`;
         });
-
-        return latex;
     }
 
-    // Function to convert HTML to LaTeX math
-    function convertHtmlToLatex(html) {
-        const supRegex = /<sup>(.*?)<\/sup>/g;
-        const subRegex = /<sub>(.*?)<\/sub>/g;
+    return latex;
+}
 
+function convertHtmlToLatex(html) {
+    const supRegex = /<sup>(.*?)<\/sup>/g;
+    const subRegex = /<sub>(.*?)<\/sub>/g;
+
+    // Process recursively until all matches are replaced
+    while (supRegex.test(html) || subRegex.test(html)) {
         html = html.replace(supRegex, (match, p1) => `^${p1.length > 1 ? `{${p1}}` : p1}`);
         html = html.replace(subRegex, (match, p1) => `_${p1.length > 1 ? `{${p1}}` : p1}`);
-        return html;
     }
+
+    return html;
+}
+
 
     const greekMap = {
         "\\alpha": "α", "\\beta": "β", "\\gamma": "γ", "\\delta": "δ", "\\epsilon": "ε",
@@ -103,7 +110,8 @@ var inputer_traces = [];
 
 
 var templates_list = [
-    ["default",           '{"layout":{"showlegend":false,"legend":{"bordercolor":"#444","bgcolor":"#FFFFFF","xanchor":"left","yanchor":"middle","x":1.1,"y":0.5,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","font":{"color":"#000000"},"standoff":0},"range":[null,null],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"minor":{"dtick":"","showgrid":false,"ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis":{"title":{"text":"y","font":{"color":"#000000"},"standoff":0},"range":[null,null],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"minor":{"showgrid":false,"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis2":{"title":{"text":"headerY","font":{"color":"#000000"},"standoff":25},"overlaying":"y","side":"right","range":[null,null],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"minor":{"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"margin":{"b":80,"l":80,"r":230,"t":30},"font":{"family":"Segoe UI","size":14,"color":"#000000"},"width":530,"height":330,"paper_bgcolor":"#FFFFFF","plot_bgcolor":"#FFFFFF"},"traces":[{"x":[0,1],"y":[2,4],"visible":true,"name":"y","type":"scattergl","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"circle","color":"#e41a1c"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#e41a1c"}}],"palette":"Set1"}'],
+    ["default",           '{"layout":{"showlegend":false,"legend":{"bordercolor":"#444","bgcolor":"#FFFFFF","xanchor":"left","yanchor":"middle","x":1.1,"y":0.5,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","showgrid":false,"ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis":{"title":{"text":"y","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"showgrid":false,"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis2":{"title":{"text":"headerY","font":{"color":"#000000","size":18},"standoff":25},"overlaying":"y","side":"right","range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"margin":{"b":80,"l":80,"r":230,"t":30},"font":{"family":"Segoe UI","size":14,"color":"#000000"},"width":530,"height":330,"paper_bgcolor":"#FFFFFF","plot_bgcolor":"#FFFFFF","use_error_bars":false},"traces":[{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[3.66845263240629,2.31017363209877,1.44586524235294,0.723120573844419,0.184471042767296,0.143787253402463],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"circle","color":"#0000ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#0000ff"},"error_y":{"type":"data","array":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":true,"thickness":2,"width":4,"color":"#0000ff"}},{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":false,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ff00"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ff00"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[4.61992648699552,3.54209405861394,2.90078046483438,1.26268331782491,0.334644373153112],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"diamond","color":"#ff0000"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff0000"},"error_y":{"type":"data","array":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":true,"thickness":2,"width":4,"color":"#ff0000"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":false,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"triangle-up","color":"#00ffff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ffff"}},{"x":[20,0.001],"y":[6.54504172319639,0.0759362106656637],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"cross","color":"#ff00ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff00ff"}}],"palette":"pyDefault"}'],
+    ["y2",           '{"layout":{"showlegend":false,"legend":{"bordercolor":"#444","bgcolor":"#FFFFFF","xanchor":"left","yanchor":"middle","x":1.1,"y":0.5,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","showgrid":false,"ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis":{"title":{"text":"y","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"showgrid":false,"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis2":{"title":{"text":"Y2","font":{"color":"#FF0000","size":18},"standoff":25},"overlaying":"y","side":"right","range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#FF0000","linecolor":"#FF0000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#FF0000"},"minor":{"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#FF0000","linecolor":"#FF0000"}},"margin":{"b":80,"l":80,"r":230,"t":30},"font":{"family":"Segoe UI","size":14,"color":"#000000"},"width":530,"height":330,"paper_bgcolor":"#FFFFFF","plot_bgcolor":"#FFFFFF","use_error_bars":false},"traces":[{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[3.66845263240629,2.31017363209877,1.44586524235294,0.723120573844419,0.184471042767296,0.143787253402463],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#0000ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#0000ff"},"error_y":{}},{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y2","marker":{"size":5,"symbol":"square","color":"#ff0000"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff0000"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[4.61992648699552,3.54209405861394,2.90078046483438,1.26268331782491,0.334644373153112],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ff00"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ff00"},"error_y":{}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ffff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ffff"}},{"x":[20,0.001],"y":[6.54504172319639,0.0759362106656637],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#ff00ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff00ff"}}],"palette":"pyDefault"}']
 ]
 // localStorage.clear()
 
@@ -573,10 +581,8 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
   var json = JSON.parse(json_text);
   var l = json["layout"];
 
-  if(l.use_error_bars){
-    document.getElementById("error_bars").checked = l.use_error_bars
-  }
-
+  document.getElementById("error_bars").checked = l.use_error_bars
+  
 
   if(update_size_only){
     update_data = false;
@@ -948,11 +954,11 @@ document.getElementById('helper_to_log').addEventListener( 'click', function(){
 document.getElementById('helper_to_lin').addEventListener( 'click', function(){
   console.log("helper_to_lin")
   var layout = inputer_layout.get_data();
-  layout.xaxis.type = "lin"
+  layout.xaxis.type = "linear"
   layout.xaxis.dtick = ""
-  layout.yaxis.type = "lin"
+  layout.yaxis.type = "linear"
   layout.yaxis.dtick = ""
-  layout.yaxis2.type = "lin"
+  layout.yaxis2.type = "linear"
   layout.yaxis2.dtick = ""
   inputer_layout.update_data(layout);
   update();
