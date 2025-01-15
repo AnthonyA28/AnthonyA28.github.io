@@ -4,7 +4,7 @@ title: About
 ---
 
 
-<img src="assets\images\me.jpg" alt="Picture of me" 
+<img src="assets\images\Anthony Grasshopper.jpg" alt="Picture of me" 
                         style="
                               width: 100%;
                               background-position: center;
