@@ -47,18 +47,18 @@ tags: Tools
 
 <main class="content-wraper" id="content-wraper">
 
+  <h2>
+      Scroll down for tutorial</a>
+  </h2>
   <div id="wrapper" style="border: 1px solid #FFFFFF">
 
 
     
-    <div style="display: inline-block;width:350px;height:2000px;border: 1px solid #FFFFFF; vertical-align: top;">
+    <div style="display: inline-block;width:350px;height:1500px;border: 1px solid #FFFFFF; vertical-align: top;">
 
 
   <input type="file" id="input_file" style="color: transparent; font-size: 40px; margin-bottom: 1px; margin-left: 5px; margin-top: 5px; width: 300px; height: 60px;">
 
-      <h3>
-          <!-- <a href="docs/index.html">Help/Documentation</a> -->
-      </h3>
 
       <!-- <br> -->
             <!-- <button type="submit" id="save_template"> Save template </button>  -->
@@ -148,25 +148,6 @@ tags: Tools
       <!-- <div id="archive_div"><strong>Choose Archived plot:</strong> </div>   -->
 
 
-
-        <h4 >Figure Sizes:</h4>
-          <div style="margin-left:15px;">
-          Typically images are rendered at 96 pixels per inch. So a 100x100 px  image will be in actual size 1.042 x 1.042 in  26.458 x 26.458 mm.
-          <br>
-          A typical small figure size is 3.35 in (8.5 cm, 321px) wide. 
-          <br>
-          A typical large figure size is 6.7 in (17 cm, 642 px) wide.  
-          </div>
-        <h4>Equations and Special Characters:</h4>
-          <div style="margin-left:15px;">
-          Special characters and mathematial equations can be written with Latex formatting. 
-          Just surround the text with dollar signs for the text to be treated as Latex. 
-          <br>
-          Alternatively, Using HTML markdown style is suitable for simple subscript and superscripts. The benefit to this, is that it will  retain the your font. 
-          <br> 
-          As an example, subscripts are achieved with x&lt;sub&gt;2&lt;/sub&gt; which will result in x<sub>2</sub>, but will render as $x_2$ in Latex.
-          Superscripts are as follows: x&lt;sup&gt;2&lt;/sup&gt; and will result in x<sup>2</sup> which is the equivalent to $x^2$ in Latex.
-          </div>
     
     </div>
 
@@ -239,6 +220,55 @@ tags: Tools
             <table><thead> <tr> <th>Name</th> <th>Symbol</th></tr></thead><tbody> <tr> <td>Ångstrom</td>   <td>Å</td></tr> <tr><tr><td>Alpha</td><td>α, Α</td> </tr> <tr><td>Beta</td><td>β, Β</td> </tr> <tr><td>Gamma</td><td>γ, Γ</td> </tr> <tr><td>Delta</td><td>δ, Δ</td> </tr> <tr><td>Epsilon</td><td>ε, ϵ</td> </tr> <tr><td>Eta</td><td>η, Η</td> </tr> <tr><td>Theta</td><td>θ, ϴ</td> </tr> <tr><td>Iota</td><td>ι, Ι</td> </tr> <tr><td>Kappa</td><td>κ, Κ</td> </tr> <tr><td>Zeta</td><td>ζ, Ζ</td> </tr> <tr><td>Mu</td><td>μ, Μ</td> </tr> <tr><td>Nu</td><td>ν, Ν</td> </tr> <tr><td>Xi</td><td>ξ, Ξ</td> </tr> <tr><td>Omicron</td><td>ο, Ο</td> </tr> <tr><td>Pi</td><td>π, Π</td> </tr> <tr><td>Rho</td><td>ρ, Ρ</td> </tr> <tr><td>Lambda</td><td>λ, Λ</td> </tr> <tr><td>Tau</td><td>τ, Τ</td> </tr> <tr><td>Upsilon</td><td>υ, Υ</td> </tr> <tr><td>Sigma</td><td>σ, Σ</td> </tr> <tr><td>Chi</td><td>χ, Χ</td> </tr> <tr><td>Psi</td><td>ψ, Ψ</td> </tr> <tr><td>Omega</td><td>ω, Ω</td> </tr> <tr><td>Phi</td><td>φ, Φ</td> </tr> <td>Cdot</td>     <td>⋅</td></tr></tbody></table>
     </div>
   </div>
+
+
+        <h1 >Introduction:</h1>      
+        Create a CSV or XLSX file formatted with data. Here is an example format: 
+          <table style="width:50%; margin:0 auto; font-size:0.8em; text-align:center; border-collapse:collapse; background-color:white; border:1px solid #ccc;">
+            <tr>
+              <th>a</th>
+              <th>b</th>
+              <th>c</th>
+            </tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>0</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>5</td>
+              <td>7</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>10</td>
+              <td>12</td>
+            </tr>
+          </tbody>
+          </table>
+        Click the "Choose File" button at the top and select your file. The data should plot. The plot is interactive so hover over the axes to change their range/domain. The controls on the right of the plot can be used to zoom, autosccale or save the plot. 
+
+
+        <h4 >Figure Sizes:</h4>
+          <div style="margin-left:15px;">
+          Typically images are rendered at 96 pixels per inch. So a 100x100 px  image will be in actual size 1.042 x 1.042 in  26.458 x 26.458 mm.
+          <br>
+          A typical small figure size is 3.35 in (8.5 cm, 321px) wide. 
+          <br>
+          A typical large figure size is 6.7 in (17 cm, 642 px) wide.  
+          </div>
+        <h4>Equations and Special Characters:</h4>
+          <div style="margin-left:15px;">
+          Special characters and mathematial equations can be written with Latex formatting. 
+          Just surround the text with dollar signs for the text to be treated as Latex. 
+          <br>
+          Alternatively, Using HTML markdown style is suitable for simple subscript and superscripts. The benefit to this, is that it will  retain the your font. 
+          <br> 
+          As an example, subscripts are achieved with x&lt;sub&gt;2&lt;/sub&gt; which will result in x<sub>2</sub>, but will render as $x_2$ in Latex.
+          Superscripts are as follows: x&lt;sup&gt;2&lt;/sup&gt; and will result in x<sup>2</sup> which is the equivalent to $x^2$ in Latex.
+          </div>
 
   </body>
 
