@@ -1265,13 +1265,76 @@ function load_file(file){
 // })
 
 
+document.getElementById('add_palette').addEventListener( 'click', function(){
+
+  var cur_palette = document.getElementById("palettes").options[document.getElementById("palettes").selectedIndex].innerText;
+  if(cur_palette.endsWith("_")){
+    cur_palette = document.getElementById("n_colors").value.concat("_").concat(palette);
+    cur_palette = cur_palette.slice(0, -1);
+    console.log(cur_palette)
+  }
+
+    var palette = prompt("Input palette", JSON.stringify(colors_palettes[cur_palette]));
+    if( palette == ""){
+      return;
+    }
+    var name = prompt("Input name", "new " +cur_palette  );
+    if( name == ""){
+      return;
+    }
+
+    localStorage.setItem("LocalStoragePalette_".concat(name), palette);
+
+
+    // Get the dropdown element
+    const dropdown = document.getElementById("palettes");
+
+    // Create a new option element
+    const newOption = document.createElement("option");
+
+    // Set the value and text of the new option
+    newOption.value = name;
+    newOption.text = name;
+
+    // Add the new option to the dropdown
+    dropdown.appendChild(newOption);
+
+    colors_palettes[name] = JSON.parse(palette);
+    
+
+});
+
+document.getElementById("delete_palette").addEventListener('click', function(){
+
+  var dropdown = document.getElementById("palettes");
+  var selectedOption = dropdown.options[dropdown.selectedIndex];
+  var selectedText = selectedOption.text;
+
+  var name = "LocalStoragePalette_" + selectedText;
+  console.log("Deleting " + name)
+
+  var item = localStorage.getItem(name);
+
+  if (item !== null) {
+    console.log('Item exists in localStorage');
+    localStorage.removeItem(name);
+    dropdown.options[dropdown.selectedIndex].remove();
+  } else {
+    console.log('Item does not exist in localStorage');
+  }
+});
+
 
 document.getElementById('save_template').addEventListener( 'click', function(){
 
-    var json_text = get_template_text();
     var name_ = prompt("Enter name of template to save:");
+    if( name_ == ""){
+      return;
+    }
 
-    localStorage.setItem("LocalStorage_".concat(name_), json_text);
+
+    var json_text = get_template_text();
+    localStorage.setItem("LocalStorageTemplate_".concat(name_), json_text);
 
 });
 
@@ -1313,15 +1376,38 @@ for (var i = 0; i < itemCount; i++) {
   var key = localStorage.key(i);
 
   // Check if the key starts with "template_"
-  if (key.startsWith("LocalStorage_")) {
+  if (key.startsWith("LocalStorageTemplate_")) {
     // Retrieve the value associated with the key
     var value = localStorage.getItem(key);
 
     templates_list.push([key.split("_")[1], value])
 
     // Perform your desired operations with the key and value
-    console.log("Key: " + key + ", Value: " + value);
+    // console.log("Key: " + key + ", Value: " + value);
   }
+
+  if (key.startsWith("LocalStoragePalette_")) {
+    var value = localStorage.getItem(key);
+    var name = key.split("_")[1]
+    console.log("Found user palette " + name + ": " + value);
+
+    // Get the dropdown element
+    const dropdown = document.getElementById("palettes");
+
+    // Create a new option element
+    const newOption = document.createElement("option");
+
+    // Set the value and text of the new option
+    newOption.value = name;
+    newOption.text = name;
+
+    // Add the new option to the dropdown
+    dropdown.appendChild(newOption);
+
+    colors_palettes[name] = JSON.parse(value);
+  }
+
+  
 }
 
 
@@ -1355,7 +1441,7 @@ document.getElementById("delete_template").addEventListener('click', function(){
   var selectedOption = dropdown.options[dropdown.selectedIndex];
   var selectedText = selectedOption.text;
 
-  var name = "LocalStorage_" + selectedText;
+  var name = "LocalStorageTemplate_" + selectedText;
   console.log("Deleting " + name)
 
   var item = localStorage.getItem(name);
@@ -1373,7 +1459,7 @@ document.getElementById("delete_template").addEventListener('click', function(){
 
 //     var json_text = get_template_text();
 //     var name_ = "user-default"
-//     localStorage.setItem("LocalStorage_".concat(name_), json_text);
+//     localStorage.setItem("LocalStorageTemplate_".concat(name_), json_text);
 
 // });
 
