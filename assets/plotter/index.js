@@ -314,6 +314,9 @@ function plot(header, data, update_nums=false){
   }
   var palette = document.getElementById("palettes").options[palindex].innerText;
   if(palette.endsWith("_")){
+    if (isNaN(document.getElementById("n_colors").value) || document.getElementById("n_colors").value.trim() === "") {
+      document.getElementById("n_colors").value = 3; 
+    }
     palette = document.getElementById("n_colors").value.concat("_").concat(palette);
     palette = palette.slice(0, -1);
     console.log(palette)
@@ -836,7 +839,10 @@ function get_template_text(curZoom=false){
   var index = document.getElementById("palettes").selectedIndex
   var palette = document.getElementById("palettes").options[index].innerText;
   if(palette.endsWith("_")){
-    palette = document.getElementById("n_colors").value.concat("_").concat(palette);
+    if (isNaN(document.getElementById("n_colors").value) || document.getElementById("n_colors").value.trim() === "") {
+      document.getElementById("n_colors").value = 3; 
+    }
+    palette = document.getElementById("n_colors").value.concat("_").concat(palette).slice(0, -1);;
   }
   console.log("Need to save " + JSON.stringify(colors_palettes[palette]))
 
@@ -1227,73 +1233,13 @@ function load_file(file){
 
 // ipcRenderer.on("load_ArchivedPlots", function(event, arg){
 //   import_svg(arg, true, true, true, true)
-// });
-
-// ipcRenderer.on("load_templ", function(event, arg){
-// 	var update_trace_styles = document.getElementById("update_trace_styles_check").checked;
-// 	var update_trace_names = document.getElementById("update_trace_names_check").checked;
-// 	var update_axes_labels = document.getElementById("update_axes_labels_check").checked;
-// 	import_json(arg, false, update_trace_styles, update_trace_names, update_axes_labels);
-// });
-
-// ipcRenderer.send("get_templates");
-// ipcRenderer.on('available_templates', function(event, arg){
-// 	console.log(event, arg);
-// 	var dropdown = document.createElement("select");
-// 	dropdown.id = 'template_dropdown';
-// 	var opt = document.createElement("option");
-
-// 	for(var i=0;i<arg.length;i++){
-// 		var opt = document.createElement("option");
-// 		opt.text = arg[i];
-// 		dropdown.options.add(opt);
-// 	}
-// 	dropdown.onchange =  change_template;
-// 	document.getElementById("template_div").appendChild(dropdown);
-
-// 	// Get the dropdown element
-// 	var dropdown = document.getElementById("template_dropdown");
-
-// 	// Loop through the options to find the index of the item with the title "default.json"
-// 	for (var i = 0; i < dropdown.options.length; i++) {
-// 	    if (dropdown.options[i].text === "default.json") {
-// 	        // Set the selectedIndex to the index of the item with the title "default.json"
-// 	        dropdown.selectedIndex = i;
-// 	        break; // Exit the loop once found
-// 	    }
-// 	}
-
-// });
-
-
-// ipcRenderer.send("get_archived_plots");
-// ipcRenderer.on('available_plots', function(event, arg){
-//   console.log(event, arg);
-//   var dropdown = document.createElement("select");
-//   dropdown.id = 'archive_dropdown';
-//   var opt = document.createElement("option");
-
-//   for(var i=0;i<arg.length;i++){
-//     var opt = document.createElement("option");
-//     opt.text = arg[i];
-//     dropdown.options.add(opt);
-//   }
-//   dropdown.onchange =  plot_archived;
-//   document.getElementById("archive_div").appendChild(dropdown);
-// });
-
-
-// ipcRenderer.send("get_colorSchemes");
-// ipcRenderer.on('available_colorSchemes', function(event, arg){
-//   console.log(arg);
-// })
 
 
 document.getElementById('add_palette').addEventListener( 'click', function(){
 
   var cur_palette = document.getElementById("palettes").options[document.getElementById("palettes").selectedIndex].innerText;
   if(cur_palette.endsWith("_")){
-    cur_palette = document.getElementById("n_colors").value.concat("_").concat(palette);
+    cur_palette = document.getElementById("n_colors").value.concat("_").concat(cur_palette);
     cur_palette = cur_palette.slice(0, -1);
     console.log(cur_palette)
   }
