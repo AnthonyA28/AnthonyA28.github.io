@@ -110,8 +110,8 @@ var inputer_traces = [];
 
 
 var templates_list = [
-    ["default",           '{"layout":{"showlegend":false,"legend":{"bordercolor":"#444","bgcolor":"#FFFFFF","xanchor":"left","yanchor":"middle","x":1.1,"y":0.5,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","showgrid":false,"ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis":{"title":{"text":"y","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"showgrid":false,"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis2":{"title":{"text":"headerY","font":{"color":"#000000","size":18},"standoff":25},"overlaying":"y","side":"right","range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"margin":{"b":80,"l":80,"r":230,"t":30},"font":{"family":"Segoe UI","size":14,"color":"#000000"},"width":530,"height":330,"paper_bgcolor":"#FFFFFF","plot_bgcolor":"#FFFFFF","use_error_bars":false},"traces":[{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[3.66845263240629,2.31017363209877,1.44586524235294,0.723120573844419,0.184471042767296,0.143787253402463],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"circle","color":"#0000ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#0000ff"},"error_y":{"type":"data","array":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":true,"thickness":2,"width":4,"color":"#0000ff"}},{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":false,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ff00"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ff00"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[4.61992648699552,3.54209405861394,2.90078046483438,1.26268331782491,0.334644373153112],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"diamond","color":"#ff0000"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff0000"},"error_y":{"type":"data","array":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":true,"thickness":2,"width":4,"color":"#ff0000"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":false,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"triangle-up","color":"#00ffff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ffff"}},{"x":[20,0.001],"y":[6.54504172319639,0.0759362106656637],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"cross","color":"#ff00ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff00ff"}}],"palette":"pyDefault"}'],
-    ["y2",           '{"layout":{"showlegend":false,"legend":{"bordercolor":"#444","bgcolor":"#FFFFFF","xanchor":"left","yanchor":"middle","x":1.1,"y":0.5,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","showgrid":false,"ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis":{"title":{"text":"y","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"showgrid":false,"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis2":{"title":{"text":"Y2","font":{"color":"#FF0000","size":18},"standoff":25},"overlaying":"y","side":"right","range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#FF0000","linecolor":"#FF0000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#FF0000"},"minor":{"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#FF0000","linecolor":"#FF0000"}},"margin":{"b":80,"l":80,"r":230,"t":30},"font":{"family":"Segoe UI","size":14,"color":"#000000"},"width":530,"height":330,"paper_bgcolor":"#FFFFFF","plot_bgcolor":"#FFFFFF","use_error_bars":false},"traces":[{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[3.66845263240629,2.31017363209877,1.44586524235294,0.723120573844419,0.184471042767296,0.143787253402463],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#0000ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#0000ff"},"error_y":{}},{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y2","marker":{"size":5,"symbol":"square","color":"#ff0000"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff0000"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[4.61992648699552,3.54209405861394,2.90078046483438,1.26268331782491,0.334644373153112],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ff00"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ff00"},"error_y":{}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ffff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ffff"}},{"x":[20,0.001],"y":[6.54504172319639,0.0759362106656637],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#ff00ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff00ff"}}],"palette":"pyDefault"}']
+    ["default",           '{"layout":{"showlegend":false,"legend":{"bordercolor":"#444","bgcolor":"#FFFFFF","xanchor":"left","yanchor":"middle","x":1.1,"y":0.5,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","showgrid":false,"ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis":{"title":{"text":"y","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"showgrid":false,"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis2":{"title":{"text":"headerY","font":{"color":"#000000","size":18},"standoff":25},"overlaying":"y","side":"right","range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"margin":{"b":80,"l":80,"r":230,"t":30},"font":{"family":"Segoe UI","size":14,"color":"#000000"},"width":530,"height":330,"paper_bgcolor":"#FFFFFF","plot_bgcolor":"#FFFFFF","use_error_bars":false},"traces":[{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[3.66845263240629,2.31017363209877,1.44586524235294,0.723120573844419,0.184471042767296,0.143787253402463],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"circle","color":"#0000ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#0000ff"},"error_y":{"type":"data","array":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":true,"thickness":2,"width":4,"color":"#0000ff"}},{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":false,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ff00"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ff00"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[4.61992648699552,3.54209405861394,2.90078046483438,1.26268331782491,0.334644373153112],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"diamond","color":"#ff0000"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff0000"},"error_y":{"type":"data","array":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":true,"thickness":2,"width":4,"color":"#ff0000"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":false,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"triangle-up","color":"#00ffff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ffff"}},{"x":[20,0.001],"y":[6.54504172319639,0.0759362106656637],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"cross","color":"#ff00ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff00ff"}}],"palette_obj":{"palette":"pyDefault","colors":["#0000ff","#00ff00","#ff0000","#00ffff","#ff00ff","#ffff00","#000000","#0000aa","#00aa00","#aa0000","#00aaaa","#aa00aa","#aaaa00"]}}'],
+    ["y2",           '{"layout":{"showlegend":false,"legend":{"bordercolor":"#444","bgcolor":"#FFFFFF","xanchor":"left","yanchor":"middle","x":1.1,"y":0.5,"margin":{"autoexpand":true,"b":50,"l":50,"r":100,"t":50},"itemwidth":10},"xaxis":{"title":{"text":"x","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":"ticks","zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":"5","tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"dtick":"","showgrid":false,"ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis":{"title":{"text":"y","font":{"color":"#000000","size":18},"standoff":0},"range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#000000","linecolor":"#000000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#000000"},"minor":{"showgrid":false,"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#000000","linecolor":"#000000"}},"yaxis2":{"title":{"text":"Y2","font":{"color":"#FF0000","size":18},"standoff":25},"overlaying":"y","side":"right","range":[],"type":"linear","mirror":false,"zeroline":false,"dtick":"","ticks":"inside","exponentformat":"power","ticklen":5,"tickcolor":"#FF0000","linecolor":"#FF0000","tickprefix":"","ticksuffix":"","showgrid":false,"tickfont":{"color":"#FF0000"},"minor":{"dtick":"","ticks":"inside","ticklen":2,"tickcolor":"#FF0000","linecolor":"#FF0000"}},"margin":{"b":80,"l":80,"r":230,"t":30},"font":{"family":"Segoe UI","size":14,"color":"#000000"},"width":530,"height":330,"paper_bgcolor":"#FFFFFF","plot_bgcolor":"#FFFFFF","use_error_bars":false},"traces":[{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[3.66845263240629,2.31017363209877,1.44586524235294,0.723120573844419,0.184471042767296,0.143787253402463],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#0000ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#0000ff"},"error_y":{}},{"x":[17.6990458957621,2.13728221778784,0.346123572451268,0.0784999999999998,0.0289395350672483,0.0130537744783035],"y":[0.222860196532869,0.701965232973014,0.0474525010499611,0.0236835454455727,0.0333387769715564,0.0135931219149001],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y2","marker":{"size":5,"symbol":"square","color":"#ff0000"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff0000"}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[4.61992648699552,3.54209405861394,2.90078046483438,1.26268331782491,0.334644373153112],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ff00"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ff00"},"error_y":{}},{"x":[17.6999131915085,3.5399826383017,0.70799652766034,0.141599305532068,0.0283198611064136],"y":[0.25974566968982,0.265248088778428,0.0835678755881122,0.0410058092304212,0.0120636478546408],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#00ffff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#00ffff"}},{"x":[20,0.001],"y":[6.54504172319639,0.0759362106656637],"visible":true,"name":"","type":"","mode":"lines+markers","yaxis":"y","marker":{"size":5,"symbol":"square","color":"#ff00ff"},"line":{"shape":"spline","dash":"solid","width":2,"color":"#ff00ff"}}],"palette_obj":{"palette":"pyDefault","colors":["#0000ff","#00ff00","#ff0000","#00ffff","#ff00ff","#ffff00","#000000","#0000aa","#00aa00","#aa0000","#00aaaa","#aa00aa","#aaaa00"]}}']
 ]
 // localStorage.clear()
 
@@ -595,8 +595,8 @@ function import_json(json_text, update_data=true, update_trace_styles=true, upda
 if (!update_size_only) {
     var elem = document.getElementById("palettes");
     var colors = [...elem.options].map(o => o.value);
-    pal = json["palette"];
-
+    var palette_obj = json["palette_obj"];
+    pal = palette_obj["palette"]
     // Slice until the first underscore
     const underscoreIndex = pal.indexOf('_');
     if (underscoreIndex !== -1) {
@@ -604,16 +604,36 @@ if (!update_size_only) {
         document.getElementById("n_colors").value = parseInt(pal.slice(0, underscoreIndex));
         pal = pal.slice(underscoreIndex + 1);  // Slice after the underscore
         console.log(pal);
+    }else{
+      console.log("Palette  " + pal + " not found")
+      console.log(JSON.stringify(palette_obj["colors"]))
     }
 
-    selectOption(elem, colors.indexOf(pal));
+    var index = colors.indexOf(pal)
+    if (index < 0 || index >= elem.options.length){
+        // Get the dropdown element
+        const dropdown = document.getElementById("palettes");
 
-    // Reset pal to json value and trim the trailing underscore if it exists
-    pal = json["palette"];
+        // Create a new option element
+        const newOption = document.createElement("option");
+
+        // Set the value and text of the new option
+        newOption.value = pal;
+        newOption.text = pal;
+
+        // Add the new option to the dropdown
+        dropdown.insertBefore(newOption, dropdown.firstChild);
+
+        colors_palettes[pal] = palette_obj["colors"];
+        index = colors.indexOf(pal)
+    }
+    selectOption(elem, index);
+
     if (pal.endsWith("_")) {
         pal = pal.slice(0, -1);
         console.log(pal);
     }
+    console.log(pal)
 }
 
 
@@ -818,12 +838,16 @@ function get_template_text(curZoom=false){
   if(palette.endsWith("_")){
     palette = document.getElementById("n_colors").value.concat("_").concat(palette);
   }
+  console.log("Need to save " + JSON.stringify(colors_palettes[palette]))
 
   var use_error_bars  = document.getElementById("error_bars").checked
   console.log("saving svg with error bars " + use_error_bars);
   layout.use_error_bars = use_error_bars
 
-  var json = {layout, traces, palette}
+  var colors   = colors_palettes[palette];
+  var palette_obj = {palette , colors}
+
+  var json = {layout, traces, palette_obj }
   var text = JSON.stringify(json);
 
   for(var i = 0 ; i < traces.length; i ++){
@@ -1297,7 +1321,7 @@ document.getElementById('add_palette').addEventListener( 'click', function(){
     newOption.text = name;
 
     // Add the new option to the dropdown
-    dropdown.appendChild(newOption);
+    dropdown.insertBefore(newOption, dropdown.firstChild);
 
     colors_palettes[name] = JSON.parse(palette);
     
@@ -1402,7 +1426,7 @@ for (var i = 0; i < itemCount; i++) {
     newOption.text = name;
 
     // Add the new option to the dropdown
-    dropdown.appendChild(newOption);
+    dropdown.insertBefore(newOption, dropdown.firstChild );
 
     colors_palettes[name] = JSON.parse(value);
   }
