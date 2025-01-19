@@ -23,18 +23,11 @@ $$
 
 Thus, we can extrapolate that if hair **V** was cut to 1 cm length, then it would have one entanglement. This is basically the way we think about entanglements in polymers. The physical consequences of entanglements in polymers are vast, but to put it simply, they provide a resistance to deformation of the resulting polymer.
 
+The amount of entanglements is generally not important. What matters, is that the strands are long enough to be entangled. 
 
-# Computing entanglement molecular molecular weight
-
-For polymer chains, we think about their length in terms of the number of repeat units multiplied by their weight, which gives us the molecular weight of the polymer strands, denoted as $M_n$. We can compute the number of entanglements in the same way as the hair analogy:
-
-$$
-N_e = \frac{M_n}{M_e}
-$$
-
-Where $N_e$ is the number of entanglements and **$M_e$ is the entanglement of molecular weight**. 
-
-## Determination of entanglement molecular weight by rheology 
+ 
+# Computing entanglement molecular weight
+## Computing entanglement molecular weight in polymer melts 
 
 From the fundamental laws of rubber elasticity. The following equation applies to polymer melts (uncrosslinked polymers above their glass transition temperature)[^Mark]:
 
@@ -44,11 +37,11 @@ $$
 
 Where $\rho$ is the density, $T$ is the temperature and $G_N^o$ is the plateau modulus. 
 
-All that has to be done is perform rheology on the polymer melt and determine the $G_N^o$ plateau modulus in the [rubbery regime].  
+All that has to be done is perform rheology on the polymer melt and determine the $G_N^o$ plateau modulus in the rubbery regime.  
 
 
 
-## Determination of entanglement molecular weight by viscosity
+## Computing entanglement molecular weight in liquids
 
 Another approach is to measure the viscosity of the polymer melt as a function of molecular weight [^Fetters]. Simply measure the viscosity for a series of polymer melts having different molecular weights. The resulting plot will have two regimes, the scaling of viscosity and molecular weight will change at a transition point at a critical molecular weight $M_c$:
 
@@ -64,7 +57,22 @@ $$
 M_c = 2M_e
 $$
 
-## Tabulated entanglement molecular weights
+
+
+
+## Computing entanglement molecular weight in polymer networks
+
+When the polymer has crosslinks, it is a bit less straightforward to compute the number of entanglements. In fact **equation $\ref{M_e}$** cannot be applied here. We must account for the cumulative effect of crosslinks and entanglements. We can consider an additive effect of the shear modulus[^Rubinstein]: 
+
+
+$$
+G \approx G_x + G_e \approx \rho R T (\frac{1}{M_x} + \frac{1}{M_e})
+$$
+
+Where $M_x$ is the molecular weight between crosslinks. 
+
+
+# Tabulated entanglement molecular weights
 
 It is typically not necessary to perform the above experiments to determine $M_e$. The values of $M_e$ for most common polymers are tabulated and available online. Here is a short list [^Markid]:
 
@@ -80,29 +88,8 @@ It is typically not necessary to perform the above experiments to determine $M_e
 | 1,4-Polybutadiene        | 25                | 1.15        | 1,900  |
 | Polyethylene             | 150               | 2.2         | 1,100  |
 
-# Counting entanglements
-
-Since we know how to determine the entanglement molecular weight, we can now determine the amount of entanglements in the polymer. 
-
-## In polymer melts
-
-Computing the number of entanglements in a polymer melt is simple. After $M_e$ is know, simply use $N_e = \frac{M_n}{M_e}$ where $M_n$ is the number average molecular weight of the polymer network. 
-
-## In polymer networks
-
-When the polymer has crosslinks, it is a bit less straightforward to compute the number of entanglements. In fact **equation $\ref{M_e}$** cannot be applied here. We must account for the cumulative effect of crosslinks and entanglements. We can consider an additive effect of the shear modulus[^Rubinstein]: 
 
 
-$$
-G \approx G_x + G_e \approx \rho R T (\frac{1}{M_x} + \frac{1}{M_e})
-$$
-Where $M_x$ is the molecular weight between crosslinks. 
-
-
-
-
-
-## Appendix 
 
 ##  Example calculation
 

@@ -2,6 +2,7 @@
 title: Common Polymers
 tags: Polymers
 layout: post
+excerpt: Some common polymers
 ---
 
 # Common Polymers

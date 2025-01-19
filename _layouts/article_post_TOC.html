@@ -1,28 +1,31 @@
----
-layout: default
----
-
 
 <style>
-  .center {
-    margin: 0 auto; 
-    width: 50%; 
+  .post {
+    display: flex; /* Enables a horizontal layout */
+    align-items: flex-start; /* Align items at the top */
   }
-  .larger-text {
-    font-size: larger;
+  .toc {
+    width: 30%; /* Adjust TOC width as needed */
+    margin-left: 20px;
+    margin-right: 20px; /* Space between TOC and main content */
   }
+  
 </style>
 
+{% include head.html %}
+
+  <!-- TOC on the left -->
 
 <div class="post">
-  
-
-  <!-- <span class="larger-text">Contents:</span> -->
-  <div class="center">
+  <div class="toc">
     {% include toc.html html=content %}
+  </div>  
+
+  <div style="width: 100%; position: relative; transform: translateX(-15.5%); margin: 0 auto;">
+    <div class="container content">
+        {{ content }}
+    </div>
   </div>
-
-  {{ content }}
-
-
 </div>
+<!-- 
+

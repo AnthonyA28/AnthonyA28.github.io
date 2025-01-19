@@ -1,7 +1,8 @@
 ---
 title: Polymer Introduction
 tags: Polymers
-layout: post
+layout: article_post
+excerpt: Introduction to polymers
 ---
 
 # Polymer Introduction

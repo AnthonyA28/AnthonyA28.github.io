@@ -2,7 +2,7 @@
 title: Bonding of Pressure Sensitive Adhesives
 tags: Adhesives
 layout: post
-
+excerpt: Adhesives must be designed to bond to surfaces. 
 ---
 
 # The Bonding Mechanism of Pressure-Sensitive Adhesives

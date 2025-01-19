@@ -2,7 +2,7 @@
 title: Rheology
 layout: article_post_TOC
 section: article
-excerpt: Plastics and rubbers are composed of long molecules which become entangled
+excerpt: Characterizing polymers
 tags: Polymers
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: Classes of Pressure Sensitive Adhesives
 tags: Adhesives
-layout: post
-
+layout: article_post_TOC
+excerpt: Adhesives are divided into their chemical composition
 ---
 
 ## Classes of PSAs
@@ -18,7 +18,7 @@ Acrylic-based PSAs are the most widely used class of PSAs, primarily due to thei
 
 ### Natural Rubber-based PSAs
 
-Natural rubber-based PSAs are composed of cis-1,4 polyisoprene and tackifier additives, which soften the PSA [^4]‧[^5]‧[^6]. 
+Natural rubber-based PSAs are composed of cis-1,4 polyisoprene and tackifier additives, which soften the PSA [^4]‧[^5]‧[^6]. These are easily mixed (rather than copolymerized). 
 Natural rubber-based PSAs exhibit high cohesive strength due to strain-induced crystallization, and in contrast to acrylics, they can adhere to low surface energy substrates such as plastics [^5]‧[^6]. Natural rubber-based PSAs were the earliest PSAs in production and are still very common as they are the simplest and cheapest to produce [^7].
 
 <img src="\assets\images\Adhesion\natural_rubber.jpg" alt="natural rubber" style="zoom:25%; margin-left: auto; margin-right: auto;" />
@@ -32,7 +32,7 @@ Styrenic block copolymer (SBC) based PSAs are typically formulated as blends of 
 
 ### Silicone-based PSAs
 
-Silicone-based PSAs are considered high-performance due to their excellent stability over a much wider range of temperatures than acrylic and natural rubber-based PSAs [^1]. Similarly to natural rubber, they can adhere to low surface energy substrates. They are typically composed of a silicone gum polydimethyl siloxane (PDMS) combined with a silanol-functionalized siloxane resin (MQ resin). The PDMS gum provides elasticity, whereas the resin behaves as a tackifier [^10].
+Silicone-based PSAs are considered high-performance due to their excellent stability over a much wider range of temperatures than acrylic and natural rubber-based PSAs [^1]. Similarly to natural rubber, they can adhere to low surface energy substrates. Typically a silicone gum polydimethyl siloxane (PDMS) is copolymerized with a silanol-functionalized siloxane resin (MQ resin). The PDMS gum provides elasticity, whereas the resin behaves as a tackifier [^10].
 
 <img src="\assets\images\Adhesion\PDMS.jpg" alt="PDMS" style="zoom:25%; margin-left: auto; margin-right: auto;" />
 
