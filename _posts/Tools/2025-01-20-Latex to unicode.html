@@ -20,7 +20,7 @@ tags: Tools
             display: flex;
             flex-direction: column;
             gap: 10px;
-            width: 300px;
+            width: 600px;
         }
         textarea {
             width: 100%;
@@ -34,13 +34,14 @@ tags: Tools
     </style>
 </head>
 <body>
-    <h1>Input and Output Example</h1>
+  <h2>Convert your Latex code to unicode</h2>
+    <p>Type your Latex code into the box then click 'Convert text'.</p>
     <div class="container">
-        <textarea id="inputBox" placeholder="Enter your text here..."></textarea>
+        <textarea id="inputBox" placeholder="">F = G \frac{(m_1 \cdot m_2)}{r^2}</textarea>
         <button onclick="ConvertText()">Convert text</button>
         <div id="outputBox" style="border: 1px solid #ccc; padding: 10px; min-height: 50px;"></div>
-
     </div>
+    <p>Unicode offers good support for superscript (^ in Latex) and subscripts (_ in Latex). Limited support for fractions also exists (\frac{a}{b} in Latex).</p>
 
     <script>
 
