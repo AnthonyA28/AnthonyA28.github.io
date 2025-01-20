@@ -1,0 +1,161 @@
+---
+title: Latex to HTML
+tags: Tools
+---
+
+{% include head.html %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input and Output Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 300px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            resize: none;
+        }
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Input and Output Example</h1>
+    <div class="container">
+        <textarea id="inputBox" placeholder="Enter your text here..."></textarea>
+        <button onclick="ConvertText()">Convert text</button>
+        <div id="outputBox" style="border: 1px solid #ccc; padding: 10px; min-height: 50px;"></div>
+
+    </div>
+
+    <script>
+
+
+    const greekMap = {
+        "\\alpha": "α", "\\beta": "β", "\\gamma": "γ", "\\delta": "δ", "\\epsilon": "ε",
+        "\\eta": "η", "\\theta": "θ", "\\iota": "ι", "\\kappa": "κ", "\\zeta": "ζ",
+        "\\mu": "μ", "\\nu": "ν", "\\xi": "ξ", "\\omicron": "ο", "\\pi": "π",
+        "\\rho": "ρ", "\\lambda": "λ", "\\tau": "τ", "\\upsilon": "υ", "\\sigma": "σ",
+        "\\chi": "χ", "\\psi": "ψ", "\\omega": "ω", "\\phi": "φ", "\\cdot": "⋅",
+        "\\Alpha": "Α", "\\Beta": "Β", "\\Gamma": "Γ", "\\Delta": "Δ", "\\Epsilon": "ϵ",
+        "\\Eta": "Η", "\\Theta": "ϴ", "\\Iota": "Ι", "\\Kappa": "Κ", "\\Zeta": "Ζ",
+        "\\Mu": "Μ", "\\Nu": "Ν", "\\Xi": "Ξ", "\\Omicron": "Ο", "\\Pi": "Π",
+        "\\Rho": "Ρ", "\\Lambda": "Λ", "\\Tau": "Τ", "\\Upsilon": "Υ", "\\Sigma": "Σ",
+        "\\Chi": "Χ", "\\Psi": "Ψ", "\\Omega": "Ω", "\\Phi": "Φ", "\\cdot": "⋅","<": "<sub></sub>", ">": "<sup></sup>"
+    };
+
+
+function convertLatexToHtml(latex) {
+    const superscriptRegex = /\^(\{.*?\}|.)/;
+    const subscriptRegex = /_(\{.*?\}|.)/;
+    const fracRegex = /\\frac\{(.*?)\}\{(.*?)\}/;
+
+    while (superscriptRegex.test(latex) || subscriptRegex.test(latex) || fracRegex.test(latex)) {
+        // Replace superscripts
+        latex = latex.replace(superscriptRegex, (match, p1) => {
+            const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
+            return `<sup>${content}</sup>`;
+        });
+
+        // Replace subscripts
+        latex = latex.replace(subscriptRegex, (match, p1) => {
+            const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
+            return `<sub>${content}</sub>`;
+        });
+
+        // Replace fractions
+        latex = latex.replace(fracRegex, (match, numerator, denominator) => {
+            return `<sup>${numerator}</sup>⁄<sub>${denominator}</sub>`;
+        });
+    }
+    return latex;
+}
+
+function convertHtmlToLatex(html) {
+    const supRegex = /<sup>(.*?)<\/sup>/g;
+    const subRegex = /<sub>(.*?)<\/sub>/g;
+    const fracRegex = /<sup>(.*?)<\/sup>⁄<sub>(.*?)<\/sub>/g;
+
+    while (supRegex.test(html) || subRegex.test(html) || fracRegex.test(html)) {
+        // Replace fractions
+        html = html.replace(fracRegex, (match, numerator, denominator) => `\\frac{${numerator}}{${denominator}}`);
+
+        // Replace superscripts
+        html = html.replace(supRegex, (match, p1) => `^${p1.length > 1 ? `{${p1}}` : p1}`);
+
+        // Replace subscripts
+        html = html.replace(subRegex, (match, p1) => `_${p1.length > 1 ? `{${p1}}` : p1}`);
+    }
+    return html;
+}
+
+    function swap_r(elem){
+      let value = elem.value;
+      Object.keys(greekMap).slice(0, -2).forEach(key => {
+          const regex = new RegExp(key.replace(/\\/g, '\\\\'), 'g'); // Escape the backslash for regex
+          value = value.replace(regex, greekMap[key]);
+      });
+      elem.value = convertLatexToHtml(value);
+    }
+
+    function swap_e(elem){
+      const reversedMap = Object.entries(greekMap)
+          .slice(0, -2)
+          .reduce((acc, [key, value]) => {
+              acc[value] = key;
+              return acc;
+          }, {});
+
+      let value = elem.value;
+
+      Object.keys(reversedMap).forEach(char => {
+          const regex = new RegExp(char, 'g');
+          value = value.replace(regex, reversedMap[char]);
+      });
+
+      elem.value = convertHtmlToLatex(`${value}`);
+    }
+
+
+    document.addEventListener('keydown', function (event) {
+      const activeElement = document.activeElement;
+      // Handle input and textarea fields
+      if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+
+          if (event.ctrlKey && event.shiftKey && event.key === 'R') {
+              event.preventDefault();
+              swap_r(activeElement);
+          }
+
+          if (event.ctrlKey && event.shiftKey && event.key === 'E') {
+              event.preventDefault();
+              swap_e(activeElement);
+          }
+
+      }
+    });
+
+  function ConvertText() {
+      
+      swap_r(document.getElementById("inputBox"))
+      document.getElementById("outputBox").innerHTML = document.getElementById("inputBox").value; // Render HTML
+      swap_e(document.getElementById("inputBox"));
+  }
+
+</script>
+</body>
+</html>

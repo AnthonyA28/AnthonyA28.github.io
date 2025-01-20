@@ -1,40 +1,49 @@
 document.addEventListener('keydown', function (event) {
     const activeElement = document.activeElement;
 
-function convertLatexToHtml(latex) {
-    const superscriptRegex = /\^(\{.*?\}|.)/;
-    const subscriptRegex = /_(\{.*?\}|.)/;
+    function convertLatexToHtml(latex) {
+        const superscriptRegex = /\^(\{.*?\}|.)/;
+        const subscriptRegex = /_(\{.*?\}|.)/;
+        const fracRegex = /\\frac\{(.*?)\}\{(.*?)\}/;
 
-    while (superscriptRegex.test(latex) || subscriptRegex.test(latex)) {
-        // Replace superscripts
-        latex = latex.replace(superscriptRegex, (match, p1) => {
-            const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
-            return `<sup>${content}</sup>`;
-        });
+        while (superscriptRegex.test(latex) || subscriptRegex.test(latex) || fracRegex.test(latex)) {
+            // Replace superscripts
+            latex = latex.replace(superscriptRegex, (match, p1) => {
+                const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
+                return `<sup>${content}</sup>`;
+            });
 
-        // Replace subscripts
-        latex = latex.replace(subscriptRegex, (match, p1) => {
-            const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
-            return `<sub>${content}</sub>`;
-        });
+            // Replace subscripts
+            latex = latex.replace(subscriptRegex, (match, p1) => {
+                const content = p1.startsWith("{") ? p1.slice(1, -1) : p1;
+                return `<sub>${content}</sub>`;
+            });
+
+            // Replace fractions
+            latex = latex.replace(fracRegex, (match, numerator, denominator) => {
+                return `<sup>${numerator}</sup>⁄<sub>${denominator}</sub>`;
+            });
+        }
+        return latex;
     }
 
-    return latex;
-}
+    function convertHtmlToLatex(html) {
+        const supRegex = /<sup>(.*?)<\/sup>/g;
+        const subRegex = /<sub>(.*?)<\/sub>/g;
+        const fracRegex = /<sup>(.*?)<\/sup>⁄<sub>(.*?)<\/sub>/g;
 
-function convertHtmlToLatex(html) {
-    const supRegex = /<sup>(.*?)<\/sup>/g;
-    const subRegex = /<sub>(.*?)<\/sub>/g;
+        while (supRegex.test(html) || subRegex.test(html) || fracRegex.test(html)) {
+            // Replace fractions
+            html = html.replace(fracRegex, (match, numerator, denominator) => `\\frac{${numerator}}{${denominator}}`);
 
-    // Process recursively until all matches are replaced
-    while (supRegex.test(html) || subRegex.test(html)) {
-        html = html.replace(supRegex, (match, p1) => `^${p1.length > 1 ? `{${p1}}` : p1}`);
-        html = html.replace(subRegex, (match, p1) => `_${p1.length > 1 ? `{${p1}}` : p1}`);
+            // Replace superscripts
+            html = html.replace(supRegex, (match, p1) => `^${p1.length > 1 ? `{${p1}}` : p1}`);
+
+            // Replace subscripts
+            html = html.replace(subRegex, (match, p1) => `_${p1.length > 1 ? `{${p1}}` : p1}`);
+        }
+        return html;
     }
-
-    return html;
-}
-
 
     const greekMap = {
         "\\alpha": "α", "\\beta": "β", "\\gamma": "γ", "\\delta": "δ", "\\epsilon": "ε",
@@ -46,9 +55,9 @@ function convertHtmlToLatex(html) {
         "\\Eta": "Η", "\\Theta": "ϴ", "\\Iota": "Ι", "\\Kappa": "Κ", "\\Zeta": "Ζ",
         "\\Mu": "Μ", "\\Nu": "Ν", "\\Xi": "Ξ", "\\Omicron": "Ο", "\\Pi": "Π",
         "\\Rho": "Ρ", "\\Lambda": "Λ", "\\Tau": "Τ", "\\Upsilon": "Υ", "\\Sigma": "Σ",
-        "\\Chi": "Χ", "\\Psi": "Ψ", "\\Omega": "Ω", "\\Phi": "Φ",
-        "<": "<sub></sub>", ">": "<sup></sup>"
+        "\\Chi": "Χ", "\\Psi": "Ψ", "\\Omega": "Ω", "\\Phi": "Φ", "\\cdot": "⋅","<": "<sub></sub>", ">": "<sup></sup>"
     };
+
 
     // Handle input and textarea fields
     if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
