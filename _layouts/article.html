@@ -15,14 +15,25 @@
     align-items: flex-start; /* Align items at the top */
   }
   .content {
-    width: 60%; /* Adjusted to occupy 60% */
+    max-width: 1000px; /* Adjusted to occupy 60% */
     margin: 0 auto; /* Centers the content horizontally */
+    margin-left: 30px;
+    margin-right: 30px;
     border: 1px solid #ccc; /* Adds a border around the content */
     padding: 30px; /* Adds padding inside the content box for space between text and border */
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for better visibility */
     background-color: #fafafa; /* Optional: Background for better contrast */
     transition: background-color 0.3s, color 0.3s;
   }
+
+img, table {
+    max-width: 100%; /* Ensure images and tables scale within the container */
+    height: auto; /* Maintain aspect ratio */
+}
+
+
+
+
 
 /* Light Mode Table Styles */
 table {
@@ -55,6 +66,7 @@ table tr, table th {
 .dark-mode table tr, .dark-mode table th {
   background-color: #000000; /* Same color for all rows and header in dark mode */
 }
+
 
 
 
@@ -102,8 +114,8 @@ table tr, table th {
     top: 10px;
     right: 10px;
     padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
+/*    background-color: #fafafa;*/
+/*    color: #fff;*/
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -111,8 +123,9 @@ table tr, table th {
     transition: background-color 0.3s, color 0.3s;
   }
   .toggle-dark-mode:hover {
-    background-color: #0056b3;
+/*    background-color: #0056b3;*/
   }
+
 
 
 input {
