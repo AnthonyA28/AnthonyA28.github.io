@@ -1,7 +1,7 @@
 ---
 title: Common Polymers
 tags: Polymers
-layout: post
+layout: article
 excerpt: Some common polymers
 ---
 

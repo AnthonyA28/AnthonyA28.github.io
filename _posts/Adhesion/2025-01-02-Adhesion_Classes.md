@@ -1,7 +1,7 @@
 ---
 title: Classes of Pressure Sensitive Adhesives
 tags: Adhesives
-layout: article_post_TOC
+layout: article_TOC
 excerpt: Adhesives are divided into their chemical composition
 ---
 

@@ -1,7 +1,6 @@
 ---
 title: Entanglements in polymers
-layout: article_post_TOC
-section: article
+layout: article_TOC
 excerpt: Plastics and rubbers are composed of long molecules which become entangled
 tags: Polymers
 ---

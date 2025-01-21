@@ -1,7 +1,6 @@
 ---
 title: Rheology
-layout: article_post_TOC
-section: article
+layout: article_TOC
 excerpt: Characterizing polymers
 tags: Polymers
 ---

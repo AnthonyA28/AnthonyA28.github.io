@@ -1,7 +1,7 @@
 ---
 title: Interfacial Fracture
 tags: FractureMechanics
-layout: post
+layout: article
 toc: true
 ---
 

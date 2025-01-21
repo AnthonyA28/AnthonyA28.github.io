@@ -1,7 +1,7 @@
 ---
 title: Pressure Sensitive Adhesives
 tags: Adhesives
-layout: post
+layout: article_TOC
 excerpt: Introduction to adhesives
 ---
 

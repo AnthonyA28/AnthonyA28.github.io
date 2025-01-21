@@ -1,7 +1,7 @@
 ---
 title: Introduction to Fracture 
 tags: FractureMechanics
-layout: article_post_TOC
+layout: article
 toc: true
 
 ---
@@ -73,7 +73,7 @@ $$
 The the energy release rate is defined as the following: 
 
 $$
-G \equiv \frac{d\Pi}{da}
+G \equiv - \frac{d\Pi}{da}
 $$
 
 where $a$ is the surface area of a crack. 

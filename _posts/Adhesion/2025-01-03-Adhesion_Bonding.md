@@ -1,7 +1,7 @@
 ---
 title: Bonding of Pressure Sensitive Adhesives
 tags: Adhesives
-layout: post
+layout: article
 excerpt: Adhesives must be designed to bond to surfaces. 
 ---
 

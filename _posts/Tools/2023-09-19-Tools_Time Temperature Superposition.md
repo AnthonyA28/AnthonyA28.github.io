@@ -1,5 +1,5 @@
 ---
-layout: tools
+layout: article
 title: Time Temperature Superposition
 tags: Tools
 section: article

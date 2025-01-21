@@ -79,7 +79,7 @@ body {
 
 /* No `:visited` state is required by default (browsers will use `a`) */
 a {
-  color: rgb(19, 150, 250, 0.9);
+/*  color: rgb(19, 150, 250, 0.9);*/
   text-decoration: none;
 }
 /* `:focus` is linked to `:hover` for basic accessibility */
@@ -118,10 +118,10 @@ p {
   margin-bottom: 1rem;
 }
 
-strong {
+/*strong {
   color: #303030;
 }
-
+*/
 
 /* Lists */
 ul, ol, dl {
@@ -219,7 +219,7 @@ img {
 }
 
 /* Tables */
-table {
+/*table {
   margin-bottom: 1rem;
   width: 100%;
   border: 1px solid #e5e5e5;
@@ -236,9 +236,9 @@ tbody tr:nth-child(odd) th {
 }
 
 ul {
-    margin-left: 20px; /* Adjust the value as needed */
+    margin-left: 20px; 
 }
-
+*/
 
 /*
  * Custom type

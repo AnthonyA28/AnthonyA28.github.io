@@ -1,9 +1,12 @@
 ---
+layout: article
 title: Plotter
 tags: Tools
+section: article
 ---
 
-{% include head.html %}
+
+
 
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -20,30 +23,6 @@ tags: Tools
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
 
-<style type="text/css">
-
-
-  body
-  {
-    font-size: 17px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    background-color: #CCDECC;
-  }
-
-  .collapsible {
-    color: #000;
-    background-color: #FFF;
-    border: none;
-    text-align: right;
-    font-size: 13px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-  }
-  .active, .collapsible:hover {
-    background-color: #aaa;
-  }
-</style>
 
 <main class="content-wraper" id="content-wraper">
 
@@ -53,14 +32,14 @@ tags: Tools
       
   </h2>
 
-  <div id="wrapper" style="border: 1px solid #FFFFFF">
+  <div id="wrapper" style="border: 5px solid rgba(255, 255, 255, 0)">
 
 
     
-    <div style="display: inline-block;width:350px;height:1500px;border: 1px solid #FFFFFF; vertical-align: top;">
+    <div style="display: inline-block;width:350px;height:1500px;border: 5px solid rgba(255, 255, 255, 0); vertical-align: top;">
 
 
-  <input type="file" id="input_file" style="color: transparent; font-size: 40px; margin-bottom: 1px; margin-left: 5px; margin-top: 5px; width: 300px; height: 60px;">
+      <input type="file" id="input_file">
 
 
       <!-- <br> -->
@@ -71,10 +50,7 @@ tags: Tools
         <button type="submit" id="save_template" > Save Template</button> 
         <button type="submit" id="delete_template" > Delete Template</button> 
         <!-- <button type="submit" id="open_templates"> Open templates</button>  -->
-        
-
-        
-        <br>
+              
         <br>
 
         <div ><strong>Update:</strong>
@@ -87,7 +63,6 @@ tags: Tools
           </div>
         </div>
 
-      <br>
       <strong>Palette:</strong>
       <select id="palettes">
         <option>pyDefault</option>
@@ -134,19 +109,16 @@ tags: Tools
 
 
       </select>
-      <input type="number" style="width:50px;" id="n_colors"> n_colors </input>
+      <input type="number" style="width:50px;" id="n_colors"> </input>
       <br>
       <button type="submit" id="add_palette" >add palette</button> 
       <button type="submit" id="delete_palette" >delete palette</button>
-
-      <h3>Use error bars:  <input type="checkbox" id="error_bars" ></h3>
-      <!-- <h3>Set Y2 color:    <input type="checkbox" id="helper_set_y2_color" ></h3> -->
-      <!-- <h3>downsample size: <input type="number" style="width:100px;" id="downsample_size" value="1000" min="100" max="1000000" > </input></h3> -->
-      <h3>Layout:</h3>
+      <h4 style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Use error bars:  <input type="checkbox" id="error_bars" ></h4>
+      <h3 style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Layout:</h3>
       <div id="layout">
         <div id="app" ></div>
       </div>
-      <h3>Master Trace:</h3>
+      <h3 style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Master Trace:</h3>
       <div id="appM"></div>
 
 
@@ -157,7 +129,7 @@ tags: Tools
     
     </div>
 
-    <div style="display: inline-block;width:410px;height:410px;border: 1px solid #FFFFFF; vertical-align:  top ; margin-top: 25px" id="gd_div">
+    <div style="display: inline-block;width:410px;height:1475px;border: 0px solid rgba(255, 255, 255, 0); vertical-align:  top ; margin-top: 25px" id="gd_div">
 
 
 
@@ -202,33 +174,22 @@ tags: Tools
 
     </div>
 
-    <div style="display: inline-block;width:350px;height:1000px;border: 1px solid #FFFFFF; vertical-align: top;">
+    <div style="display: inline-block;width:350px;height:1500px;border: 5px solid rgba(255, 255, 255, 0); vertical-align: top;">
 
       <!-- Data -->
       <div id="data">
-        <h3>Data:</h3>  
+        <h3 style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Data:</h3>  
       </div>
     </div>
 
 
 
-    <div style="display: inline-block;width:350px;height:1000px;border: 1px solid #FFFFFF; vertical-align: top;">
+<!--     <div style="display: inline-block;width:350px;height:1500px;border: 5px solid rgba(255, 255, 255, 0); vertical-align: top;">
 
 
-      <style type="text/css">
-      .tg  {border-collapse:collapse;border-spacing:0;}
-      .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-        overflow:hidden;padding:10px 5px;word-break:normal;}
-      .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-        font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-      .tg .tg-cly1{text-align:left;vertical-align:middle}
-      .tg .tg-1wig{font-weight:bold;text-align:left;vertical-align:top}
-      .tg .tg-m919{font-family:inherit;font-weight:bold;text-align:left;vertical-align:middle}
-      .tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
-      .tg .tg-0lax{text-align:left;vertical-align:top}
-      </style>
-            <table><thead> <tr> <th>Name</th> <th>Symbol</th></tr></thead><tbody> <tr> <td>Ångstrom</td>   <td>Å</td></tr> <tr><tr><td>Alpha</td><td>α, Α</td> </tr> <tr><td>Beta</td><td>β, Β</td> </tr> <tr><td>Gamma</td><td>γ, Γ</td> </tr> <tr><td>Delta</td><td>δ, Δ</td> </tr> <tr><td>Epsilon</td><td>ε, ϵ</td> </tr> <tr><td>Eta</td><td>η, Η</td> </tr> <tr><td>Theta</td><td>θ, ϴ</td> </tr> <tr><td>Iota</td><td>ι, Ι</td> </tr> <tr><td>Kappa</td><td>κ, Κ</td> </tr> <tr><td>Zeta</td><td>ζ, Ζ</td> </tr> <tr><td>Mu</td><td>μ, Μ</td> </tr> <tr><td>Nu</td><td>ν, Ν</td> </tr> <tr><td>Xi</td><td>ξ, Ξ</td> </tr> <tr><td>Omicron</td><td>ο, Ο</td> </tr> <tr><td>Pi</td><td>π, Π</td> </tr> <tr><td>Rho</td><td>ρ, Ρ</td> </tr> <tr><td>Lambda</td><td>λ, Λ</td> </tr> <tr><td>Tau</td><td>τ, Τ</td> </tr> <tr><td>Upsilon</td><td>υ, Υ</td> </tr> <tr><td>Sigma</td><td>σ, Σ</td> </tr> <tr><td>Chi</td><td>χ, Χ</td> </tr> <tr><td>Psi</td><td>ψ, Ψ</td> </tr> <tr><td>Omega</td><td>ω, Ω</td> </tr> <tr><td>Phi</td><td>φ, Φ</td> </tr> <td>Cdot</td>     <td>⋅</td></tr></tbody></table>
-    </div>
+
+            <table style="width:100%; margin:0 auto; font-size:0.8em; text-align:center; border-collapse:collapse; "><thead> <tr> <th>Name</th> <th>Symbol</th></tr></thead><tbody> <tr> <td>Ångstrom</td>   <td>Å</td></tr> <tr><tr><td>Alpha</td><td>α, Α</td> </tr> <tr><td>Beta</td><td>β, Β</td> </tr> <tr><td>Gamma</td><td>γ, Γ</td> </tr> <tr><td>Delta</td><td>δ, Δ</td> </tr> <tr><td>Epsilon</td><td>ε, ϵ</td> </tr> <tr><td>Eta</td><td>η, Η</td> </tr> <tr><td>Theta</td><td>θ, ϴ</td> </tr> <tr><td>Iota</td><td>ι, Ι</td> </tr> <tr><td>Kappa</td><td>κ, Κ</td> </tr> <tr><td>Zeta</td><td>ζ, Ζ</td> </tr> <tr><td>Mu</td><td>μ, Μ</td> </tr> <tr><td>Nu</td><td>ν, Ν</td> </tr> <tr><td>Xi</td><td>ξ, Ξ</td> </tr> <tr><td>Omicron</td><td>ο, Ο</td> </tr> <tr><td>Pi</td><td>π, Π</td> </tr> <tr><td>Rho</td><td>ρ, Ρ</td> </tr> <tr><td>Lambda</td><td>λ, Λ</td> </tr> <tr><td>Tau</td><td>τ, Τ</td> </tr> <tr><td>Upsilon</td><td>υ, Υ</td> </tr> <tr><td>Sigma</td><td>σ, Σ</td> </tr> <tr><td>Chi</td><td>χ, Χ</td> </tr> <tr><td>Psi</td><td>ψ, Ψ</td> </tr> <tr><td>Omega</td><td>ω, Ω</td> </tr> <tr><td>Phi</td><td>φ, Φ</td> </tr> <td>Cdot</td>     <td>⋅</td></tr></tbody></table>
+    </div> -->
   </div>
 
 
