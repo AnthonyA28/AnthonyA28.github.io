@@ -8,7 +8,7 @@ excerpt: Some common polymers
 # Common Polymers
 
 
-<img src="\assets\images\Types Of Polymers.jpg" alt="Types Of Polymers" width="700" height="400" />
+<img src="\assets\images\Types Of Polymers.jpg" alt="Types Of Polymers" width="100%"/>
 
 <body>
     <table id="sortableTable">

@@ -3,13 +3,15 @@ layout: default
 title: Posts
 ---
 
-
+<h1>Fracture Mechanics</h1>
 
 <ul>
-  {% for post in site.tags.FractureMechanics %}
-    <li>
-      <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-      <p>  {{ post.excerpt }}   </p>
-    </li>
-  {% endfor %}
+{% assign posts = site.tags.FractureMechanics | sort: 'date' %}
+{% for post in posts %}
+  <li>
+    <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+    <p>{{ post.excerpt }}</p>
+  </li>
+{% endfor %}
+
 </ul>

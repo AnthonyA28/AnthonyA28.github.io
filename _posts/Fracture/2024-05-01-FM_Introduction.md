@@ -2,6 +2,7 @@
 title: Introduction to Fracture 
 tags: FractureMechanics
 layout: article
+excerpt: We aim to predict failure in materials. 
 toc: true
 
 ---

@@ -3,6 +3,7 @@ title: Interfacial Fracture
 tags: FractureMechanics
 layout: article
 toc: true
+excerpt: Interfacial fracture (peeling) provides some simple and useful insights on fracture. 
 ---
 
 In out introduction to fracture, we have reviewed the definition of fracture energy $\Gamma$. Recall the definition of the energy release rate: 

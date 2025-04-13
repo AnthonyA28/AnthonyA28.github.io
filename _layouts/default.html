@@ -1,13 +1,29 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<style type="text/css">
+  
+  .post {
+    display: flex; /* Enables a horizontal layout */
+    justify-content: center; /* Centers content horizontally */
+    align-items: flex-start; /* Align items at the top */
+  }
+  .content {
+    width: 95%;
+    max-width: 1000px; /* Adjusted to occupy 60% */
+    margin: 0 auto; /* Centers the content horizontally */
+    margin-left: 30px;
+    margin-right: 30px;
+    border: 1px solid #ccc; /* Adds a border around the content */
+    padding: 60px; /* Adds padding inside the content box for space between text and border */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for better visibility */
+    background-color: #fafafa; /* Optional: Background for better contrast */
+    transition: background-color 0.3s, color 0.3s;
+  }
 
-  {% include head.html %}
+</style>
 
-  <body>
-      <div class="container content">
-        {{content}}
+{% include base.html %}
 
-      </div>
-  </body>
-
-</html>
+<div class="post">
+  <div class="content">
+    {{ content }}
+  </div>
+</div>

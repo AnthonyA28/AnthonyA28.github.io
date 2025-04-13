@@ -1,0 +1,323 @@
+<style>
+  /* Light Mode Styles (Default) */
+  body {
+    background-color: #fff;
+    color: #000;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: #000; /* Default heading color in light mode */
+    transition: color 0.3s;
+  }
+  .post {
+    display: flex; /* Enables a horizontal layout */
+    justify-content: center; /* Centers content horizontally */
+    align-items: flex-start; /* Align items at the top */
+  }
+  .content {
+    max-width: 1000px; /* Adjusted to occupy 60% */
+    margin: 0 auto; /* Centers the content horizontally */
+    margin-left: 30px;
+    margin-right: 30px;
+    border: 1px solid #ccc; /* Adds a border around the content */
+    padding: 30px; /* Adds padding inside the content box for space between text and border */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for better visibility */
+    background-color: #fafafa; /* Optional: Background for better contrast */
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+img, table {
+    max-width: 100%; /* Ensure images and tables scale within the container */
+    height: auto; /* Maintain aspect ratio */
+}
+
+
+
+
+
+/* Light Mode Table Styles */
+table {
+  width: 100%; /* Ensures table spans its container */
+  border-collapse: collapse; /* Removes gaps between table cells */
+  background-color: #ffffff; /* Table background white */
+}
+
+table th, table td {
+  color: #000000; /* Text color black */
+  border: 1px solid #ccc; /* Add borders to cells */
+  padding: 8px; /* Adds spacing inside cells */
+  text-align: left; /* Aligns text to the left */
+}
+
+table tr, table th {
+  background-color: #ffffff; /* Same color for all rows and header in light mode */
+}
+
+/* Dark Mode Table Styles */
+.dark-mode table {
+  background-color: #000000; /* Dark background for the table */
+}
+
+.dark-mode table th, .dark-mode table td {
+  color: #ffffff; /* White text for readability */
+  border: 1px solid #444; /* Subtle border for dark mode */
+}
+
+.dark-mode table tr, .dark-mode table th {
+  background-color: #000000; /* Same color for all rows and header in dark mode */
+}
+
+
+
+
+
+  mi {
+      color: #000;
+  }
+
+  .dark-mode mi {
+      color: #fff;
+  }
+
+
+  a {
+    color: #0077cc;
+  }
+
+  .dark-mode a {
+    color: #0077cc;
+  }
+
+
+  /* Dark Mode Styles */
+  body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  .dark-mode .content {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #444;
+  }
+  .dark-mode h1, 
+  .dark-mode h2, 
+  .dark-mode h3, 
+  .dark-mode h4, 
+  .dark-mode h5, 
+  .dark-mode h6 {
+    color: #fff; /* Inverted heading color in dark mode */
+  }
+
+  /* Button Styles */
+  .toggle-dark-mode {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px 15px;
+/*    background-color: #fafafa;*/
+/*    color: #fff;*/
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .toggle-dark-mode:hover {
+/*    background-color: #0056b3;*/
+  }
+
+
+
+input {
+  font-size: 16px; /* Sets font size */
+  padding: 0px; /* Adds spacing inside the input */
+  border: 1px solid #ccc; /* Defines a subtle border */
+  border-radius: 4px;  Rounds the corners 
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Adds a subtle inner shadow */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for focus */
+}
+
+input:focus {
+  border-color: #007bff; /* Highlights border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adds a glow effect on focus */
+  outline: none; /* Removes default focus outline */
+}
+
+
+
+
+  /* Default (Light Mode) Styles */
+
+
+
+
+  
+  .collapsible {
+    color: #000; /* Black text */
+    background-color: #dedede;
+    border: none; /* No border */
+    text-align: right; /* Align text to the right */
+    font-size: 16px; /* Font size */
+    margin-top: 0;
+    margin-bottom: 0;
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for mode changes */
+  }
+
+  .collapsible:hover {
+    background-color: #606060;
+  }
+
+  /* Dark Mode Styles */
+  .dark-mode .collapsible {
+    color: #FFF; /* White text */
+    background-color: #606060;
+  }
+
+  .dark-mode .collapsible:hover {
+    background-color: #aaa; /* Dark gray background on hover or when active */
+  }
+
+
+input, select{
+  color: #000; /* Black text */
+  background-color: #dedede;
+}
+
+
+/* Default (Light Mode) Styles */
+button {
+  color: #000; /* Black text */
+  background-color: #dedede;
+  border: none; /* No border */
+  text-align: center; /* Align text to the center */
+  font-size: 16px; /* Font size */
+  margin-top: 0px;
+  margin-bottom: 0;
+  padding: 0px 5px; /* Adds some padding for better appearance */
+  cursor: pointer; /* Adds a pointer cursor */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for mode changes */
+}
+
+button:hover {
+  background-color: #606060; /* Gray background on hover */
+}
+
+/* Dark Mode Styles */
+
+.dark-mode input, .dark-mode select{
+  color: #fff; /* White text */
+  background-color: #606060; /* Black background */
+}
+
+
+.dark-mode button {
+  color: #fff; /* White text */
+  background-color: #606060; /* Black background */
+}
+
+.dark-mode button:hover {
+  background-color: #aaa; /* Dark gray background on hover */
+}
+
+
+  .collapsible {
+    color: #000; /* Black text */
+    background-color: #dedede;
+    border: none; /* No border */
+    text-align: right; /* Align text to the right */
+    font-size: 16px; /* Font size */
+    margin-top: 0;
+    margin-bottom: 0;
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for mode changes */
+  }
+
+  .collapsible:hover {
+    background-color: #606060;
+  }
+
+  /* Dark Mode Styles */
+  .dark-mode .collapsible {
+    color: #FFF; /* White text */
+    background-color: #606060;
+  }
+
+  .dark-mode .collapsible:hover {
+    background-color: #aaa; /* Dark gray background on hover or when active */
+  }
+
+
+input, select{
+  color: #000; /* Black text */
+  background-color: #dedede;
+}
+
+
+/* Default (Light Mode) Styles */
+button {
+  color: #000; /* Black text */
+  background-color: #dedede;
+  border: none; /* No border */
+  text-align: center; /* Align text to the center */
+  font-size: 16px; /* Font size */
+  margin-top: 0px;
+  margin-bottom: 0;
+  padding: 0px 5px; /* Adds some padding for better appearance */
+  cursor: pointer; /* Adds a pointer cursor */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for mode changes */
+}
+
+button:hover {
+  background-color: #606060; /* Gray background on hover */
+}
+
+/* Dark Mode Styles */
+
+.dark-mode input, .dark-mode select{
+  color: #fff; /* White text */
+  background-color: #606060; /* Black background */
+}
+
+
+.dark-mode button {
+  color: #fff; /* White text */
+  background-color: #606060; /* Black background */
+}
+
+.dark-mode button:hover {
+  background-color: #aaa; /* Dark gray background on hover */
+}
+
+
+</style>
+
+{% include head.html %}
+
+
+<button class="toggle-dark-mode" onclick="toggleDarkMode()">Switch to Dark Mode</button>
+
+<script>
+  // Load the saved theme preference from localStorage
+  document.addEventListener('DOMContentLoaded', () => {
+    const darkModePreference = localStorage.getItem('darkMode');
+    if (darkModePreference === 'enabled') {
+      document.body.classList.add('dark-mode');
+      updateButtonText();
+    }
+  });
+
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+    updateButtonText();
+  }
+
+  function updateButtonText() {
+    const button = document.querySelector('.toggle-dark-mode');
+    if (document.body.classList.contains('dark-mode')) {
+      button.textContent = 'Switch to Light Mode';
+    } else {
+      button.textContent = 'Switch to Dark Mode';
+    }
+  }
+</script>
