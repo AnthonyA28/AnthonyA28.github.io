@@ -68,7 +68,11 @@ Use the sliders below to adjust the $a$s and $b$s at different temperatures. The
 
     
 
-    <h2> New feature! <button type="submit" id="autoshift" > Auto shift to match G''  :)</button> </h2>
+    <h2> New feature!  </h2>
+    <button type="submit" id="autoshiftAts" > Set A<sub>T</sub>s to match G''</button>
+    <button type="submit" id="autoshiftBts" > Shift B<sub>T</sub>s match G'  </button>
+    <br>
+    <button type="submit" id="resetShifts" > Reset:</button>
 
     <h5>Load Data: <input type="file" id="input_file"></h5>
     <h5>Export Data:  <button type="submit"  id="exportData" > Export Data</button></h5>
@@ -383,6 +387,54 @@ function findBestScalingFactorLog(arx1, ary1, arx2, ary2, aMin, aMax, steps = 10
   return bestA;
 }
 
+
+function totalErrorB(arx1, ary1, arx2, ary2, b) {
+  const scaledary2 = ary2.map(val => val - b);
+  // const scaledX2 = arx2.map(val => val - a);
+  const minX1 = Math.min(...arx1);
+
+  let error = 0;
+  let count = 0;
+
+  for (let i = 0; i < scaledary2.length; i++) {
+    // const x2 = scaledX2[i];
+    const x2 = arx2[i]; 
+
+    // Skip points that are outside the domain of the reference x-axis
+    if (x2 < minX1) continue;
+
+    const nearestIndex = findNearestIndex(arx1, x2);
+    const diff = scaledary2[i] - ary1[nearestIndex];
+    error += diff * diff;
+    count++;
+  }
+
+  return count > 0 ? error / count : Infinity;
+}
+
+function findBestScalingFactorLogB(arx1, ary1, arx2, ary2, aMin, aMax, steps = 1000) {
+  const logMin = Math.log10(aMin);
+  const logMax = Math.log10(aMax);
+
+  let bestA = aMin;
+  let minError = Infinity;
+
+  for (let i = 0; i <= steps; i++) {
+    const logA = logMin + (logMax - logMin) * (i / steps);
+    const a = Math.pow(10, logA);
+
+    const err = totalErrorB(arx1, ary1, arx2, ary2, a);
+    console.log(`b: ${a}, ${err}`);  // Optional: log error trace
+
+    if (err < minError) {
+      minError = err;
+      bestA = a;
+    }
+  }
+
+  return bestA;
+}
+
 function interpolateArrays(x, y, numPoints) {
   if (x.length !== y.length) {
     throw new Error("x and y must have the same length");
@@ -409,66 +461,100 @@ function interpolateArrays(x, y, numPoints) {
 
 
 
-document.getElementById('autoshift').addEventListener('click', function() {
-  console.log("autoshift");
+document.getElementById('resetShifts').addEventListener('click', function() {
+
+    for(var i =0; i < inputer_TTS.length; i ++ ){
+      inputer_TTS[i].inputs['b'].elem.value = 1;
+      inputer_TTS[i].inputs['b'].elem_base.value = 1;
+      inputer_TTS[i].inputs['b'].elem.dispatchEvent(new Event('change'));
+      inputer_TTS[i].inputs['a'].elem.value = 1;
+      inputer_TTS[i].inputs['a'].elem_base.value = 1;
+      inputer_TTS[i].inputs['a'].elem.dispatchEvent(new Event('change'));
+    }
+
+});
+
+document.getElementById('autoshiftAts').addEventListener('click', function() {
+  console.log("autoshiftAts");
   let Gps = [];
   let Gpps = [];
   let omegas = [];
 
   let max_trace_length = 0;
+  let j = 0;
   for(let i = 0; i < traces.length; i += 2){
-    omegas.push(traces[i].x)
-    Gps.push(traces[i].y)
-    Gpps.push(traces[i+1].y)
+    omegas.push(traces[i].base_x)
+    Gps.push(traces[i].base_y)
+    Gpps.push(traces[i+1].base_y.map(val => val * inputer_TTS[j].inputs['b'].elem_base.value));
+    j = j + 1; 
   }
   console.log(omegas);
 
   let prevA = 1; 
  for (let i = 1; i < Gps.length; i++) {
-  // Previous dataset
-  let normOmega1 = log10Array(omegas[i - 1]);
-  let normGp1 = log10Array(Gps[i - 1]);
-  let normGpp1 = log10Array(Gpps[i - 1]);
-  ({ x: normOmega1, y: normGpp1 } = interpolateArrays(normOmega1, normGpp1, 100));
-  
-  // normOmega1 = exp10Array(normOmega1)
-  // normGpp1 = exp10Array(normGpp1)
+    let normOmega1 = log10Array(omegas[i - 1]);
+    let normGp1 = log10Array(Gps[i - 1]);
+    let normGpp1 = log10Array(Gpps[i - 1]);
+    ({ x: normOmega1, y: normGpp1 } = interpolateArrays(normOmega1, normGpp1, 100));
 
-  // Current dataset
-  let normOmega2 = log10Array(omegas[i]);
-  let normGp2 = log10Array(Gps[i]);
-  let normGpp2 = log10Array(Gpps[i]);
-  ({ x: normOmega2, y: normGpp2 } = interpolateArrays(normOmega2, normGpp2, 100));
+    let normOmega2 = log10Array(omegas[i]);
+    let normGp2 = log10Array(Gps[i]);
+    let normGpp2 = log10Array(Gpps[i]);
+    ({ x: normOmega2, y: normGpp2 } = interpolateArrays(normOmega2, normGpp2, 100));
+    var bestA = findBestScalingFactorLog(
+      normOmega1, normGpp1,
+      normOmega2, normGpp2,
+      0.01, 1, 1000
+    );
+    bestA = 1/(Math.pow(10, bestA));
+    bestA = bestA * prevA
+    console.log("best A : " + bestA)
+    prevA = bestA;
+    inputer_TTS[i].inputs['a'].elem.value = 1;
+    inputer_TTS[i].inputs['a'].elem_base.value = bestA;
+    inputer_TTS[i].inputs['a'].elem.dispatchEvent(new Event('change'));
+    update_TTS();
+  }
+});
 
-  // normOmega2 = exp10Array(normOmega2)
-  // normGpp12= exp10Array(normGpp2)
+document.getElementById('autoshiftBts').addEventListener('click', function() {
+  console.log("autoshiftBts");
+  let Gps = [];
+  let omegas = [];
 
+  let max_trace_length = 0;
+  let j = 0; 
+  for(let i = 0; i < traces.length; i += 2){
+    omegas.push(traces[i].base_x.map(val => val* inputer_TTS[j].inputs['a'].elem_base.value));
+    Gps.push(traces[i].base_y)
+    j = j + 1; 
+  }
+  console.log(omegas);
 
-  var bestA = findBestScalingFactorLog(
-    normOmega1, normGpp1,
-    normOmega2, normGpp2,
-    0.1, 1, 1000
-  );
+  let prevB = 1; 
+ for (let i = 1; i < Gps.length; i++) {
+    let normOmega1 = log10Array(omegas[i - 1]);
+    let normGp1 = log10Array(Gps[i - 1]);
+    ({ x: normOmega1, y: normGp1 } = interpolateArrays(normOmega1, normGp1, 100));
 
-
-  // // console.log("best A : " + bestA)
-  bestA = 1/(Math.pow(10, bestA));
-  bestA = bestA * prevA
-  console.log("best A : " + bestA)
-  prevA = bestA;  // optional: store or apply
-
-  // for (var i = 0; i < inputer_TTS.length; i++) {
-    // a = parseFloat(inputer_TTS[i].inputs['a'].elem.value)*parseFloat(inputer_TTS[i].inputs['a'].elem_base.value);
-  // }
-  inputer_TTS[i].inputs['a'].elem_base.value = bestA;
-  update_TTS();
-  
-}
-
-
-
-
-
+    let normOmega2 = log10Array(omegas[i]);
+    let normGp2 = log10Array(Gps[i]);
+    ({ x: normOmega2, y: normGp2 } = interpolateArrays(normOmega2, normGp2, 100));
+    var bestB = findBestScalingFactorLogB(
+      normOmega1, normGp1,
+      normOmega2, normGp2,
+      0.001, 1, 1000
+    );
+    // console.log("best B : " + bestB)
+    bestB = 1/(Math.pow(10, bestB));
+    bestB = bestB * prevB
+    console.log("best B : " + bestB)
+    prevB = bestB;
+    inputer_TTS[i].inputs['b'].elem_base.value = bestB;
+    inputer_TTS[i].inputs['b'].elem.value = 1;
+    inputer_TTS[i].inputs['b'].elem.dispatchEvent(new Event('change'));
+  }
+    update_TTS();
 });
 
 
@@ -975,7 +1061,7 @@ function update(){
 
     inputer_traces[i].update_data(traces[i]);
 
-    console.log(traces[i]['a'])
+    // console.log(traces[i]['a'])
   }
 
 
@@ -1004,15 +1090,15 @@ function update_TTS() {
     b = parseFloat(inputer_TTS[i].inputs['b'].elem.value)*parseFloat(inputer_TTS[i].inputs['b'].elem_base.value);
 
     if (a > 0) {
-      console.log("i:", i);
-      console.log("traces[i*2]:", traces[i * 2]);
+      // console.log("i:", i);
+      // console.log("traces[i*2]:", traces[i * 2]);
 
       if (traces[i * 2] && traces[i * 2].hasOwnProperty('base_x')) {
-        console.log("traces[i*2].base_x:", traces[i * 2].base_x);
+        // console.log("traces[i*2].base_x:", traces[i * 2].base_x);
         traces[i * 2]['x'] = multiply(traces[i * 2].base_x, a);
         traces[i * 2 + 1]['x'] = multiply(traces[i * 2 + 1].base_x, a);
       } else {
-        console.log("traces[i*2] is undefined or does not have 'base_x'");
+        // console.log("traces[i*2] is undefined or does not have 'base_x'");
       }
     }
     if (b > 0) {
@@ -1020,7 +1106,7 @@ function update_TTS() {
         traces[i * 2]['y'] = multiply(traces[i * 2].base_y, b);
         traces[i * 2 + 1]['y'] = multiply(traces[i * 2 + 1].base_y, b);
       } else {
-        console.log("traces[i*2] is undefined or does not have 'base_y'");
+        // console.log("traces[i*2] is undefined or does not have 'base_y'");
       }
     }
   }
