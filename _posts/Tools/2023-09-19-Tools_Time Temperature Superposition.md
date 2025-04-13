@@ -68,10 +68,16 @@ Use the sliders below to adjust the $a$s and $b$s at different temperatures. The
 
     
 
+    <h2> New feature! <button type="submit" id="autoshift" > Auto shift to match G''  :)</button> </h2>
 
     <h5>Load Data: <input type="file" id="input_file"></h5>
     <h5>Export Data:  <button type="submit"  id="exportData" > Export Data</button></h5>
+    
     <button type="submit" style="display:none" id="download" > Export json</button>
+
+
+
+
     <div id="TTS" ></div>
     <!-- <div id="appTTS" ></div> -->
   <!-- </div> -->
@@ -267,6 +273,204 @@ document.getElementById('exportData').addEventListener('click', function() {
   document.body.removeChild(a);
 });
 
+function exp10Array(logArr) {
+  return logArr.map(val => Math.pow(10, val));
+}
+
+
+var log10Array = function (arr){
+  newarr = []
+  for(var i = 0; i < arr.length; i ++ ){
+    newarr.push(log10(arr[i]))
+  }
+  return newarr
+}
+
+var log10 = function (y) {
+  return Math.log(y) / Math.log(10);
+}
+
+function minMaxNormalize(arr) {
+  const min = Math.min(...arr);
+  const max = Math.max(...arr);
+  return arr.map(val => (val - min) / (max - min));
+}
+
+function interpolate(x, y, xnew) {
+  const ynew = [];
+  for (let xi of xnew) {
+    if (xi <= x[0]) {
+      ynew.push(y[0]);
+    } else if (xi >= x[x.length - 1]) {
+      ynew.push(y[y.length - 1]);
+    } else {
+      for (let i = 0; i < x.length - 1; i++) {
+        if (xi >= x[i] && xi <= x[i + 1]) {
+          const t = (xi - x[i]) / (x[i + 1] - x[i]);
+          ynew.push(y[i] * (1 - t) + y[i + 1] * t);
+          break;
+        }
+      }
+    }
+  }
+  return ynew;
+}
+
+function sortXY(x, y) {
+  const combined = x.map((val, i) => ({ x: val, y: y[i] }));
+  combined.sort((a, b) => a.x - b.x);
+  return {
+    x: combined.map(p => p.x),
+    y: combined.map(p => p.y)
+  };
+}
+
+function findNearestIndex(arr, target) {
+  let minDiff = Infinity;
+  let minIndex = -1;
+  for (let i = 0; i < arr.length; i++) {
+    const diff = Math.abs(arr[i] - target);
+    if (diff < minDiff) {
+      minDiff = diff;
+      minIndex = i;
+    }
+  }
+  return minIndex;
+}
+
+function totalError(arx1, ary1, arx2, ary2, a) {
+  const scaledX2 = arx2.map(val => val - a);
+  const minX1 = Math.min(...arx1);
+
+  let error = 0;
+  let count = 0;
+
+  for (let i = 0; i < scaledX2.length; i++) {
+    const x2 = scaledX2[i];
+
+    // Skip points that are outside the domain of the reference x-axis
+    if (x2 < minX1) continue;
+
+    const nearestIndex = findNearestIndex(arx1, x2);
+    const diff = ary2[i] - ary1[nearestIndex];
+    error += diff * diff;
+    count++;
+  }
+
+  return count > 0 ? error / count : Infinity;
+}
+
+function findBestScalingFactorLog(arx1, ary1, arx2, ary2, aMin, aMax, steps = 1000) {
+  const logMin = Math.log10(aMin);
+  const logMax = Math.log10(aMax);
+
+  let bestA = aMin;
+  let minError = Infinity;
+
+  for (let i = 0; i <= steps; i++) {
+    const logA = logMin + (logMax - logMin) * (i / steps);
+    const a = Math.pow(10, logA);
+
+    const err = totalError(arx1, ary1, arx2, ary2, a);
+    // console.log(`a: ${a}, ${err}`);  // Optional: log error trace
+
+    if (err < minError) {
+      minError = err;
+      bestA = a;
+    }
+  }
+
+  return bestA;
+}
+
+function interpolateArrays(x, y, numPoints) {
+  if (x.length !== y.length) {
+    throw new Error("x and y must have the same length");
+  }
+
+  // Sort x and y together
+  const { x: sortedX, y: sortedY } = sortXY(x, y);
+
+  const minX = sortedX[0];
+  const maxX = sortedX[sortedX.length - 1];
+
+  // Create evenly spaced points between minX and maxX
+  const xNew = [];
+  const step = (maxX - minX) / (numPoints - 1);
+  for (let i = 0; i < numPoints; i++) {
+    xNew.push(minX + i * step);
+  }
+
+  // Interpolate y values for xNew
+  const yNew = interpolate(sortedX, sortedY, xNew);
+
+  return { x: xNew, y: yNew };
+}
+
+
+
+document.getElementById('autoshift').addEventListener('click', function() {
+  console.log("autoshift");
+  let Gps = [];
+  let Gpps = [];
+  let omegas = [];
+
+  let max_trace_length = 0;
+  for(let i = 0; i < traces.length; i += 2){
+    omegas.push(traces[i].x)
+    Gps.push(traces[i].y)
+    Gpps.push(traces[i+1].y)
+  }
+  console.log(omegas);
+
+  let prevA = 1; 
+ for (let i = 1; i < Gps.length; i++) {
+  // Previous dataset
+  let normOmega1 = log10Array(omegas[i - 1]);
+  let normGp1 = log10Array(Gps[i - 1]);
+  let normGpp1 = log10Array(Gpps[i - 1]);
+  ({ x: normOmega1, y: normGpp1 } = interpolateArrays(normOmega1, normGpp1, 100));
+  
+  // normOmega1 = exp10Array(normOmega1)
+  // normGpp1 = exp10Array(normGpp1)
+
+  // Current dataset
+  let normOmega2 = log10Array(omegas[i]);
+  let normGp2 = log10Array(Gps[i]);
+  let normGpp2 = log10Array(Gpps[i]);
+  ({ x: normOmega2, y: normGpp2 } = interpolateArrays(normOmega2, normGpp2, 100));
+
+  // normOmega2 = exp10Array(normOmega2)
+  // normGpp12= exp10Array(normGpp2)
+
+
+  var bestA = findBestScalingFactorLog(
+    normOmega1, normGpp1,
+    normOmega2, normGpp2,
+    0.1, 1, 1000
+  );
+
+
+  // // console.log("best A : " + bestA)
+  bestA = 1/(Math.pow(10, bestA));
+  bestA = bestA * prevA
+  console.log("best A : " + bestA)
+  prevA = bestA;  // optional: store or apply
+
+  // for (var i = 0; i < inputer_TTS.length; i++) {
+    // a = parseFloat(inputer_TTS[i].inputs['a'].elem.value)*parseFloat(inputer_TTS[i].inputs['a'].elem_base.value);
+  // }
+  inputer_TTS[i].inputs['a'].elem_base.value = bestA;
+  update_TTS();
+  
+}
+
+
+
+
+
+});
+
 
 
 
@@ -281,10 +485,6 @@ var inputer_TTS = []
 
 
 
-
-var log10 = function (y) {
-  return Math.log(y) / Math.log(10);
-}
 
 var transpose = function (a) {
   var w = a.length || 0;
