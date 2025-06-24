@@ -37,14 +37,26 @@
   </div>
   
   <script>
-    const images = [
-      "assets/images/image1.jpg",
-      "assets/images/image2.jpg",
-      "assets/images/image3.jpg"
-    ];
+const images = [
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Farmhouse_in_Provence%2C_1888%2C_Vincent_van_Gogh%2C_NGA.jpg/960px-Farmhouse_in_Provence%2C_1888%2C_Vincent_van_Gogh%2C_NGA.jpg?20180227211922",
+
+  "https://upload.wikimedia.org/wikipedia/commons/6/66/VanGogh-starry_night_ballance1.jpg",
+
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/The_School_of_Athens_by_Raffaello_Sanzio_da_Urbino.jpg/1024px-The_School_of_Athens_by_Raffaello_Sanzio_da_Urbino.jpg"
+
+  // "http://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/1280px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg", // Birth of Venus, Botticelli
+  // "https://upload.wikimedia.org/wikipedia/commons/3/3d/The_Persistence_of_Memory.jpg",                                        // The Persistence of Memory, Dalí
+  // "https://upload.wikimedia.org/wikipedia/commons/4/4c/Rembrandt_Harmensz._van_Rijn_-_The_Nightwatch_-_WGA19149.jpg",          // The Night Watch, Rembrandt
+  // "https://upload.wikimedia.org/wikipedia/commons/a/a3/Georges_Seurat_-_A_Sunday_on_La_Grande_Jatte_%E2%80%93_1884_-_Google_Art_Project.jpg", // A Sunday Afternoon, Seurat
+  // "https://upload.wikimedia.org/wikipedia/commons/e/ea/Michelangelo%27s_David_-_left_view_2.jpg",                             // David (Michelangelo sculpture)
+  // "https://upload.wikimedia.org/wikipedia/commons/f/fc/Claude_Monet_-_Impression%2C_soleil_levant.jpg",                       // Impression, Sunrise, Monet
+  // "https://upload.wikimedia.org/wikipedia/commons/1/1c/Arnolfini_Portrait.jpg"                                               // Arnolfini Portrait, Jan van Eyck
+];
+
+
 
     let index = 0;
-    const interval = 10 * 1000; // 10 seconds
+    const interval = 60 * 1000; // 10 seconds
 
     function showImage() {
       document.getElementById("slide").src = images[index];
