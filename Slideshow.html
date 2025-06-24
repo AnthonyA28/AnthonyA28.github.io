@@ -24,14 +24,13 @@
   
   <script>
     const images = [
-      "image1.jpg",
-      "image2.jpg",
-      "image3.jpg"
-      // Add more direct image URLs
+      "assets/images/image1.jpg",
+      "assets/images/image2.jpg",
+      "assets/images/image3.jpg"
     ];
 
     let index = 0;
-    const interval = 1 * 60 * 1000; // 5 minutes
+    const interval = 5 * 60 * 1000; // 5 minutes
 
     function showImage() {
       document.getElementById("slide").src = images[index];
