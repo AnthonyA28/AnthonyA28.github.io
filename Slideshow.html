@@ -11,7 +11,19 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
     }
+
+    .rotated-container {
+      width: 100vh; /* yes, vh — because it's being rotated */
+      height: 100vw;
+      transform: rotate(90deg);
+      transform-origin: center center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     img {
       max-width: 100%;
       max-height: 100%;
@@ -20,7 +32,9 @@
   </style>
 </head>
 <body>
-  <img id="slide" src="" alt="Slideshow">
+  <div class="rotated-container">
+    <img id="slide" src="" alt="Slideshow">
+  </div>
   
   <script>
     const images = [
@@ -30,7 +44,7 @@
     ];
 
     let index = 0;
-    const interval = 1 * 60 * 1000; // 5 minutes
+    const interval = 10 * 1000; // 10 seconds
 
     function showImage() {
       document.getElementById("slide").src = images[index];
@@ -38,7 +52,10 @@
     }
 
     showImage();
-    setInterval(showImage, interval);
+    setTimeout(() => {
+      showImage();
+      setInterval(showImage, interval);
+    }, 1000);
   </script>
 </body>
 </html>
