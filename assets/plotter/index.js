@@ -1193,7 +1193,7 @@ function load_file(file){
       const wb = XLSX.read(data, {type: 'binary'});
       const sheet = wb.Sheets[wb.SheetNames[0]]
       console.log(sheet);
-      for(var n =0; n < 25; n ++ ) {
+      for(var n =0; n < 100; n ++ ) {
         var cell = String.fromCharCode(65 + n);
         if( sheet[cell.concat("1")] == undefined){
           header.push('');

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kindle Picture Frame</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <img id="slide" src="" alt="Slideshow">
+  
+  <script>
+    const images = [
+      "image1.jpg",
+      "image2.jpg",
+      "image3.jpg"
+      // Add more direct image URLs
+    ];
+
+    let index = 0;
+    const interval = 1 * 60 * 1000; // 5 minutes
+
+    function showImage() {
+      document.getElementById("slide").src = images[index];
+      index = (index + 1) % images.length;
+    }
+
+    showImage();
+    setInterval(showImage, interval);
+  </script>
+</body>
+</html>
