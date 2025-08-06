@@ -1,23 +1,28 @@
 ---
 layout: tool
-title: Time Temperature Superposition
-tags: Tools
+title: Time Temperature Superposition 2
+# tags: Tools
 section: article
 ---
 
 
 # Time Temperature Superposition
 
+This version of the time temperature superposition includes the complex viscosity $\eta^*$, which should be in the column after the loss modulus (i.e. the header of your csv/excel file should be omegea, G', G'', eta, , omega2, G'2, G''2, eta2, , ... ). Dont forget to have the top row as a header and have the column after the eta be empty. 
 
-Rheological data can be transformed so that the effect of temperature is removed. The data is shifted along the time axes, and the effect is quantified by the shifting variable $a$. The $a_T$s at each temperature are then fit to the following equation [^WLF]: $ Log(a_T) = -\frac{C_1(T-T_r)}{C_2 + T - T_r} $. 
+The variables are shifted according to the following equations: 
 
-The data can also be shifted along the vertical axes to with the $b$ variable. 
+$$
+G' \rightarrow b_T G'
+$$
 
-Use the sliders below to adjust the $a$s and $b$s at different temperatures. The number left to each slider is the base unit that the slider value is multipled by (lower this if a needs to be very small). Export the example data by clicking 'Export Data' to see the formatting convention. Then upload your own data by clicking, or dragging and dropping, the 'Choose File' button.  
+$$
+G'' \rightarrow b_T G''
+$$
 
-
-If you need to shift data which includes the complex viscosity ($\eta$), go <a href="/2023/09/19/Tools_Time-Temperature-Superposition_multivar.html"><strong>follow  this link </strong></a>.
-
+$$
+\eta^* \rightarrow \frac{b_T}{a_T} \eta^*
+$$
 
 
 <!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -70,8 +75,8 @@ If you need to shift data which includes the complex viscosity ($\eta$), go <a h
     
 
     <!-- <h2> New feature!  </h2> -->
-    <button type="submit" id="autoshiftAts" > Set A<sub>T</sub>s to match G''</button>
-    <button type="submit" id="autoshiftBts" > Shift B<sub>T</sub>s match G'  </button>
+    <!-- <button type="submit" id="autoshiftAts" > Set A<sub>T</sub>s to match G''</button> -->
+    <!-- <button type="submit" id="autoshiftBts" > Shift B<sub>T</sub>s match G'  </button> -->
     <br>
     <button type="submit" id="resetShifts" > Reset:</button>
 
@@ -225,16 +230,17 @@ document.getElementById('exportData').addEventListener('click', function() {
     let b = (parseFloat(inputer_TTS[i].inputs['b'].elem.value)*parseFloat(inputer_TTS[i].inputs['b'].elem_base.value)).toFixed(10);
     console.log(a);
     console.log(b);
-    header[i*4] = header[i*4] + "T: " + T  + " a:" + a + " b:" + b
+    header[i*5] = header[i*5] + "T: " + T  + " a:" + a + " b:" + b
   }
 
   let dataArrays = []
 
   let max_trace_length = 0;
-  for(let i = 0; i < traces.length; i += 2){
+  for(let i = 0; i < traces.length; i += 3){
     dataArrays.push(traces[i].x)
-    dataArrays.push(traces[i].y)
-    dataArrays.push(traces[i+1].y)
+    dataArrays.push(traces[i].y)       // G'
+    dataArrays.push(traces[i+1].y)     // G''
+    dataArrays.push(traces[i+2].y)     // viscosity
     let len = traces[i].x.length;
     if(len > max_trace_length){
       max_trace_length = len;
@@ -247,7 +253,7 @@ document.getElementById('exportData').addEventListener('click', function() {
     const rowData = [];
     for (let j = 0; j < dataArrays.length; j++) {
        rowData.push(dataArrays[j][i] || ''); // Insert data or an empty string if data is missing
-    if ((j + 1) % 3 === 0 && j !== dataArrays.length - 1) {
+    if ((j + 1) % 4 === 0 && j !== dataArrays.length - 1) {
         // Insert an empty column after every 3rd column except the last one
         rowData.push('');
       }
@@ -475,92 +481,6 @@ document.getElementById('resetShifts').addEventListener('click', function() {
 
 });
 
-document.getElementById('autoshiftAts').addEventListener('click', function() {
-  console.log("autoshiftAts");
-  let Gps = [];
-  let Gpps = [];
-  let omegas = [];
-
-  let max_trace_length = 0;
-  let j = 0;
-  for(let i = 0; i < traces.length; i += 2){
-    omegas.push(traces[i].base_x)
-    Gps.push(traces[i].base_y)
-    Gpps.push(traces[i+1].base_y.map(val => val * inputer_TTS[j].inputs['b'].elem_base.value));
-    j = j + 1; 
-  }
-  console.log(omegas);
-
-  let prevA = 1; 
- for (let i = 1; i < Gps.length; i++) {
-    let normOmega1 = log10Array(omegas[i - 1]);
-    let normGp1 = log10Array(Gps[i - 1]);
-    let normGpp1 = log10Array(Gpps[i - 1]);
-    ({ x: normOmega1, y: normGpp1 } = interpolateArrays(normOmega1, normGpp1, 100));
-
-    let normOmega2 = log10Array(omegas[i]);
-    let normGp2 = log10Array(Gps[i]);
-    let normGpp2 = log10Array(Gpps[i]);
-    ({ x: normOmega2, y: normGpp2 } = interpolateArrays(normOmega2, normGpp2, 100));
-    var bestA = findBestScalingFactorLog(
-      normOmega1, normGpp1,
-      normOmega2, normGpp2,
-      0.01, 1, 1000
-    );
-    bestA = 1/(Math.pow(10, bestA));
-    bestA = bestA * prevA
-    console.log("best A : " + bestA)
-    prevA = bestA;
-    inputer_TTS[i].inputs['a'].elem.value = 1;
-    inputer_TTS[i].inputs['a'].elem_base.value = bestA;
-    inputer_TTS[i].inputs['a'].elem.dispatchEvent(new Event('change'));
-    update_TTS();
-  }
-});
-
-document.getElementById('autoshiftBts').addEventListener('click', function() {
-  console.log("autoshiftBts");
-  let Gps = [];
-  let omegas = [];
-
-  let max_trace_length = 0;
-  let j = 0; 
-  for(let i = 0; i < traces.length; i += 2){
-    omegas.push(traces[i].base_x.map(val => val* inputer_TTS[j].inputs['a'].elem_base.value));
-    Gps.push(traces[i].base_y)
-    j = j + 1; 
-  }
-  console.log(omegas);
-
-  let prevB = 1; 
- for (let i = 1; i < Gps.length; i++) {
-    let normOmega1 = log10Array(omegas[i - 1]);
-    let normGp1 = log10Array(Gps[i - 1]);
-    ({ x: normOmega1, y: normGp1 } = interpolateArrays(normOmega1, normGp1, 100));
-
-    let normOmega2 = log10Array(omegas[i]);
-    let normGp2 = log10Array(Gps[i]);
-    ({ x: normOmega2, y: normGp2 } = interpolateArrays(normOmega2, normGp2, 100));
-    var bestB = findBestScalingFactorLogB(
-      normOmega1, normGp1,
-      normOmega2, normGp2,
-      0.001, 1, 1000
-    );
-    // console.log("best B : " + bestB)
-    bestB = 1/(Math.pow(10, bestB));
-    bestB = bestB * prevB
-    console.log("best B : " + bestB)
-    prevB = bestB;
-    inputer_TTS[i].inputs['b'].elem_base.value = bestB;
-    inputer_TTS[i].inputs['b'].elem.value = 1;
-    inputer_TTS[i].inputs['b'].elem.dispatchEvent(new Event('change'));
-  }
-    update_TTS();
-});
-
-
-
-
 
 var filename = "output";
 var traces = []
@@ -643,7 +563,7 @@ function make_trace_boxes(){
         }
       ));
 
-      if( j%2 == 0){
+      if( j%3 == 0){
 
         var div = document.createElement('div');  //creating element
         div.id = "appTTS" + j.toString();         //adding text on the element
@@ -1044,21 +964,31 @@ function update(){
   var yaxisRange = plot.layout.yaxis.range;
 
   document.getElementById("gd_div").style.width = inputer_layout.get_data()['width'];
+  var shape_counter = 0 
   for(var i = 0 ; i < traces.length; i ++){
 
     traces[i] = inputer_traces[i].fill_json(traces[i]);
     
-    if(i % 2 == 0){
-          traces[i].marker.symbol = "square";
-      }else{
-          traces[i].marker.symbol = "square-open";
-      }
+    if(shape_counter == 0){
+      traces[i].marker.symbol = "square"; 
+      traces[i].line.dash = "solid";
+    }
+    else if(shape_counter == 1){
+      traces[i].marker.symbol = "square-open";
+      traces[i].line.dash = "dot";
+    }
+    else if(shape_counter == 2){
+      traces[i].marker.symbol = "circle";
+      traces[i].line.dash = "dash";
+      shape_counter = -1;
+    }
+    shape_counter += 1; 
 
     len =  Math.floor(traces.length / 2);
     name = len.toString() + "_magma_r"
-    traces[i].marker.color = colors_palettes[name][Math.floor(i/2)]
+    traces[i].marker.color = colors_palettes[name][Math.floor(i/3)]
 
-    traces[i].line.color = colors_palettes[name][Math.floor(i/2)]
+    traces[i].line.color = colors_palettes[name][Math.floor(i/3)]
 
     inputer_traces[i].update_data(traces[i]);
 
@@ -1094,18 +1024,24 @@ function update_TTS() {
       // console.log("i:", i);
       // console.log("traces[i*2]:", traces[i * 2]);
 
-      if (traces[i * 2] && traces[i * 2].hasOwnProperty('base_x')) {
-        // console.log("traces[i*2].base_x:", traces[i * 2].base_x);
-        traces[i * 2]['x'] = multiply(traces[i * 2].base_x, a);
-        traces[i * 2 + 1]['x'] = multiply(traces[i * 2 + 1].base_x, a);
+      if (traces[i * 3] && traces[i * 3].hasOwnProperty('base_x')) {
+        // console.log("traces[i*2].base_x:", traces[i * 3].base_x);
+        traces[i * 3]['x'] = multiply(traces[i * 3].base_x, a);
+        traces[i * 3 + 1]['x'] = multiply(traces[i * 3 + 1].base_x, a);
+        traces[i * 3 + 2]['x'] = multiply(traces[i * 3 + 2].base_x, a);
+        // we also multiply the y of the viscosity by a!  
+        // traces[i * 3 + 2]['y'] = multiply(multiply(traces[i * 3 + 2].base_y, a), b);
+
       } else {
         // console.log("traces[i*2] is undefined or does not have 'base_x'");
       }
     }
     if (b > 0) {
-      if (traces[i * 2] && traces[i * 2].hasOwnProperty('base_y')) {
-        traces[i * 2]['y'] = multiply(traces[i * 2].base_y, b);
-        traces[i * 2 + 1]['y'] = multiply(traces[i * 2 + 1].base_y, b);
+      if (traces[i * 3] && traces[i * 3].hasOwnProperty('base_y')) {
+        traces[i * 3]['y'] = multiply(traces[i * 3].base_y, b);
+        traces[i * 3 + 1]['y'] = multiply(traces[i * 3 + 1].base_y, b);
+        // traces[i * 3 + 2]['y'] = multiply(traces[i * 3 + 2].base_y, b);
+        traces[i * 3 + 2]['y'] = multiply(multiply(traces[i * 3 + 2].base_y, 1.0/a), b);
       } else {
         // console.log("traces[i*2] is undefined or does not have 'base_y'");
       }
