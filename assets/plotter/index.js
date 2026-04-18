@@ -1193,14 +1193,25 @@ function load_file(file){
       const wb = XLSX.read(data, {type: 'binary'});
       const sheet = wb.Sheets[wb.SheetNames[0]]
       console.log(sheet);
-      for(var n =0; n < 100; n ++ ) {
-        var cell = String.fromCharCode(65 + n);
-        if( sheet[cell.concat("1")] == undefined){
-          header.push('');
-        }else{
-          header.push(sheet[cell.concat("1")].v)
+        function excelColName(n) {
+          let name = "";
+          while (n >= 0) {
+            name = String.fromCharCode((n % 26) + 65) + name;
+            n = Math.floor(n / 26) - 1;
+          }
+          return name;
         }
-      }
+
+        for (var n = 0; n < 100; n++) {
+          var cell = excelColName(n);   // A, B, ..., Z, AA, AB, ...
+          var cellRef = cell + "1";
+
+          if (sheet[cellRef] === undefined) {
+            header.push('');
+          } else {
+            header.push(sheet[cellRef].v);
+          }
+        }
 
       console.log(header) 
 
