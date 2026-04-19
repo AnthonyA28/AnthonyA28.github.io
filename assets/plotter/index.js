@@ -828,23 +828,28 @@ function update(){
 
     // Apply custom x-axis labels if enabled
 
-  if(document.getElementById('custom_x_labels').value.length > 0) {
-    var customText = document.getElementById('custom_x_labels').value;
-
-    if(customText) {
-      var customLabels = customText.split(' ').map(s => s.trim());
-      l.xaxis.ticktext = customLabels;
-      l.xaxis.tickvals = customLabels.map((_, i) => i);
-      l.xaxis.tickmode = 'array';
+    // Apply custom x-axis labels ONLY if checkbox is checked
+    var enableCheckbox = document.getElementById('enable_custom_x_labels');
+    if(enableCheckbox && enableCheckbox.checked) {
+        var customText = document.getElementById('custom_x_labels').value;
+        if(customText && customText.trim()) {
+            var customLabels = customText.split(/\s+/).filter(s => s.length > 0);
+            var numCategories = traces[0]?.x?.length || 0;
+            
+            if(customLabels.length === numCategories) {
+                l.xaxis.ticktext = customLabels;
+                l.xaxis.tickvals = customLabels.map((_, i) => i);
+                l.xaxis.tickmode = 'array';
+            }
+        }
+    } else {
+        // Remove custom tick labels when checkbox is unchecked
+        if(l.xaxis.tickmode === 'array') {
+            delete l.xaxis.ticktext;
+            delete l.xaxis.tickvals;
+            delete l.xaxis.tickmode;
+        }
     }
-  } else {
-    if(l.xaxis.tickmode === 'array') {
-      delete l.xaxis.ticktext;
-      delete l.xaxis.tickvals;
-      delete l.xaxis.tickmode;
-    }
-  }
-
 
   Plotly.relayout(document.getElementById('gd'), l);
 
