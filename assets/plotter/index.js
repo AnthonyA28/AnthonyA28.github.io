@@ -1592,3 +1592,11 @@ document.getElementById('exportData').addEventListener('click', function() {
 document.getElementById('apply_x_labels').addEventListener('click', function() {
   update();
 });
+
+
+// Enable/disable text input based on checkbox
+document.getElementById('enable_custom_x_labels').addEventListener('change', function() {
+    var textInput = document.getElementById('custom_x_labels');
+    textInput.disabled = !this.checked;
+    update();
+});
