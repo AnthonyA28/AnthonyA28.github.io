@@ -269,20 +269,30 @@ function plot(header, data, update_nums=false){
     }
   }
 
-  var index_undefined = 0;
-  for(var j = 0; j< data.length; j +=1){
+var index_undefined = 0;
+for(var j = 0; j < data.length; j +=1){
+    // Check if this is the x-axis column (first column) or a data column
     index_undefined = data[j].length;
-    if( data[j][data[j].length-1] == undefined || isNaN(data[j][data[j].length-1]) || data[j][data[j].length-1] ==''){
-      for(var i =0 ; i < data[j].length; i ++){
-        data[j][i] = parseFloat(data[j][i])
-        if(data[j][i] == undefined || isNaN(data[j][i]) || ( data[j][i] != 0 && data[j][i] == '') ){
-          index_undefined = i
-          break;
+    for(var i = 0; i < data[j].length; i++) {
+        if(data[j][i] === '' || data[j][i] === undefined) {
+            index_undefined = i;
+            break;
         }
-      }
+        // Keep original string, don't parseFloat
     }
-    data[j] = data[j].slice(0, index_undefined)
-  }
+    data[j] = data[j].slice(0, index_undefined);
+    var customlabelStr = '';
+    for(var k = 0; k < data[j].length; k++){
+        if(data[j][k] !== undefined && data[j][k] !== '') {
+            customlabelStr += (customlabelStr ? ' ' : '') + data[j][k];
+        }
+    }
+    var isFirstColumn = (j === 0);
+    if(!isFirstColumn) {
+    } else {
+        document.getElementById('custom_x_labels').value = customlabelStr;
+    }
+}
 
   var headers = []
   i = 0;
@@ -333,8 +343,10 @@ function plot(header, data, update_nums=false){
 
 
   for(var j = 0; j< datas.length; j +=1){
-    datas[j][0] = datas[j][0].map(value => typeof value === 'string' ? parseFloat(value) : value);
+    datas[j][0] = datas[j][0].map((value, idx) => { var num = parseFloat(value); return isNaN(num) ? idx : num; });
     datas[j][1] = datas[j][1].map(value => typeof value === 'string' ? parseFloat(value) : value);
+
+
 
     if( j < traces.length){
       // Around the line where data is assigned to traces
@@ -816,11 +828,11 @@ function update(){
 
     // Apply custom x-axis labels if enabled
 
-  if(document.getElementById('enable_custom_x_labels') && document.getElementById('enable_custom_x_labels').checked) {
+  if(document.getElementById('custom_x_labels').value.length > 0) {
     var customText = document.getElementById('custom_x_labels').value;
-    
+
     if(customText) {
-      var customLabels = customText.split(',').map(s => s.trim());
+      var customLabels = customText.split(' ').map(s => s.trim());
       l.xaxis.ticktext = customLabels;
       l.xaxis.tickvals = customLabels.map((_, i) => i);
       l.xaxis.tickmode = 'array';
@@ -1571,10 +1583,6 @@ document.getElementById('exportData').addEventListener('click', function() {
 
 
 
-document.getElementById('enable_custom_x_labels').addEventListener('change', function() {
-  document.getElementById('custom_x_labels').disabled = !this.checked;
-  update();
-});
 
 document.getElementById('apply_x_labels').addEventListener('click', function() {
   update();

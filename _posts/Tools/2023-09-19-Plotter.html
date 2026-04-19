@@ -54,49 +54,6 @@ section: article
               
         <br>
 
-        <div class="custom-xaxis-container" style="margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 5px;">
-  <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-    <label style="font-weight: bold; margin-right: 5px;">
-      <input type="checkbox" id="enable_custom_x_labels" style="margin-right: 5px;">
-      Custom X-Axis Labels:
-    </label>
-    <input type="text" id="custom_x_labels"  placeholder="e.g., Category A, Category B, Category C, Category D" disabled>
-    <button id="apply_x_labels" class="btn-apply">
-      Apply Labels
-    </button>
-  </div>
-
-</div>
-
-<!-- Optional: Additional formatting options for x-axis -->
-<div class="xaxis-formatting" style="margin: 10px 0; padding: 10px; background: #f9f9f9; border-radius: 5px;">
-  <details>
-    <summary style="cursor: pointer; font-weight: bold; margin-bottom: 8px;">X-Axis Formatting Options</summary>
-    <div style="margin-top: 10px;">
-      <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-        <label>
-          Rotate Labels:
-          <select id="x_tick_angle" style="margin-left: 5px; padding: 5px;">
-            <option value="0">0° (Horizontal)</option>
-            <option value="-45">-45° (Diagonal)</option>
-            <option value="-90">-90° (Vertical)</option>
-            <option value="45">45°</option>
-          </select>
-        </label>
-        
-        <label>
-          Label Font Size:
-          <input type="number" id="x_tick_font_size" value="12" min="8" max="24" step="1" style="width: 60px; margin-left: 5px; padding: 5px;">
-        </label>
-        
-        <label>
-          <input type="checkbox" id="show_x_grid">
-          Show Grid Lines
-        </label>
-      </div>
-    </div>
-  </details>
-</div>
 
         <div ><strong>Update:</strong>
           <div style="margin-left: 20px;">
@@ -107,6 +64,13 @@ section: article
           <br> Size only <input type="checkbox" id="update_size_only_check" >
           </div>
         </div>
+
+  <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+    <input type="text" id="custom_x_labels"  placeholder="e.g., Category A, Category B, Category C, Category D">
+    <button id="apply_x_labels" class="btn-apply">
+      Apply Labels
+    </button>
+  </div>
 
       <strong>Palette:</strong>
       <select id="palettes">
