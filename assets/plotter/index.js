@@ -814,6 +814,25 @@ function update(){
     l.yaxis2.range = y2axisRange
   }
 
+    // Apply custom x-axis labels if enabled
+
+  if(document.getElementById('enable_custom_x_labels') && document.getElementById('enable_custom_x_labels').checked) {
+    var customText = document.getElementById('custom_x_labels').value;
+    
+    if(customText) {
+      var customLabels = customText.split(',').map(s => s.trim());
+      l.xaxis.ticktext = customLabels;
+      l.xaxis.tickvals = customLabels.map((_, i) => i);
+      l.xaxis.tickmode = 'array';
+    }
+  } else {
+    if(l.xaxis.tickmode === 'array') {
+      delete l.xaxis.ticktext;
+      delete l.xaxis.tickvals;
+      delete l.xaxis.tickmode;
+    }
+  }
+
 
   Plotly.relayout(document.getElementById('gd'), l);
 
@@ -1552,3 +1571,11 @@ document.getElementById('exportData').addEventListener('click', function() {
 
 
 
+document.getElementById('enable_custom_x_labels').addEventListener('change', function() {
+  document.getElementById('custom_x_labels').disabled = !this.checked;
+  update();
+});
+
+document.getElementById('apply_x_labels').addEventListener('click', function() {
+  update();
+});
