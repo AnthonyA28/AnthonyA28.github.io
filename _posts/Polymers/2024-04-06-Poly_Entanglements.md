@@ -7,11 +7,11 @@ tags: Polymers
 
 # What are Entanglements 
 
-Recall that polymers consist of large chains of molecules. In some ways, this can be thought of as wet spaghetti or hair—with entangled strands, they turn into a solid. An entanglement is simply a kind of temporary interaction that occurs between neighboring strands. Tangled hair is a good analogy to understand entanglements. Below is a picture of the human biodiversity of hair [^hair]:
+Recall that polymers consist of large chains of molecules. In some ways, this can be thought of as wet spaghetti or hair—with entangled strands, they turn into a solid. An entanglement is simply a kind of physical bond that occurs between neighboring strands. Tangled hair is a good analogy to understand entanglements. Below is a picture of the human biodiversity of hair [^hair]:
 
  ![Images-of-various-types-of-hair-illustrating-their-diversity-in-shape-Type-I-is-classifi](\assets\images\Images-of-various-types-of-hair-illustrating-their-diversity-in-shape-Type-I-is-classifi.png)
 
-Intuitively, we can see that the hair I on the left will have fewer entanglements than hair **V**. Let's say, for the sake of conceptualizing this, hair III seems to have 1 entanglement and hair V has 10. If the strand length in the picture is 10 cm, then we can compute the entanglement length of these hair types.
+Intuitively, we can see that the hair 1 on the left will have fewer entanglements than hair **V**. Let's say, for the sake of conceptualizing this, hair III seems to have 1 entanglement and hair V has 10. If the strand length in the picture is 10 cm, then we can compute the entanglement length of these hair types.
 For hair **III**,  $ L_{E, III} = 10cm $ and for hair **V** we divide the length by the number of entanglements to get  
 
 
@@ -24,7 +24,7 @@ Thus, we can extrapolate that if hair **V** was cut to 1 cm length, then it woul
 
 The amount of entanglements is generally not important. What matters, is that the strands are long enough to be entangled. 
 
- 
+
 # Computing entanglement molecular weight
 ## Computing entanglement molecular weight in polymer melts 
 
