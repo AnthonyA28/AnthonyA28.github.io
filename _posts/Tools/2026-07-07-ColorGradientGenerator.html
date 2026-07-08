@@ -1,0 +1,590 @@
+---
+layout: tool
+title: Color Gradient
+tags: Tools
+---
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Hex Gradient Generator</title>
+<style>
+
+  label {
+    display: block;
+    margin-top: 14px;
+    font-weight: bold;
+  }
+
+  input, select, textarea {
+    padding: 8px;
+    margin-top: 4px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .swatch {
+    height: 80px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    padding: 6px;
+    font-size: 12px;
+    font-family: monospace;
+    color: white;
+    text-shadow: 0 1px 3px black;
+  }
+
+  textarea {
+    margin-top: 20px;
+    height: 160px;
+    font-family: monospace;
+  }
+
+  .hint {
+    font-size: 13px;
+    color: #666;
+  }
+
+
+  .delete-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    transition: background 0.2s, transform 0.1s;
+}
+.delete-btn:hover {
+    background: #ffebe6;
+    transform: scale(1.1);
+}
+
+</style>
+</head>
+<body>
+
+<h1>Hex Gradient Generator</h1>
+
+<label>Start Color</label>
+<div class="row">
+  <input id="color1Picker" type="color" value="#ff0000">
+  <input id="color1Hex" type="text" value="#ff0000">
+</div>
+
+<label>End Color</label>
+<div class="row">
+  <input id="color2Picker" type="color" value="#440154">
+  <input id="color2Hex" type="text" value="#FDE725" placeholder="Optional">
+</div>
+<div class="hint">Leave the end color blank to generate shades from one color.</div>
+
+<label>Number of Colors</label>
+<input id="steps" type="number" min="2" value="4">
+
+<label>Scale</label>
+<select id="scale">
+  <option value="linear">Linear</option>
+  <option value="log">Logarithmic</option>
+  <option value="sqrt">Square Root</option>
+  <option value="easeInOut">Ease In-Out</option>
+</select>
+
+<!-- <label hidden>Brightness (1-5)</label> -->
+<input id="brightness" type="range" min="1" max="5" step="1" value="3" hidden>
+
+<!-- <label hidden>Contrast (1-5)</label> -->
+<input id="contrast" type="range" min="1" max="5" step="1" value="3" hidden>
+
+<!-- <label hidden>Saturation (1-5)</label> -->
+<input id="saturation" type="range" min="1" max="5" step="1" value="3" hidden>
+
+
+<div id="swatches" class="swatches"></div>
+
+<textarea id="output" readonly></textarea>
+
+
+
+<!-- Add this right beneath <h1>Hex Gradient Generator</h1> -->
+<div class="preset-manager" style="margin-bottom: 24px; padding: 12px; border: 1px dashed #ccc; border-radius: 8px;">
+  <label style="margin-top: 0;">Saved Schemes</label>
+  
+  <!-- Custom Dropdown Container -->
+  <div class="custom-select-wrapper" style="position: relative; margin-top: 4px; cursor: pointer;">
+    <div id="dropdownTrigger" style="padding: 10px; border: 1px solid #aaa; border-radius: 6px; background: #fff; display: flex; justify-content: space-between; align-items: center;">
+      <span>Select a saved scheme...</span>
+      <span style="font-size: 10px; color: #666;">▼</span>
+    </div>
+    <div id="dropdownOptions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #aaa; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">
+      <!-- JavaScript will dynamically inject visual rows here -->
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 8px; margin-top: 12px;">
+    <input id="schemeName" type="text" placeholder="Name your color scheme..." style="margin-top: 0; flex: 1;">
+    <button id="saveSchemeBtn" style="padding: 8px 16px; border: none; background: #007bff; color: white; border-radius: 4px; font-weight: bold; cursor: pointer;">Save</button>
+  </div>
+</div>
+
+
+<script>
+let lastUpdate = 0;
+let scheduledUpdate = null;
+
+function normalizeHex(hex) {
+  hex = hex.trim();
+
+  if (!hex) return "";
+
+  if (!hex.startsWith("#")) {
+    hex = "#" + hex;
+  }
+
+  if (/^#[0-9a-fA-F]{3}$/.test(hex)) {
+    hex = "#" + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+  }
+
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex)) {
+    return null;
+  }
+
+  return hex.toLowerCase();
+}
+
+function hexToRgb(hex) {
+  hex = normalizeHex(hex);
+
+  if (!hex) return null;
+
+  hex = hex.replace("#", "");
+
+  return {
+    r: parseInt(hex.substring(0, 2), 16),
+    g: parseInt(hex.substring(2, 4), 16),
+    b: parseInt(hex.substring(4, 6), 16)
+  };
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + [r, g, b]
+    .map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h, s;
+  const l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0;
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)); break;
+      case g: h = ((b - r) / d + 2); break;
+      case b: h = ((r - g) / d + 4); break;
+    }
+
+    h /= 6;
+  }
+
+  return { h, s, l };
+}
+
+function hslToRgb(h, s, l) {
+  let r, g, b;
+
+  if (s === 0) {
+    r = g = b = l;
+  } else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+
+    r = hue2rgb(p, q, h + 1 / 3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1 / 3);
+  }
+
+  return {
+    r: r * 255,
+    g: g * 255,
+    b: b * 255
+  };
+}
+
+function applyScale(t, scale) {
+  if (scale === "log") {
+    return Math.log10(1 + 9 * t);
+  }
+
+  if (scale === "sqrt") {
+    return Math.sqrt(t);
+  }
+
+  if (scale === "easeInOut") {
+    return t < 0.5
+      ? 2 * t * t
+      : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+
+  return t;
+}
+
+function adjustColor(rgb, brightness, contrast, saturation) {
+    // Scale 1-5 inputs to -100 to 100 range
+    const scaledBrightness = (brightness - 3) * 50;
+    const scaledContrast = (contrast - 3) * 50;
+    const scaledSaturation = (saturation - 3) * 50;
+
+    let hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+    
+    // Apply scaled brightness (-100 to 100)
+    hsl.l += scaledBrightness / 100;
+    hsl.l = Math.max(0, Math.min(1, hsl.l));
+    
+    // Apply scaled saturation (-100 to 100)
+    hsl.s += scaledSaturation / 100;
+    hsl.s = Math.max(0, Math.min(1, hsl.s));
+    
+    let adjusted = hslToRgb(hsl.h, hsl.s, hsl.l);
+    
+    // Apply scaled contrast (-100 to 100)
+    const factor = (259 * (scaledContrast + 255)) / (255 * (259 - scaledContrast));
+    adjusted.r = factor * (adjusted.r - 128) + 128;
+    adjusted.g = factor * (adjusted.g - 128) + 128;
+    adjusted.b = factor * (adjusted.b - 128) + 128;
+    
+    return adjusted;
+}
+
+function generateSingleColorRamp(baseRgb, steps, scale) {
+  const colors = [];
+
+  for (let i = 0; i < steps; i++) {
+    const rawT = steps === 1 ? 0 : i / (steps - 1);
+    const t = applyScale(rawT, scale);
+
+    const hsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b);
+
+    hsl.l = 0.15 + t * 0.75;
+
+    const rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
+    colors.push(rgb);
+  }
+
+  return colors;
+}
+
+function generateGradient() {
+  const startHex = normalizeHex(document.getElementById("color1Hex").value);
+  const endHex = normalizeHex(document.getElementById("color2Hex").value);
+
+  if (!startHex) return;
+
+  const color1 = hexToRgb(startHex);
+  const color2 = endHex ? hexToRgb(endHex) : null;
+
+  if (!color1 || endHex === null) return;
+
+  const steps = Math.max(2, parseInt(document.getElementById("steps").value) || 2);
+  const scale = document.getElementById("scale").value;
+  const brightness = parseInt(document.getElementById("brightness").value);
+  const contrast = parseInt(document.getElementById("contrast").value);
+  const saturation = parseInt(document.getElementById("saturation").value);
+
+  const swatches = document.getElementById("swatches");
+  const output = document.getElementById("output");
+
+  swatches.innerHTML = "";
+  const colors = [];
+
+  let rgbColors;
+
+  if (color2) {
+    rgbColors = [];
+
+    for (let i = 0; i < steps; i++) {
+      const rawT = i / (steps - 1);
+      const t = applyScale(rawT, scale);
+
+      rgbColors.push({
+        r: color1.r + (color2.r - color1.r) * t,
+        g: color1.g + (color2.g - color1.g) * t,
+        b: color1.b + (color2.b - color1.b) * t
+      });
+    }
+  } else {
+    rgbColors = generateSingleColorRamp(color1, steps, scale);
+  }
+
+  for (const rgbBase of rgbColors) {
+    const rgb = adjustColor(rgbBase, brightness, contrast, saturation);
+    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+
+    colors.push(hex);
+
+    const div = document.createElement("div");
+    div.className = "swatch";
+    div.style.backgroundColor = hex;
+    div.textContent = hex;
+    swatches.appendChild(div);
+  }
+
+  output.value = colors.join("\n");
+}
+
+function requestGradientUpdate() {
+  const now = Date.now();
+  const elapsed = now - lastUpdate;
+
+  if (elapsed >= 500) {
+    clearTimeout(scheduledUpdate);
+    scheduledUpdate = null;
+    lastUpdate = now;
+    generateGradient();
+  } else if (!scheduledUpdate) {
+    scheduledUpdate = setTimeout(() => {
+      lastUpdate = Date.now();
+      scheduledUpdate = null;
+      generateGradient();
+    }, 500 - elapsed);
+  }
+}
+
+function syncPickerAndHex(pickerId, hexId) {
+  const picker = document.getElementById(pickerId);
+  const hex = document.getElementById(hexId);
+
+  picker.addEventListener("input", () => {
+    hex.value = picker.value;
+    requestGradientUpdate();
+  });
+
+  hex.addEventListener("input", () => {
+    const normalized = normalizeHex(hex.value);
+
+    if (normalized) {
+      picker.value = normalized;
+    }
+
+    requestGradientUpdate();
+  });
+}
+
+syncPickerAndHex("color1Picker", "color1Hex");
+syncPickerAndHex("color2Picker", "color2Hex");
+
+[
+  "steps",
+  "scale",
+  "brightness",
+  "contrast",
+  "saturation"
+].forEach(id => {
+  document.getElementById(id).addEventListener("input", requestGradientUpdate);
+  document.getElementById(id).addEventListener("change", requestGradientUpdate);
+});
+
+generateGradient();
+
+
+
+// --- PRESET ENGINE & LOCAL STORAGE LOGIC ---
+const STORAGE_KEY = "gradient_generator_presets";
+
+// Default core palettes pre-loaded into local system memory
+const DEFAULT_PRESETS = {
+    "Viridis": { color1: "#440154", color2: "#fde725", steps: 5, scale: "linear" },
+    "Magma":   { color1: "#000004", color2: "#fcfdbf", steps: 5, scale: "linear" },
+    "Plasma":  { color1: "#0d0887", color2: "#f0f921", steps: 5, scale: "linear" }
+};
+
+// Retrieve user library or fall back to native system presets
+function getSavedPresets() {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? { ...DEFAULT_PRESETS, ...JSON.parse(stored) } : DEFAULT_PRESETS;
+    } catch(e) {
+        return DEFAULT_PRESETS;
+    }
+}
+
+// Generate the visual markup inside the option dropdown elements
+function renderCustomDropdown() {
+    const presets = getSavedPresets();
+    const container = document.getElementById("dropdownOptions");
+    if (!container) return;
+    container.innerHTML = "";
+    
+    Object.keys(presets).forEach(name => {
+        const p = presets[name];
+        
+        // Option Row Container
+        const optionRow = document.createElement("div");
+        optionRow.style.padding = "10px";
+        optionRow.style.display = "flex";
+        optionRow.style.justifyContent = "space-between";
+        optionRow.style.alignItems = "center";
+        optionRow.style.borderBottom = "1px solid #eee";
+        optionRow.style.cursor = "pointer";
+        
+        // Left Box: Group the text title label
+        const leftBox = document.createElement("span");
+        leftBox.textContent = name;
+        leftBox.style.fontWeight = "bold";
+        leftBox.style.fontSize = "14px";
+        optionRow.appendChild(leftBox);
+
+        // Right Box: Group the ribbon preview and the action button together
+        const rightBox = document.createElement("div");
+        rightBox.style.display = "flex";
+        rightBox.style.alignItems = "center";
+
+        // Color Strip Preview Ribbon 
+        const ribbon = document.createElement("div");
+        ribbon.style.width = "100px";
+        ribbon.style.height = "16px";
+        ribbon.style.borderRadius = "4px";
+        ribbon.style.border = "1px solid #ccc";
+        
+        if (p.color2) {
+            ribbon.style.background = `linear-gradient(to right, ${p.color1}, ${p.color2})`;
+        } else {
+            ribbon.style.backgroundColor = p.color1;
+        }
+        rightBox.appendChild(ribbon);
+
+        // ONLY add a delete button if it's NOT a system default preset
+        if (name !== "Viridis" && name !== "Magma" && name !== "Plasma") {
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "delete-btn";
+            deleteBtn.innerHTML = "🗑️";
+            deleteBtn.title = "Delete this scheme";
+            
+            // Handle deleting the asset item entry
+            deleteBtn.addEventListener("click", (e) => {
+                e.stopPropagation(); // Stops the dropdown row from triggering a profile switch
+                
+                if (confirm(`Are you sure you want to delete "${name}"?`)) {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        const currentPresets = JSON.parse(stored);
+                        delete currentPresets[name]; // Wipe key property element out of collection
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(currentPresets));
+                        
+                        // If the deleted scheme is currently active, reset the display tracker text
+                        const currentTriggerText = document.getElementById("dropdownTrigger").querySelector("span");
+                        if (currentTriggerText.textContent === name) {
+                            currentTriggerText.textContent = "Select a saved scheme...";
+                        }
+                        
+                        renderCustomDropdown(); // Force a fresh panel rebuild repaint
+                    }
+                }
+            });
+            rightBox.appendChild(deleteBtn);
+        }
+
+        optionRow.appendChild(rightBox);
+        
+        // Main row click listener to load the configuration map variables
+        optionRow.addEventListener("click", (e) => {
+            e.stopPropagation();
+            document.getElementById("color1Picker").value = p.color1;
+            document.getElementById("color1Hex").value = p.color1;
+            document.getElementById("color2Picker").value = p.color2 || "#ffffff";
+            document.getElementById("color2Hex").value = p.color2;
+            document.getElementById("steps").value = p.steps;
+            document.getElementById("scale").value = p.scale;
+            
+            document.getElementById("dropdownTrigger").querySelector("span").textContent = name;
+            document.getElementById("dropdownOptions").style.display = "none";
+            
+            generateGradient(); // Repaint current palette grid cells
+        });
+        
+        container.appendChild(optionRow);
+    });
+}
+
+// Global click monitoring to expand/collapse dropdown rows safely
+document.getElementById("dropdownTrigger").addEventListener("click", (e) => {
+    e.stopPropagation();
+    const opts = document.getElementById("dropdownOptions");
+    opts.style.display = opts.style.display === "none" ? "block" : "none";
+});
+
+document.addEventListener("click", () => {
+    document.getElementById("dropdownOptions").style.display = "none";
+});
+
+// Event hook for saving configurations into the browser profile
+document.getElementById("saveSchemeBtn").addEventListener("click", () => {
+    const nameInput = document.getElementById("schemeName");
+    const name = nameInput.value.trim();
+    if (!name) { alert("Please type a name first!"); return; }
+    
+    const userPresets = {};
+    const existing = localStorage.getItem(STORAGE_KEY);
+    if(existing) {
+        Object.assign(userPresets, JSON.parse(existing));
+    }
+    
+    // Snag settings exactly as they appear on configuration components
+    userPresets[name] = {
+        color1: normalizeHex(document.getElementById("color1Hex").value),
+        color2: normalizeHex(document.getElementById("color2Hex").value),
+        steps: parseInt(document.getElementById("steps").value) || 4,
+        scale: document.getElementById("scale").value
+    };
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(userPresets));
+    nameInput.value = ""; // Flush memory
+    renderCustomDropdown(); // Reload list items
+    alert(`"${name}" saved successfully!`);
+});
+
+// Initialize list rows on compile load
+renderCustomDropdown();
+
+</script>
+
+
+</body>
+</html>
