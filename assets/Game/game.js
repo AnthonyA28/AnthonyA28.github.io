@@ -19,10 +19,23 @@ onkeydown = onkeyup = function (e) { g.keypress(e); };
  Global letiables.
  **/
 let CURMAP = 0;
+let NEXT_START_MAP = 0;
+const LEVEL_STARTS = {
+    1: { x: 10, y: 100 },
+    2: { x: 10, y: 100 },
+    3: { x: 10, y: 100 },
+    4: { x: 10, y: 100 },
+    5: { x: 10, y: 100 },
+    6: { x: 10, y: 100 },
+    7: { x: 10, y: 100 },
+    8: { x: 10, y: 100 },
+    9: { x: 10, y: 100 },
+};
 let SCALEW;
 let SCALEH;
 let PAUSED = false;
 let MAPENTITIES;
+let MAPENTITYSPAWNS;
 let mousePos = {
     x: 0,
     y: 0,
@@ -96,6 +109,9 @@ class entity {
     }
 }
 _lastSprFlip = new WeakMap();
+function getLevelStart(map, fallbackY = 100) {
+    return LEVEL_STARTS[map] || { x: 10, y: fallbackY };
+}
 class movable extends entity {
     constructor(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, Z, weight, speed, stillSprite, moveFn) {
         super(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, Z);
@@ -301,6 +317,7 @@ class player extends movable {
             fmap((this.x + SPRIMAGES[this.baseSprite].width) / 8, this.y / 8, CURMAP, 3) ||
             fmap(this.x / 8, (this.y + SPRIMAGES[this.baseSprite].height) / 8, CURMAP, 3) ||
             fmap((this.x + SPRIMAGES[this.baseSprite].width) / 8, (this.y + SPRIMAGES[this.baseSprite].height) / 8, CURMAP, 3)) {
+            NEXT_START_MAP = CURMAP;
             entities = [];
             g.start();
             return;
@@ -315,9 +332,11 @@ class player extends movable {
         }
         if (this.x + SPRIMAGES[this.baseSprite].width >= 511) {
             CURMAP += 1;
-            this.x = 1;
+            let start = getLevelStart(CURMAP, this.y);
+            this.x = start.x;
+            this.y = start.y;
             this.bullets = [];
-            entities = MAPENTITIES[CURMAP];
+            activateMapEntities(CURMAP);
         }
         if (__classPrivateFieldGet(this, _jumping) > 0) {
             let max = 1.80; // representative of the amplitude of this
@@ -461,91 +480,119 @@ function addMovable(x = undefined, y = undefined, baseSprite = 101, lastSprite =
     entities.push(e);
     return entities.length - 1;
 }
+function isEntityTile(tile) {
+    return tile == 0 || tile == 5 || tile == 9 || tile == 10 || tile == 11 || tile == 14 || tile == 17 || tile == 20 || tile == 102;
+}
+function addSpawnedEntity(spawn) {
+    let x = spawn.x * 8;
+    let y = spawn.y * 8;
+    if (spawn.tile == 10) {
+        addMovable(x, y, 10, 10, Infinity, 3, 0, 4);
+    }
+    if (spawn.tile == 102) {
+        addMovable(x, y, 102, 110, 100, 3, 5, 4);
+    }
+    if (spawn.tile == 5) {
+        addMovable(x, y, 5, 6, 100, 3, 5, 4);
+    }
+    if (spawn.tile == 0) {
+        addMovable(x, y, 0, 4, 50, 0, 2, 0);
+    }
+    if (spawn.tile == 11) {
+        addMovable(x, y, 11, 13, 100, 3, 5, 4);
+    }
+    if (spawn.tile == 14) {
+        let e = addMovable(x, y, 14, 16, 100, 3, 5, 4);
+        entities[e].moveFn = function () {
+            if (!this.moveEastWest(this.speed)) {
+                this.speed *= -1;
+                return;
+            }
+            this.moving = true;
+            if (GRAVITY < 0) {
+                this.weight = -1 * Math.abs(this.weight);
+            }
+            else if (GRAVITY > 0) {
+                this.weight = Math.abs(this.weight);
+            }
+        };
+    }
+    if (spawn.tile == 17) {
+        let e = addMovable(x, y, 17, 19, 100, 3, 5, 4);
+        entities[e].moveFn = function () {
+            if (!this.moveEastWest(this.speed)) {
+                this.speed *= -1;
+                return;
+            }
+            this.moving = true;
+            if (GRAVITY < 0) {
+                this.weight = Math.abs(this.weight);
+            }
+            else if (GRAVITY > 0) {
+                this.weight = -1 * Math.abs(this.weight);
+            }
+        };
+    }
+    if (spawn.tile == 20) {
+        addMovable(x, y, 20, 22, 100, -3, 5, 4);
+    }
+    if (spawn.tile == 9) {
+        addMovable(x, y, 9, 9, Infinity, 3, 0, 4);
+    }
+}
+function loadMapEntities(map) {
+    if (MAPENTITIES[map] != undefined) {
+        return MAPENTITIES[map];
+    }
+    let previousEntities = entities;
+    entities = [];
+    for (let i = 0; i < MAPENTITYSPAWNS[map].length; i++) {
+        addSpawnedEntity(MAPENTITYSPAWNS[map][i]);
+    }
+    MAPENTITIES[map] = entities;
+    entities = previousEntities;
+    return MAPENTITIES[map];
+}
+function activateMapEntities(map) {
+    if (PLR && entities) {
+        let playerIndex = entities.indexOf(PLR);
+        if (playerIndex >= 0)
+            entities.splice(playerIndex, 1);
+    }
+    entities = loadMapEntities(map);
+    if (PLR && entities.indexOf(PLR) < 0) {
+        entities.push(PLR);
+    }
+}
 g.pre_parse = function () {
-    MAPENTITIES = [];
+    MAPENTITIES = new Array(MAPS.length);
+    MAPENTITYSPAWNS = new Array(MAPS.length);
+    entities = [];
     for (let map = 0; map < MAPS.length; map++) {
-        entities = [];
-        let x = 0;
-        let y = 0;
-        for (y = 0; y < MAPS[map].length; y++) {
-            for (x = 0; x < MAPS[map][0].length; x++) {
-                if (MAPS[map][y][x] == 10) {
-                    addMovable(x * 8, y * 8, 10, 10, Infinity, 3, 0, 4);
-                    MAPS[map][y][x] = 254;
-                }
-                if (MAPS[map][y][x] == 102) {
-                    addMovable(x * 8, y * 8, 102, 110, 100, 3, 5, 4);
-                    MAPS[map][y][x] = 254;
-                }
-                if (MAPS[map][y][x] == 5) {
-                    addMovable(x * 8, y * 8, 5, 6, 100, 3, 5, 4);
-                    MAPS[map][y][x] = 254;
-                }
-                if (MAPS[map][y][x] == 0) {
-                    addMovable(x * 8, y * 8, 0, 4, 50, 0, 2, 0);
-                    MAPS[map][y][x] = 254;
-                }
-                if (MAPS[map][y][x] == 11) {
-                    addMovable(x * 8, y * 8, 11, 13, 100, 3, 5, 4);
-                    MAPS[map][y][x] = 254;
-                }
-                if (MAPS[map][y][x] == 14) {
-                    let e = addMovable(x * 8, y * 8, 14, 16, 100, 3, 5, 4);
-                    entities[e].moveFn = function () {
-                        if (!this.moveEastWest(this.speed)) {
-                            this.speed *= -1;
-                            return;
-                        }
-                        this.moving = true;
-                        if (GRAVITY < 0) {
-                            this.weight = -1 * Math.abs(this.weight);
-                        }
-                        else if (GRAVITY > 0) {
-                            this.weight = Math.abs(this.weight);
-                        }
-                    };
-                    MAPS[map][y][x] = 254;
-                }
-                if (MAPS[map][y][x] == 17) {
-                    let e = addMovable(x * 8, y * 8, 17, 19, 100, 3, 5, 4);
-                    entities[e].moveFn = function () {
-                        if (!this.moveEastWest(this.speed)) {
-                            this.speed *= -1;
-                            return;
-                        }
-                        this.moving = true;
-                        if (GRAVITY < 0) {
-                            this.weight = Math.abs(this.weight);
-                        }
-                        else if (GRAVITY > 0) {
-                            this.weight = -1 * Math.abs(this.weight);
-                        }
-                    };
-                    MAPS[map][y][x] = 254;
-                }
-                if (MAPS[map][y][x] == 20) {
-                    let e = addMovable(x * 8, y * 8, 20, 22, 100, -3, 5, 4);
-                    MAPS[map][y][x] = 254;
-                }
-                if (MAPS[map][y][x] == 9) {
-                    addMovable(x * 8, y * 8, 9, 9, Infinity, 3, 0, 4);
+        MAPENTITYSPAWNS[map] = [];
+        for (let y = 0; y < MAPS[map].length; y++) {
+            for (let x = 0; x < MAPS[map][0].length; x++) {
+                let tile = MAPS[map][y][x];
+                if (isEntityTile(tile)) {
+                    MAPENTITYSPAWNS[map].push({ tile: tile, x: x, y: y });
                     MAPS[map][y][x] = 254;
                 }
             }
         }
-        MAPENTITIES.push(entities);
     }
 };
 g.init = function () {
     console.log("initializeing g");
     GRAVITY = 4;
-    CURMAP = 0;
-    entities = MAPENTITIES[CURMAP];
+    CURMAP = Math.min(Math.max(NEXT_START_MAP, 0), MAPENTITIES.length - 1);
+    NEXT_START_MAP = 0;
+    entities = loadMapEntities(CURMAP);
     SCALEW = Math.floor(g.CVS.width / MAPIMAGES[0].width);
     SCALEH = Math.floor(g.CVS.height / MAPIMAGES[0].height);
     {
-        let x = 10;
-        let y = 100;
+        let start = getLevelStart(CURMAP);
+        let x = start.x;
+        let y = start.y;
         let baseSprite = 102;
         let lastSprite = 109;
         let flipSpeed = 45;
@@ -567,9 +614,7 @@ g.init = function () {
         let moveFn = function () { };
         PLR = {};
         PLR = new player(x, y, baseSprite, lastSprite, flipSpeed, west, north, danger, 1, weight, speed, stillSprite, moveFn, keyNorth, keySouth, keyEast, keyWest, keyAction1, keyAction2, carrySprite, shootSprite, jumpFrames);
-        for (let i = 0; i < MAPENTITIES.length; i++) {
-            MAPENTITIES[i].push(PLR);
-        }
+        entities.push(PLR);
         // entities.push(PLR);
     }
 };
