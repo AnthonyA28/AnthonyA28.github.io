@@ -30,6 +30,9 @@ const LEVEL_STARTS = {
     7: { x: 10, y: 100 },
     8: { x: 10, y: 100 },
     9: { x: 10, y: 100 },
+    10: { x: 10, y: 100 },
+    11: { x: 10, y: 100 },
+    12: { x: 10, y: 100 },
 };
 let SCALEW;
 let SCALEH;
