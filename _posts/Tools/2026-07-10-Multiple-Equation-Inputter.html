@@ -1,0 +1,179 @@
+---
+layout: tool
+title: Multiple Equation Inputter
+tags: Tools
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Multiple Equation Inputter</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+  <script>window.MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'none'},startup:{typeset:false}};</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root{--blue:#2d70b3;--red:#c74440;--green:#388c46;--purple:#6042a6;--orange:#fa7e19;--black:#222;--line:#ddd;--muted:#777}
+    *{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;font:14px Arial,sans-serif;color:#333;overflow:hidden}
+    body>.post{display:block;width:100%;height:100%;margin:0}
+    body>.post>.content{width:100%;height:100%;margin:0;padding:0;border:0;box-shadow:none;background:#fff;overflow:hidden}
+    .app{--panel-width:390px;--export-width:340px;width:100%;height:100%;height:100dvh;display:grid;grid-template-columns:var(--panel-width) 6px minmax(280px,1fr) 6px var(--export-width);background:#fff}
+    body>.toggle-dark-mode{z-index:20;top:auto;right:108px;bottom:10px;padding:6px 9px;font-size:12px;opacity:.75}
+    .panel{z-index:2;display:flex;min-width:0;flex-direction:column;background:#f7f7f7;border-right:1px solid #bbb;box-shadow:2px 0 8px #0002}
+    .panel-resizer{z-index:4;width:6px;cursor:col-resize;background:transparent;transition:background .12s}.panel-resizer:hover,.panel-resizer.dragging{background:#2d70b3}.app.resizing{user-select:none;cursor:col-resize}
+    .topbar{height:40px;display:flex;align-items:center;gap:8px;padding:0 10px;color:#fff;background:#2d70b3}
+    .logo{font-size:19px;font-weight:bold}.title{font-size:14px}.top-actions{margin-left:auto;display:flex;gap:4px}
+    .icon-btn{width:30px;height:30px;border:0;border-radius:4px;background:transparent;color:inherit;font-size:18px;cursor:pointer}.icon-btn:hover{background:#ffffff26}
+    .header-export{width:auto;padding:0 9px!important;color:#fff!important;border:1px solid #ffffff55!important;font-size:12px!important;white-space:nowrap}.header-export:hover{background:#ffffff26!important}
+    .expressions{flex:1;overflow:auto;background:white}
+    .expression{min-height:58px;display:grid;grid-template-columns:42px 1fr 36px;border-bottom:1px solid #ddd;background:#fff;position:relative}
+    .expression.active{box-shadow:inset 4px 0 var(--row-color)}
+    .expression.invalid{background:#fffafa}
+    .gutter{display:flex;align-items:center;justify-content:center;color:#999;font-size:14px;position:relative}
+    .color{width:22px;height:22px;border:2px solid #fff;border-radius:50%;background:var(--row-color);box-shadow:0 0 0 1px #aaa;cursor:pointer}
+    .color.off{background:#fff}.color.off:after{content:'';display:block;width:20px;border-top:2px solid var(--row-color);transform:translate(1px,10px) rotate(-45deg)}
+    .entry{align-self:center;min-width:0;padding:8px 3px 5px}
+    .equation-wrap{display:flex;align-items:baseline;font:20px Georgia,'Times New Roman',serif}
+    .prefix{margin-right:4px;color:#777;font-style:italic}
+    .equation{display:block;width:100%;min-width:0;border:0!important;box-shadow:none!important;background:transparent;color:#222;font-size:20px;padding:2px 0}.equation.mq-focused{box-shadow:none!important}.equation .mq-empty:after{content:'expression';color:#bbb;font:italic 20px Georgia,serif}.error{height:14px;color:#c74440;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .remove{align-self:center;width:28px;height:28px;border:0;border-radius:50%;background:#ddd;color:#666;font-size:20px;line-height:1;cursor:pointer;opacity:0}
+    .expression:hover .remove,.expression.active .remove{opacity:1}.remove:hover{background:#c74440;color:#fff}
+    .addbar{height:40px;display:flex;align-items:center;border-top:1px solid #ccc;background:#f4f4f4}
+    .add{height:100%;padding:0 17px;border:0;border-right:1px solid #ccc;background:#eee;font-size:25px;color:#555;cursor:pointer}.add:hover{background:#ddd}
+    .hint{padding-left:11px;color:#777;font-size:12px}
+    .graph-wrap{position:relative;min-width:0;background:#fff;cursor:grab;touch-action:none}.graph-wrap.dragging{cursor:grabbing}.graph{width:100%;height:100%;display:block;user-select:none}
+    .zoom{position:absolute;top:12px;right:12px;display:grid;gap:5px}.zoom button,.home{width:36px;height:36px;border:1px solid #bbb;border-radius:4px;background:#fff;color:#555;font-size:22px;box-shadow:0 1px 4px #0002;cursor:pointer}
+    .zoom button:hover,.home:hover{background:#f2f2f2}.home{position:absolute;top:12px;left:12px;font-size:17px}
+    .bounds{position:absolute;left:12px;top:56px;padding:9px;background:#fffffff2;border:1px solid #ccc;border-radius:5px;box-shadow:0 1px 4px #0002;display:none;grid-template-columns:repeat(2,82px);gap:6px;cursor:default}.bounds.open{display:grid}.bounds input{width:82px;padding:5px;border:1px solid #bbb;border-radius:3px}.axis-mode{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:13px}.axis-mode label{display:flex;gap:4px;align-items:center}.axis-mode .intercept-option{grid-column:span 2}.settings{position:absolute;left:56px;top:12px;width:36px;height:36px;border:1px solid #bbb;border-radius:4px;background:#fff;font-size:18px;cursor:pointer}.settings:hover{background:#f2f2f2}
+    .export-toggle{position:absolute;right:12px;top:100px;width:36px;height:36px;border:1px solid #bbb;border-radius:4px;background:#fff;font-size:18px;cursor:pointer;box-shadow:0 1px 4px #0002}.export-toggle:hover{background:#f2f2f2}
+    .export-panel{z-index:2;min-width:0;height:100%;display:flex;flex-direction:column;background:#f8f8f8;border-left:1px solid #bbb;box-shadow:-2px 0 8px #0002;cursor:default}
+    .export-head{height:41px;display:flex;align-items:center;gap:7px;padding:0 10px;background:#fff;border-bottom:1px solid #ccc;font-weight:bold}.export-head select{margin-left:auto;padding:4px;border:1px solid #bbb;border-radius:4px}.export-close{border:0;background:transparent;font-size:21px;cursor:pointer}.export-list{flex:1;overflow:auto;padding:8px}.export-item{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:start;gap:6px;padding:8px 5px;border-bottom:1px solid #ddd}.export-number{color:#888}.export-code{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:13px Consolas,monospace}.equation-actions{grid-column:2;display:flex;gap:5px}.equation-actions button{border:1px solid #bbb;border-radius:4px;background:#fff;padding:4px 6px;font-size:11px;cursor:pointer}.copy-equation.copied{color:#388c46;border-color:#388c46}.export-empty{padding:16px;color:#777;text-align:center}
+    .file-tools{flex:0 0 auto;padding:10px;border-bottom:1px solid #ccc;background:#fff}.file-actions{display:flex;gap:7px}.file-actions button{flex:1;min-height:34px;padding:8px;border:1px solid #aaa;border-radius:4px;background:#fff;cursor:pointer}.file-actions button:first-child{background:#2d70b3;color:#fff;border-color:#2d70b3}.import-box{display:none;margin-top:9px}.import-box.open{display:block}.import-box textarea{display:block;width:100%;height:110px;resize:vertical;padding:8px;border:1px solid #aaa;border-radius:4px;font:13px Consolas,monospace}.import-controls{display:flex;justify-content:flex-end;gap:6px;margin-top:6px}.import-controls button{padding:6px 10px;border:1px solid #aaa;border-radius:4px;background:#fff;cursor:pointer}.import-controls .import-apply{background:#388c46;color:#fff;border-color:#388c46}
+    .saved-sets{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #ddd}.saved-title{margin-bottom:6px;font-weight:bold}.save-row,.load-row{display:flex;gap:6px}.save-row{margin-bottom:6px}.save-row input,.load-row select{min-width:0;flex:1;padding:6px;border:1px solid #aaa;border-radius:4px;background:#fff}.save-row button,.load-row button{padding:6px 9px;border:1px solid #aaa;border-radius:4px;background:#fff;cursor:pointer}.save-row button{background:#388c46;color:#fff;border-color:#388c46}.delete-set{color:#b42318!important}.save-status{height:15px;margin-top:4px;color:#388c46;font-size:11px}
+    @media(max-width:760px){body{overflow:auto}.app{height:auto;min-height:100vh;grid-template-columns:1fr}.panel{height:45vh;border-right:0;border-bottom:1px solid #aaa}.panel-resizer{display:none}.graph-wrap{height:50vh}.export-panel{height:55vh;border-top:1px solid #aaa}}
+  </style>
+</head>
+<body><div class="app">
+  <aside class="panel">
+    <header class="topbar"><span class="logo">∿</span><span class="title">Multiple Equation Inputter</span><span class="top-actions"><button class="icon-btn" id="clearEquations" title="Clear all equations">⌫</button><button class="icon-btn" id="reset" title="Reset">↻</button></span></header>
+    <div class="expressions" id="expressions" aria-label="Expression list"></div>
+    <footer class="addbar"><button class="add" id="add" title="Add expression">＋</button><span class="hint">Enter adds another expression</span></footer>
+  </aside>
+  <div class="panel-resizer" id="panelResizer" role="separator" aria-label="Resize expression panel" aria-orientation="vertical" tabindex="0"></div>
+  <main class="graph-wrap" id="graphWrap">
+    <svg class="graph" id="graph" aria-label="Graph"></svg>
+    <button class="home" id="home" title="Reset view">⌂</button>
+    <div class="zoom"><button id="zoomIn">＋</button><button id="zoomOut">−</button></div>
+    <div class="bounds" id="bounds"><input id="xmin" value="-10" aria-label="minimum x"><input id="xmax" value="10" aria-label="maximum x"><input id="ymin" value="-10" aria-label="minimum y"><input id="ymax" value="10" aria-label="maximum y"><div class="axis-mode"><label><input type="checkbox" id="xlog"> Log x-axis</label><label><input type="checkbox" id="ylog"> Log y-axis</label><label class="intercept-option"><input type="checkbox" id="showIntercepts"> Show intercepts and coordinates</label></div></div>
+    <button class="settings" id="settings" title="Graph settings">⚙</button>
+  </main>
+  <div class="panel-resizer" id="exportResizer" role="separator" aria-label="Resize export panel" aria-orientation="vertical" tabindex="0"></div>
+  <aside class="export-panel" id="exportPanel" aria-label="Equation exports"><header class="export-head"><span>Equation exports</span><select id="exportFormat" aria-label="Export format"><option value="latex">LaTeX</option><option value="word">Word equation</option></select></header><div class="file-tools"><section class="saved-sets"><div class="saved-title">Saved equation sets</div><div class="save-row"><input id="setName" placeholder="Set name" aria-label="Equation set name"><button id="saveSet">Save</button></div><div class="load-row"><select id="savedSetList" aria-label="Saved equation sets"><option value="">No saved sets</option></select><button id="loadSet">Load</button><button class="delete-set" id="deleteSet">Delete</button></div><div class="save-status" id="saveStatus"></div></section><div class="file-actions"><button id="downloadEquations">Download .txt</button><button id="showImport">Import text</button></div><div class="import-box" id="importBox"><textarea id="importText" placeholder="Paste one LaTeX equation per line…" aria-label="Equations to import"></textarea><div class="import-controls"><button id="cancelImport">Cancel</button><button class="import-apply" id="applyImport">Replace equations</button></div></div></div><div class="export-list" id="exportList"></div></aside>
+</div>
+<script>
+  const palette=['#2d70b3','#c74440','#388c46','#6042a6','#fa7e19','#000000'];
+  const list=document.querySelector('#expressions'),svg=document.querySelector('#graph'),wrap=document.querySelector('#graphWrap'),MQ=MathQuill.getInterface(2);
+  let rows=[],view={xmin:-10,xmax:10,ymin:-10,ymax:10},axis={xlog:false,ylog:false,showIntercepts:false},hoverPoints=[];
+  const defaultEquations=['\\alpha=2','\\omega=1.5','\\phi=\\frac{\\pi}{4}','\\alpha\\cdot\\sin\\left(\\omega\\cdot x+\\phi\\right)','0.25\\cdot x^{2}-2','\\sqrt{x+5}','e^{-0.25\\cdot x}\\cdot\\cos\\left(2\\cdot x\\right)'];
+  const uid=()=>crypto.randomUUID?.()||String(Date.now()+Math.random());
+  function newRow(expr=''){return{id:uid(),expr,color:palette[rows.length%palette.length],visible:true,error:''}}
+  function addRow(expr='',focus=true,after=null){const row=newRow(expr),i=after?rows.findIndex(r=>r.id===after)+1:rows.length;rows.splice(i,0,row);mountRow(row,i);renumber();draw();if(focus)requestAnimationFrame(()=>inputFor(row).focus())}
+  function inputFor(row){return list.querySelector(`[data-id="${row.id}"] .equation`).mathField}
+  function mountRow(row,index){
+    const el=document.createElement('div');el.className='expression';el.dataset.id=row.id;el.style.setProperty('--row-color',row.color);
+    el.innerHTML=`<div class="gutter"><button class="color" title="Show or hide expression"></button></div><div class="entry"><div class="equation-wrap"><span class="equation"></span></div><div class="error"></div></div><button class="remove" title="Delete expression">×</button>`;
+    const host=el.querySelector('.equation'),color=el.querySelector('.color');
+    const field=MQ.MathField(host,{spaceBehavesLikeTab:true,autoCommands:'pi tau theta phi sqrt sum prod alpha beta gamma delta lambda mu sigma omega',autoOperatorNames:'sin cos tan sec csc cot log ln abs exp floor ceil round',handlers:{edit:f=>{row.expr=f.latex();validateAll();draw()},enter:()=>addRow('',true,row.id),upOutOf:()=>{const i=rows.indexOf(row);if(i>0)inputFor(rows[i-1]).focus()},downOutOf:()=>{const i=rows.indexOf(row);if(i<rows.length-1)inputFor(rows[i+1]).focus()},deleteOutOf:()=>{const i=rows.indexOf(row);if(!field.latex()&&rows.length>1)removeRow(row,Math.max(0,i-1))}}});host.mathField=field;if(row.expr)field.latex(row.expr);
+    host.addEventListener('focusin',()=>el.classList.add('active'));host.addEventListener('focusout',()=>el.classList.remove('active'));
+    color.addEventListener('click',()=>{row.visible=!row.visible;color.classList.toggle('off',!row.visible);draw()});
+    el.querySelector('.remove').addEventListener('click',()=>removeRow(row));
+    const before=list.children[index];before?list.insertBefore(el,before):list.appendChild(el);validate(row,el)
+  }
+  function removeRow(row,focusIndex){const i=rows.indexOf(row);rows.splice(i,1);list.querySelector(`[data-id="${row.id}"]`).remove();if(!rows.length)addRow('',false);renumber();draw();const target=rows[focusIndex??Math.min(i,rows.length-1)];if(target)inputFor(target).focus()}
+  function renumber(){[...list.children].forEach((el,i)=>el.querySelector('.gutter').dataset.number=i+1)}
+  function latexToMath(s){return s.replace(/\\left|\\right/g,'').replace(/\\cdot|\\times/g,'*').replace(/\\operatorname\{([^}]+)\}/g,'$1').replace(/\\(sin|cos|tan|sec|csc|cot|log|ln|sqrt|exp|abs|floor|ceil)/g,'$1').replace(/\\(pi|tau|theta|phi|alpha|beta|gamma|delta|lambda|mu|sigma|omega)/g,'$1').replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g,'(($1)/($2))').replace(/\^\{([^{}]+)\}/g,'^($1)').replace(/_\{([^{}]+)\}/g,'_($1)').replace(/\{/g,'(').replace(/\}/g,')')}
+  function compile(row){if(!row.expr.trim())return null;return math.compile(latexToMath(row.expr.trim()))}
+  function isDefinition(row){return /^\s*[A-Za-z][A-Za-z0-9_]*\s*=/.test(latexToMath(row.expr))}
+  function buildScopes(){const scope={x:0,pi:Math.PI,e:Math.E},scopes=new Map();for(const row of rows){row.error='';scopes.set(row,{...scope});if(!row.expr.trim())continue;try{const code=compile(row);if(isDefinition(row)){const result=code.evaluate(scope);scopes.set(row,{...scope});if(typeof result==='function')throw Error('Functions are not supported yet')}else code.evaluate(scope)}catch(e){row.error=isDefinition(row)?'Invalid variable definition':'Unknown variable or invalid expression'}}return scopes}
+  function validateAll(){buildScopes();for(const row of rows){const el=list.querySelector(`[data-id="${row.id}"]`);if(!el)continue;el.classList.toggle('invalid',!!row.error);el.querySelector('.error').textContent=row.error}}
+  function validate(){validateAll()}
+  function values(){return['xmin','xmax','ymin','ymax'].map(id=>Number(document.querySelector('#'+id).value))}
+  function niceStep(span){const rough=span/10,p=10**Math.floor(Math.log10(rough)),n=rough/p;return(n<2?1:n<5?2:5)*p}
+  function draw(){
+    const w=wrap.clientWidth||800,h=wrap.clientHeight||600,[xmin,xmax,ymin,ymax]=[view.xmin,view.xmax,view.ymin,view.ymax];svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
+    const tx=x=>axis.xlog?Math.log10(x):x,ty=y=>axis.ylog?Math.log10(y):y;
+    const ux=p=>axis.xlog?10**p:p,uy=p=>axis.ylog?10**p:p;
+    const ax=tx(xmin),bx=tx(xmax),ay=ty(ymin),by=ty(ymax);
+    const sx=x=>((tx(x)-ax)/(bx-ax))*w,sy=y=>h-((ty(y)-ay)/(by-ay))*h,parts=[];
+    const xs=niceStep(xmax-xmin),ys=niceStep(ymax-ymin);
+    const xTicks=axis.xlog?Array.from({length:Math.ceil(bx)-Math.floor(ax)+1},(_,i)=>10**(Math.floor(ax)+i)):Array.from({length:Math.ceil((xmax-Math.ceil(xmin/xs)*xs)/xs)+1},(_,i)=>Math.ceil(xmin/xs)*xs+i*xs);
+    const yTicks=axis.ylog?Array.from({length:Math.ceil(by)-Math.floor(ay)+1},(_,i)=>10**(Math.floor(ay)+i)):Array.from({length:Math.ceil((ymax-Math.ceil(ymin/ys)*ys)/ys)+1},(_,i)=>Math.ceil(ymin/ys)*ys+i*ys);
+    for(const x of xTicks)if(x>=xmin&&x<=xmax)parts.push(`<line x1="${sx(x)}" y1="0" x2="${sx(x)}" y2="${h}" stroke="#ddd"/><text x="${sx(x)+3}" y="${axis.ylog?h-5:Math.min(h-4,Math.max(13,sy(0)+14))}" fill="#888" font-size="11">${+x.toPrecision(6)}</text>`);
+    for(const y of yTicks)if(y>=ymin&&y<=ymax)parts.push(`<line x1="0" y1="${sy(y)}" x2="${w}" y2="${sy(y)}" stroke="#ddd"/><text x="${axis.xlog?3:Math.min(w-30,Math.max(3,sx(0)+4))}" y="${sy(y)-3}" fill="#888" font-size="11">${+y.toPrecision(6)}</text>`);
+    if(ymin<=0&&ymax>=0)parts.push(`<line x1="0" y1="${sy(0)}" x2="${w}" y2="${sy(0)}" stroke="#888" stroke-width="1.5"/>`);if(xmin<=0&&xmax>=0)parts.push(`<line x1="${sx(0)}" y1="0" x2="${sx(0)}" y2="${h}" stroke="#888" stroke-width="1.5"/>`);
+    const scopes=buildScopes(),markers=[];hoverPoints=[];validateAll();rows.filter(r=>r.visible&&r.expr.trim()&&!r.error&&!isDefinition(r)).forEach(r=>{let c;try{c=compile(r)}catch{return}let d='',pen=false,lastY=0,prev=null;const base=scopes.get(r)||{},n=Math.max(500,w);for(let i=0;i<=n;i++){const x=ux(ax+i/n*(bx-ax));let y;try{y=Number(c.evaluate({...base,x}))}catch{y=NaN}const px=sx(x),py=sy(y),ok=Number.isFinite(y)&&(!axis.ylog||y>0)&&Math.abs(py-lastY)<h*.8;if(ok){d+=`${pen?'L':'M'}${px.toFixed(1)},${py.toFixed(1)}`;pen=true;hoverPoints.push({px,py,x,y,color:r.color});if(!axis.ylog&&prev&&prev.y*y<0){const root=prev.x+(x-prev.x)*(-prev.y)/(y-prev.y),rx=sx(root);markers.push({px:rx,py:sy(0),x:root,y:0,color:r.color})}prev={x,y}}else{pen=false;prev=null}lastY=py}if(!axis.xlog&&xmin<=0&&xmax>=0){try{const y0=Number(c.evaluate({...base,x:0}));if(Number.isFinite(y0)&&y0>=ymin&&y0<=ymax&&(!axis.ylog||y0>0))markers.push({px:sx(0),py:sy(y0),x:0,y:y0,color:r.color})}catch{}}parts.push(`<path d="${d}" fill="none" stroke="${r.color}" stroke-width="2.5"/>`)});
+    const unique=[];for(const m of markers)if(!unique.some(u=>Math.hypot(u.px-m.px,u.py-m.py)<5))unique.push(m);if(axis.showIntercepts)for(const m of unique){const label=`(${formatCoord(m.x)}, ${formatCoord(m.y)})`;parts.push(`<g class="intercept"><circle cx="${m.px}" cy="${m.py}" r="4.5" fill="#fff" stroke="${m.color}" stroke-width="2.5"/><text x="${m.px+7}" y="${m.py-7}" fill="#333" font-size="11" paint-order="stroke" stroke="#fff" stroke-width="3">${label}</text></g>`)}parts.push('<g id="hoverMarker" visibility="hidden"></g>');svg.innerHTML=parts.join('');renderExports()
+  }
+  function formatCoord(n){return Math.abs(n)<1e-10?'0':Number(n.toPrecision(5)).toString()}
+  function updateHover(e){if(drag||!hoverPoints.length)return;const rect=svg.getBoundingClientRect(),mx=(e.clientX-rect.left)*(svg.viewBox.baseVal.width/rect.width),my=(e.clientY-rect.top)*(svg.viewBox.baseVal.height/rect.height);let best=null,dist=Infinity;for(const p of hoverPoints){const d=(p.px-mx)**2+(p.py-my)**2;if(d<dist){dist=d;best=p}}const marker=document.querySelector('#hoverMarker');if(!marker||!best||dist>2500){if(marker)marker.setAttribute('visibility','hidden');return}const label=`(${formatCoord(best.x)}, ${formatCoord(best.y)})`,tx=Math.min(svg.viewBox.baseVal.width-105,best.px+10),ty=Math.max(22,best.py-12);marker.setAttribute('visibility','visible');marker.innerHTML=`<circle cx="${best.px}" cy="${best.py}" r="6" fill="${best.color}" stroke="#fff" stroke-width="2"/><rect x="${tx-4}" y="${ty-15}" width="100" height="21" rx="4" fill="#fff" stroke="#aaa"/><text x="${tx+2}" y="${ty}" fill="#222" font-size="12">${label}</text>`}
+  function zoomAt(scale=.8,px=.5,py=.5){for(const [a,b,log,p] of [['xmin','xmax',axis.xlog,px],['ymin','ymax',axis.ylog,1-py]]){let lo=log?Math.log10(view[a]):view[a],hi=log?Math.log10(view[b]):view[b],at=lo+(hi-lo)*p;lo=at+(lo-at)*scale;hi=at+(hi-at)*scale;view[a]=log?10**lo:lo;view[b]=log?10**hi:hi}syncBounds();draw()}
+  function syncBounds(){for(const k of Object.keys(view))document.querySelector('#'+k).value=+view[k].toPrecision(6)}
+  function loadDefaults(){rows=[];list.innerHTML='';for(const equation of defaultEquations)addRow(equation,false)}
+  document.querySelector('#add').onclick=()=>addRow();document.querySelector('#reset').onclick=()=>{view={xmin:-10,xmax:10,ymin:-10,ymax:10};syncBounds();loadDefaults()};
+  document.querySelector('#clearEquations').onclick=()=>{rows=[];list.innerHTML='';addRow('',true)};
+  document.querySelector('#home').onclick=()=>{view=axis.xlog||axis.ylog?{xmin:axis.xlog ? .1:-10,xmax:axis.xlog?100:10,ymin:axis.ylog ? .1:-10,ymax:axis.ylog?100:10}:{xmin:-10,xmax:10,ymin:-10,ymax:10};syncBounds();draw()};document.querySelector('#zoomIn').onclick=()=>zoomAt(.7);document.querySelector('#zoomOut').onclick=()=>zoomAt(1.4);
+  document.querySelector('#settings').onclick=()=>document.querySelector('#bounds').classList.toggle('open');['xmin','xmax','ymin','ymax'].forEach(k=>document.querySelector('#'+k).addEventListener('change',()=>{const n=Number(document.querySelector('#'+k).value);if(Number.isFinite(n))view[k]=n;if(view.xmin<view.xmax&&view.ymin<view.ymax)draw()}));
+  for(const name of ['x','y'])document.querySelector('#'+name+'log').addEventListener('change',e=>{axis[name+'log']=e.target.checked;if(e.target.checked){view[name+'min']=.1;view[name+'max']=100}else{view[name+'min']=-10;view[name+'max']=10}syncBounds();draw()});
+  document.querySelector('#showIntercepts').addEventListener('change',e=>{axis.showIntercepts=e.target.checked;draw()});
+  wrap.addEventListener('wheel',e=>{e.preventDefault();const r=wrap.getBoundingClientRect();zoomAt(Math.exp(e.deltaY*.0015),(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height)},{passive:false});
+  let drag=null;wrap.addEventListener('pointerdown',e=>{if(e.target.closest('button,input,.bounds'))return;drag={x:e.clientX,y:e.clientY,v:{...view}};wrap.setPointerCapture(e.pointerId);wrap.classList.add('dragging')});
+  wrap.addEventListener('pointermove',e=>{updateHover(e);if(!drag)return;const dx=(e.clientX-drag.x)/wrap.clientWidth,dy=(e.clientY-drag.y)/wrap.clientHeight;for(const [a,b,log,d] of [['xmin','xmax',axis.xlog,dx],['ymin','ymax',axis.ylog,-dy]]){let lo=log?Math.log10(drag.v[a]):drag.v[a],hi=log?Math.log10(drag.v[b]):drag.v[b],shift=(hi-lo)*d;view[a]=log?10**(lo-shift):lo-shift;view[b]=log?10**(hi-shift):hi-shift}syncBounds();draw()});
+  wrap.addEventListener('pointerleave',()=>{const marker=document.querySelector('#hoverMarker');if(marker)marker.setAttribute('visibility','hidden')});
+  wrap.addEventListener('pointerup',()=>{drag=null;wrap.classList.remove('dragging')});wrap.addEventListener('pointercancel',()=>{drag=null;wrap.classList.remove('dragging')});
+  const app=document.querySelector('.app'),resizer=document.querySelector('#panelResizer');let panelDrag=null;
+  function resizePanel(width){const right=document.querySelector('.export-panel').getBoundingClientRect().width,max=Math.max(280,window.innerWidth-right-292),next=Math.min(max,Math.max(260,width));app.style.setProperty('--panel-width',next+'px');resizer.setAttribute('aria-valuenow',Math.round(next));draw()}
+  resizer.addEventListener('pointerdown',e=>{panelDrag={start:e.clientX,width:document.querySelector('.panel').getBoundingClientRect().width};resizer.setPointerCapture(e.pointerId);resizer.classList.add('dragging');app.classList.add('resizing')});
+  resizer.addEventListener('pointermove',e=>{if(panelDrag)resizePanel(panelDrag.width+e.clientX-panelDrag.start)});
+  function stopPanelResize(){panelDrag=null;resizer.classList.remove('dragging');app.classList.remove('resizing')}
+  resizer.addEventListener('pointerup',stopPanelResize);resizer.addEventListener('pointercancel',stopPanelResize);
+  resizer.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();resizePanel(document.querySelector('.panel').getBoundingClientRect().width+(e.key==='ArrowRight'?20:-20))}});
+  const exportResizer=document.querySelector('#exportResizer');let exportDrag=null;
+  function resizeExport(width){const left=document.querySelector('.panel').getBoundingClientRect().width,max=Math.max(260,window.innerWidth-left-292),next=Math.min(max,Math.max(260,width));app.style.setProperty('--export-width',next+'px');exportResizer.setAttribute('aria-valuenow',Math.round(next));draw()}
+  exportResizer.addEventListener('pointerdown',e=>{exportDrag={start:e.clientX,width:document.querySelector('.export-panel').getBoundingClientRect().width};exportResizer.setPointerCapture(e.pointerId);exportResizer.classList.add('dragging');app.classList.add('resizing')});
+  exportResizer.addEventListener('pointermove',e=>{if(exportDrag)resizeExport(exportDrag.width-(e.clientX-exportDrag.start))});
+  function stopExportResize(){exportDrag=null;exportResizer.classList.remove('dragging');app.classList.remove('resizing')}
+  exportResizer.addEventListener('pointerup',stopExportResize);exportResizer.addEventListener('pointercancel',stopExportResize);
+  exportResizer.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();resizeExport(document.querySelector('.export-panel').getBoundingClientRect().width+(e.key==='ArrowLeft'?20:-20))}});
+  const exportPanel=document.querySelector('#exportPanel'),exportList=document.querySelector('#exportList'),exportFormat=document.querySelector('#exportFormat');
+  function wordEquation(latex){const greek={pi:'π',tau:'τ',theta:'θ',phi:'φ',alpha:'α',beta:'β',gamma:'γ',delta:'δ',lambda:'λ',mu:'μ',sigma:'σ',omega:'ω'};return latex.replace(/\\left|\\right/g,'').replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g,'($1)/($2)').replace(/\\sqrt\{([^{}]+)\}/g,'sqrt($1)').replace(/\\cdot|\\times/g,'×').replace(/\\operatorname\{([^}]+)\}/g,'$1').replace(/\\(pi|tau|theta|phi|alpha|beta|gamma|delta|lambda|mu|sigma|omega)/g,(_,g)=>greek[g]).replace(/\\(sin|cos|tan|sec|csc|cot|log|ln|exp|abs)/g,'$1').replace(/\^\{([^{}]+)\}/g,'^($1)').replace(/_\{([^{}]+)\}/g,'_($1)').replace(/[{}]/g,'')}
+  function escapeHtml(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+  function renderExports(){if(!exportList)return;const filled=rows.filter(r=>r.expr.trim()),format=exportFormat.value;if(!filled.length){exportList.innerHTML='<div class="export-empty">No equations to export</div>';return}exportList.innerHTML=filled.map(r=>{const value=format==='latex'?r.expr:wordEquation(r.expr),latex=encodeURIComponent(r.expr),number=rows.indexOf(r)+1;return `<div class="export-item"><span class="export-number">${number}</span><pre class="export-code">${escapeHtml(value)}</pre><div class="equation-actions"><button class="copy-equation" data-value="${encodeURIComponent(value)}" title="Copy equation">⧉ Copy</button><button class="download-equation" data-type="svg" data-latex="${latex}" data-number="${number}">SVG</button><button class="download-equation" data-type="jpg" data-latex="${latex}" data-number="${number}">JPG</button></div></div>`}).join('')}
+  exportFormat.onchange=renderExports;
+  function saveBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+  async function waitForMathJax(){for(let i=0;i<100;i++){if(window.MathJax?.startup?.promise&&typeof MathJax.tex2svg==='function'){await MathJax.startup.promise;if(typeof MathJax.tex2svg==='function')return}await new Promise(resolve=>setTimeout(resolve,100))}throw Error('MathJax SVG renderer failed to load')}
+  async function equationSvg(latex){await waitForMathJax();let container;try{container=MathJax.tex2svg(latex,{display:true})}catch(error){throw Error(`Could not typeset equation: ${error.message}`)}const rendered=container?.querySelector?.('svg');if(!rendered)throw Error('MathJax returned no SVG element');const source=rendered.cloneNode(true);source.setAttribute('xmlns','http://www.w3.org/2000/svg');source.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink');source.style.background='transparent';return source}
+  async function downloadEquation(button){const latex=decodeURIComponent(button.dataset.latex),type=button.dataset.type,name=`equation-${button.dataset.number}`;button.disabled=true;const original=button.textContent;button.textContent='…';try{const source=await equationSvg(latex),xml='<?xml version="1.0" encoding="UTF-8"?>'+new XMLSerializer().serializeToString(source);if(type==='svg')saveBlob(new Blob([xml],{type:'image/svg+xml;charset=utf-8'}),name+'.svg');else{const vb=source.getAttribute('viewBox')?.split(/\s+/).map(Number)||[0,0,300,80],aspect=(vb[2]||300)/(vb[3]||80),exWidth=parseFloat(source.getAttribute('width')),exHeight=parseFloat(source.getAttribute('height')),cssW=Number.isFinite(exWidth)?Math.max(80,exWidth*16):240,cssH=Number.isFinite(exHeight)?Math.max(32,exHeight*16):cssW/aspect,scale=2,canvas=document.createElement('canvas');canvas.width=Math.ceil(cssW*scale);canvas.height=Math.ceil(cssH*scale);const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);const url=URL.createObjectURL(new Blob([xml],{type:'image/svg+xml'})),img=new Image();await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url});ctx.drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);await new Promise((resolve,reject)=>canvas.toBlob(blob=>{if(blob){saveBlob(blob,name+'.jpg');resolve()}else reject(Error('JPG conversion failed'))},'image/jpeg',.92))}}catch(error){console.error('Equation download failed:',error);button.disabled=false;button.title=error.message;button.textContent='Error';setTimeout(()=>button.textContent=original,1800);return}button.disabled=false;button.textContent=original}
+  exportList.addEventListener('click',async e=>{const download=e.target.closest('.download-equation');if(download){downloadEquation(download);return}const button=e.target.closest('.copy-equation');if(!button)return;const value=decodeURIComponent(button.dataset.value);try{await navigator.clipboard.writeText(value);button.textContent='✓ Copied';button.classList.add('copied');setTimeout(()=>{button.textContent='⧉ Copy';button.classList.remove('copied')},1200)}catch{button.title='Clipboard access was blocked'}});
+  const importBox=document.querySelector('#importBox'),importText=document.querySelector('#importText');
+  const savedSetList=document.querySelector('#savedSetList'),setName=document.querySelector('#setName'),saveStatus=document.querySelector('#saveStatus'),storageKey='multipleEquationInputter.savedSets';
+  function getSavedSets(){try{return JSON.parse(localStorage.getItem(storageKey)||'{}')}catch{return{}}}
+  function putSavedSets(sets){localStorage.setItem(storageKey,JSON.stringify(sets))}
+  function refreshSavedSets(selected=''){const sets=getSavedSets(),names=Object.keys(sets).sort((a,b)=>a.localeCompare(b));savedSetList.innerHTML='';if(!names.length){savedSetList.add(new Option('No saved sets',''));return}for(const name of names)savedSetList.add(new Option(name,name));savedSetList.value=names.includes(selected)?selected:names[0]}
+  function replaceEquations(equations){rows=[];list.innerHTML='';for(const equation of equations)addRow(equation,false);if(!rows.length)addRow('',false);draw()}
+  function showSaveStatus(message,error=false){saveStatus.textContent=message;saveStatus.style.color=error?'#b42318':'#388c46';clearTimeout(showSaveStatus.timer);showSaveStatus.timer=setTimeout(()=>saveStatus.textContent='',2200)}
+  document.querySelector('#saveSet').onclick=()=>{const name=setName.value.trim(),equations=rows.filter(r=>r.expr.trim()).map(r=>r.expr);if(!name){setName.focus();showSaveStatus('Enter a set name.',true);return}if(!equations.length){showSaveStatus('There are no equations to save.',true);return}try{const sets=getSavedSets();sets[name]=equations;putSavedSets(sets);refreshSavedSets(name);setName.value='';showSaveStatus(`Saved “${name}”.`)}catch{showSaveStatus('Browser storage is unavailable.',true)}};
+  function loadSelectedSet(){const name=savedSetList.value,sets=getSavedSets();if(name&&Array.isArray(sets[name])){replaceEquations(sets[name]);showSaveStatus(`Loaded “${name}”.`)}}
+  document.querySelector('#loadSet').onclick=loadSelectedSet;savedSetList.addEventListener('change',loadSelectedSet);
+  document.querySelector('#deleteSet').onclick=()=>{const name=savedSetList.value;if(!name)return;const sets=getSavedSets();delete sets[name];putSavedSets(sets);refreshSavedSets();showSaveStatus(`Deleted “${name}”.`)};
+  setName.addEventListener('keydown',e=>{if(e.key==='Enter')document.querySelector('#saveSet').click()});
+  document.querySelector('#downloadEquations').onclick=()=>{const text=rows.filter(r=>r.expr.trim()).map(r=>r.expr).join('\n');if(!text)return;const blob=new Blob([text+'\n'],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='equations.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),0)};
+  document.querySelector('#showImport').onclick=()=>{importBox.classList.toggle('open');if(importBox.classList.contains('open'))importText.focus()};
+  document.querySelector('#cancelImport').onclick=()=>{importBox.classList.remove('open');importText.value=''};
+  document.querySelector('#applyImport').onclick=()=>{const equations=importText.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);if(!equations.length){importText.focus();return}replaceEquations(equations);importText.value='';importBox.classList.remove('open')};
+  refreshSavedSets();
+  new ResizeObserver(draw).observe(wrap);loadDefaults();
+</script></body></html>
