@@ -7,7 +7,7 @@ tags: Tools
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Graphing Calculator</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -334,6 +334,7 @@ tags: Tools
   mobileKeypad.querySelector('.keypad-pages').addEventListener('click',e=>{const button=e.target.closest('.keypad-page-nav');if(!button)return;const page=button.dataset.page,grid=mobileKeypad.querySelector('.keypad-grid');grid.classList.toggle('fn-page',page==='functions');grid.classList.toggle('letter-page',page==='letters');grid.classList.toggle('keyboard-page',page==='keyboard');for(const item of mobileKeypad.querySelectorAll('.keypad-page-nav')){const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active))}});
   mobileKeypad.addEventListener('pointerdown',e=>{if(e.target.closest('.keypad-key'))e.preventDefault()});
   mobileKeypad.addEventListener('click',e=>{const key=e.target.closest('.keypad-key');if(!key)return;if(key.dataset.action==='page'){const grid=mobileKeypad.querySelector('.keypad-grid'),page=grid.classList.contains('fn-page')?'letters':grid.classList.contains('letter-page')?'numbers':'functions';grid.classList.toggle('fn-page',page==='functions');grid.classList.toggle('letter-page',page==='letters');key.textContent=page==='functions'?'abc':page==='letters'?'123':'fn';key.setAttribute('aria-pressed',String(page!=='numbers'));key.setAttribute('aria-label',page==='functions'?'Show letter and Greek keys':page==='letters'?'Show number keys':'Show function keys');return}const field=keypadField();if(!field)return;if(key.dataset.action==='finish-command'){if(field.el().querySelector('.mq-latex-command-input'))field.typedText(' ');field.focus();return}if(key.dataset.action==='enter'){const after=activeRow;addRow('',false,after?.id);activeRow=rows[rows.indexOf(after)+1]||rows[rows.length-1];requestAnimationFrame(()=>{keypadTextarea()?.setAttribute('inputmode','none');keypadField()?.focus()});return}if(key.dataset.keystroke)field.keystroke(key.dataset.keystroke);else if(key.dataset.typed!=null)field.typedText(key.dataset.typed);else if(key.dataset.template!=null){field.write(key.dataset.template);field.keystroke('Left')}else if(key.dataset.cmd)field.cmd('\\'+key.dataset.cmd);else if(key.classList.contains('keyboard-key')&&key.dataset.write!=null)field.typedText(key.dataset.write);else if(key.dataset.write!=null)field.write(key.dataset.write);field.focus()});
+  document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});document.addEventListener('gesturechange',e=>e.preventDefault(),{passive:false});document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});let lastTouchEnd=0;document.addEventListener('touchend',e=>{const now=Date.now();if(now-lastTouchEnd<300)e.preventDefault();lastTouchEnd=now},{passive:false});
   migrateSavedSets();seedExampleSets();refreshSavedSets();
   new ResizeObserver(draw).observe(wrap);loadDefaults();updatePanelLayout();
 </script></body></html>
