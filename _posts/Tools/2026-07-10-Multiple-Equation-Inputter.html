@@ -238,11 +238,11 @@ tags: Tools
   function keypadField(){const row=activeRow&&rows.includes(activeRow)?activeRow:rows[rows.length-1];return row?inputFor(row):null}
   function keypadTextarea(){const row=activeRow&&rows.includes(activeRow)?activeRow:rows[rows.length-1];return row?list.querySelector(`[data-id="${row.id}"] textarea`):null}
   function isMobileInputDevice(){return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
-  function setEquationKeyboardPolicy(textarea){if(!textarea)return;const suppress=isMobileInputDevice();textarea.toggleAttribute('readonly',suppress);if(suppress){textarea.setAttribute('inputmode','none');textarea.setAttribute('virtualkeyboardpolicy','manual')}else{textarea.removeAttribute('inputmode');textarea.removeAttribute('virtualkeyboardpolicy')}}
+  function setEquationKeyboardPolicy(textarea){if(!textarea)return;const suppress=isMobileInputDevice()&&mobileKeypad.classList.contains('open');textarea.toggleAttribute('readonly',suppress);if(suppress){textarea.setAttribute('inputmode','none');textarea.setAttribute('virtualkeyboardpolicy','manual')}else{textarea.removeAttribute('inputmode');textarea.removeAttribute('virtualkeyboardpolicy')}}
   function setKeypadOpen(open){
     mobileKeypad.classList.toggle('open',open);mobileKeypad.setAttribute('aria-hidden',String(!open));keypadToggle.setAttribute('aria-expanded',String(open));keypadToggle.title=open?'Close numeric keypad':'Open numeric keypad';
     app.classList.toggle('keypad-open',open);updatePanelLayout();
-    const field=keypadField(),textarea=keypadTextarea();setEquationKeyboardPolicy(textarea);
+    const field=keypadField(),textarea=keypadTextarea();setEquationKeyboardPolicy(textarea);if(open){textarea?.blur();navigator.virtualKeyboard?.hide?.()}
     if(open)requestAnimationFrame(()=>field?.focus())
   }
   keypadToggle.addEventListener('click',()=>setKeypadOpen(!mobileKeypad.classList.contains('open')));document.querySelector('#keypadClose').addEventListener('click',()=>setKeypadOpen(false));
