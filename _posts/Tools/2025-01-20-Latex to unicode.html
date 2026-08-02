@@ -29,6 +29,28 @@ tags: Tools
             padding: 10px;
             cursor: pointer;
         }
+        .greek-reference {
+            margin-top: 30px;
+            max-width: 600px;
+        }
+        .greek-reference table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .greek-reference th,
+        .greek-reference td {
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .greek-reference th {
+            background: #f3f3f3;
+        }
+        .greek-reference td:nth-child(2),
+        .greek-reference td:nth-child(3) {
+            font-size: 1.2em;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -44,19 +66,75 @@ tags: Tools
     <script>
 
 
-    const greekMap = {
-        "\\alpha": "α", "\\beta": "β", "\\gamma": "γ", "\\delta": "δ", "\\epsilon": "ε",
-        "\\eta": "η", "\\theta": "θ", "\\iota": "ι", "\\kappa": "κ", "\\zeta": "ζ",
-        "\\mu": "μ", "\\nu": "ν", "\\xi": "ξ", "\\omicron": "ο", "\\pi": "π",
-        "\\rho": "ρ", "\\lambda": "λ", "\\tau": "τ", "\\upsilon": "υ", "\\sigma": "σ",
-        "\\chi": "χ", "\\psi": "ψ", "\\omega": "ω", "\\phi": "φ", "\\cdot": "⋅",
-        "\\Alpha": "Α", "\\Beta": "Β", "\\Gamma": "Γ", "\\Delta": "Δ", "\\Epsilon": "ϵ",
-        "\\Eta": "Η", "\\Theta": "ϴ", "\\Iota": "Ι", "\\Kappa": "Κ", "\\Zeta": "Ζ",
-        "\\Mu": "Μ", "\\Nu": "Ν", "\\Xi": "Ξ", "\\Omicron": "Ο", "\\Pi": "Π",
-        "\\Rho": "Ρ", "\\Lambda": "Λ", "\\Tau": "Τ", "\\Upsilon": "Υ", "\\Sigma": "Σ",
-        "\\Chi": "Χ", "\\Psi": "Ψ", "\\Omega": "Ω", "\\Phi": "Φ", "\\cdot": "⋅","<": "<sub></sub>", ">": "<sup></sup>"
-    };
+const greekMap = {
+    // Lowercase Greek letters
+    "\\alpha": "α",
+    "\\beta": "β",
+    "\\gamma": "γ",
+    "\\delta": "δ",
+    "\\epsilon": "ε",
+    "\\zeta": "ζ",
+    "\\eta": "η",
+    "\\theta": "θ",
+    "\\iota": "ι",
+    "\\kappa": "κ",
+    "\\lambda": "λ",
+    "\\mu": "μ",
+    "\\nu": "ν",
+    "\\xi": "ξ",
+    "\\omicron": "ο",
+    "\\pi": "π",
+    "\\rho": "ρ",
+    "\\sigma": "σ",
+    "\\tau": "τ",
+    "\\upsilon": "υ",
+    "\\phi": "φ",
+    "\\chi": "χ",
+    "\\psi": "ψ",
+    "\\omega": "ω",
 
+    // Uppercase Greek letters
+    "\\Alpha": "Α",
+    "\\Beta": "Β",
+    "\\Gamma": "Γ",
+    "\\Delta": "Δ",
+    "\\Epsilon": "Ε",
+    "\\Zeta": "Ζ",
+    "\\Eta": "Η",
+    "\\Theta": "Θ",
+    "\\Iota": "Ι",
+    "\\Kappa": "Κ",
+    "\\Lambda": "Λ",
+    "\\Mu": "Μ",
+    "\\Nu": "Ν",
+    "\\Xi": "Ξ",
+    "\\Omicron": "Ο",
+    "\\Pi": "Π",
+    "\\Rho": "Ρ",
+    "\\Sigma": "Σ",
+    "\\Tau": "Τ",
+    "\\Upsilon": "Υ",
+    "\\Phi": "Φ",
+    "\\Chi": "Χ",
+    "\\Psi": "Ψ",
+    "\\Omega": "Ω",
+
+    // Common Greek variants
+    "\\varepsilon": "ϵ",
+    "\\vartheta": "ϑ",
+    "\\varkappa": "ϰ",
+    "\\varpi": "ϖ",
+    "\\varrho": "ϱ",
+    "\\varsigma": "ς",
+    "\\varphi": "ϕ",
+
+    // Mathematical symbols
+    "\\cdot": "⋅",
+
+    // Formatting markers
+    "<": "<sub></sub>",
+    ">": "<sup></sup>"
+};
 
 function convertLatexToHtml(latex) {
     const superscriptRegex = /\^(\{.*?\}|.)/;
@@ -156,5 +234,43 @@ function convertHtmlToLatex(html) {
   }
 
 </script>
+    <section class="greek-reference" aria-labelledby="greek-reference-title">
+        <h3 id="greek-reference-title">Greek letter reference</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Greek letter</th>
+                    <th scope="col">Lowercase</th>
+                    <th scope="col">Uppercase</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Alpha</td><td>&#945;</td><td>&#913;</td></tr>
+                <tr><td>Beta</td><td>&#946;</td><td>&#914;</td></tr>
+                <tr><td>Gamma</td><td>&#947;</td><td>&#915;</td></tr>
+                <tr><td>Delta</td><td>&#948;</td><td>&#916;</td></tr>
+                <tr><td>Epsilon</td><td>&#949;</td><td>&#917;</td></tr>
+                <tr><td>Zeta</td><td>&#950;</td><td>&#918;</td></tr>
+                <tr><td>Eta</td><td>&#951;</td><td>&#919;</td></tr>
+                <tr><td>Theta</td><td>&#952;</td><td>&#920;</td></tr>
+                <tr><td>Iota</td><td>&#953;</td><td>&#921;</td></tr>
+                <tr><td>Kappa</td><td>&#954;</td><td>&#922;</td></tr>
+                <tr><td>Lambda</td><td>&#955;</td><td>&#923;</td></tr>
+                <tr><td>Mu</td><td>&#956;</td><td>&#924;</td></tr>
+                <tr><td>Nu</td><td>&#957;</td><td>&#925;</td></tr>
+                <tr><td>Xi</td><td>&#958;</td><td>&#926;</td></tr>
+                <tr><td>Omicron</td><td>&#959;</td><td>&#927;</td></tr>
+                <tr><td>Pi</td><td>&#960;</td><td>&#928;</td></tr>
+                <tr><td>Rho</td><td>&#961;</td><td>&#929;</td></tr>
+                <tr><td>Sigma</td><td>&#963;</td><td>&#931;</td></tr>
+                <tr><td>Tau</td><td>&#964;</td><td>&#932;</td></tr>
+                <tr><td>Upsilon</td><td>&#965;</td><td>&#933;</td></tr>
+                <tr><td>Phi</td><td>&#966;</td><td>&#934;</td></tr>
+                <tr><td>Chi</td><td>&#967;</td><td>&#935;</td></tr>
+                <tr><td>Psi</td><td>&#968;</td><td>&#936;</td></tr>
+                <tr><td>Omega</td><td>&#969;</td><td>&#937;</td></tr>
+            </tbody>
+        </table>
+    </section>
 </body>
 </html>
