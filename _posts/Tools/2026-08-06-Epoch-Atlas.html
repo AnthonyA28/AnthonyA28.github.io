@@ -1,0 +1,1942 @@
+---
+title: Epoch Atlas
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0c1b20">
+  <title>Epoch Atlas | Territories through time</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #0c1b20;
+      --ink-2: #13282e;
+      --ink-3: #1b3439;
+      --paper: #f1eadb;
+      --paper-2: #d9cfba;
+      --muted: #9eb0ae;
+      --line: #315057;
+      --gold: #d4a85e;
+      --gold-bright: #f0c979;
+      --sea: #173941;
+      --jade: #72a79a;
+      --danger: #df8f72;
+      --header-h: 66px;
+      --timeline-h: 116px;
+      --inspector-w: 334px;
+      --inspector-compact-w: 50px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { background: var(--ink); color: var(--paper); font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body > .post, body > .post > .content { display: block; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    [hidden] { display: none !important; }
+    .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+    :focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 3px; }
+
+    .app {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: var(--header-h) minmax(0, 1fr) var(--timeline-h);
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    .appbar {
+      position: relative;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: minmax(210px, auto) minmax(220px, 580px) minmax(160px, auto);
+      align-items: center;
+      gap: 24px;
+      padding: 0 22px;
+      border-bottom: 1px solid #385057;
+      background: #0a181ceF;
+      box-shadow: 0 10px 30px #02090b45;
+      backdrop-filter: blur(14px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-mark { position: relative; width: 35px; height: 35px; flex: 0 0 auto; border: 1px solid #caa86699; border-radius: 50%; }
+    .brand-mark::before, .brand-mark::after { content: ""; position: absolute; inset: 6px; border: 1px solid #d5ba84aa; border-radius: 50%; }
+    .brand-mark::after { inset: 4px 16px; border-radius: 0; border-width: 0 1px; }
+    .brand-mark i { position: absolute; left: 4px; right: 4px; top: 16px; height: 1px; background: #d5ba84aa; transform: rotate(-18deg); }
+    .brand strong { display: block; font: 700 17px/1.05 Georgia, "Times New Roman", serif; letter-spacing: .12em; white-space: nowrap; }
+    .brand small { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; letter-spacing: .15em; text-transform: uppercase; white-space: nowrap; }
+
+    .search { position: relative; width: 100%; }
+    .search-icon { position: absolute; z-index: 1; left: 14px; top: 50%; width: 14px; height: 14px; border: 1.8px solid #a9b7b4; border-radius: 50%; transform: translateY(-57%); pointer-events: none; }
+    .search-icon::after { content: ""; position: absolute; width: 6px; height: 1.8px; right: -5px; bottom: -3px; background: #a9b7b4; transform: rotate(45deg); }
+    .search input { width: 100%; height: 40px; padding: 0 46px 0 40px; border: 1px solid #3b555b; border-radius: 9px; outline: 0; background: #14282de8; color: #f4eee2; box-shadow: inset 0 1px 0 #ffffff08; }
+    .search input::placeholder { color: #849795; }
+    .search input:focus { border-color: #d4a85eb5; box-shadow: 0 0 0 3px #d4a85e18; }
+    .search-clear { position: absolute; z-index: 2; right: 7px; top: 6px; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: #a9b7b4; cursor: pointer; font-size: 18px; }
+    .search-clear:hover { background: #ffffff0d; color: #fff; }
+    .search-results { position: absolute; z-index: 40; top: 46px; left: 0; right: 0; max-height: min(430px, 60vh); margin: 0; padding: 6px; overflow: auto; border: 1px solid #4a6267; border-radius: 10px; background: #102227f5; box-shadow: 0 18px 45px #020708a8; list-style: none; backdrop-filter: blur(16px); }
+    .search-option { width: 100%; display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px; background: transparent; text-align: left; cursor: pointer; }
+    .search-option:hover, .search-option.active { background: #ffffff0c; }
+    .result-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--result-color, var(--gold)); box-shadow: 0 0 0 2px #ffffff12; }
+    .result-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .result-meta { color: #91a29f; font-size: 10px; white-space: nowrap; }
+    .search-empty { padding: 14px 12px; color: var(--muted); text-align: center; font-size: 12px; }
+
+    .app-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+    .quiet-button { min-height: 36px; padding: 0 12px; border: 1px solid #3a5359; border-radius: 8px; background: #14272c; color: #d7dfda; cursor: pointer; }
+    .quiet-button:hover { border-color: #657b7f; background: #1a3035; }
+    .source-pulse { width: 7px; height: 7px; display: inline-block; margin-right: 7px; border-radius: 50%; background: var(--jade); box-shadow: 0 0 0 4px #72a79a18; vertical-align: 1px; }
+    .theme-picker { position: relative; }
+    .theme-toggle { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .theme-icon { display: inline-flex; align-items: center; gap: 2px; }
+    .theme-icon i { width: 5px; height: 12px; display: block; border-radius: 999px; background: var(--gold); }
+    .theme-icon i:nth-child(2) { height: 16px; background: var(--jade); }
+    .theme-icon i:nth-child(3) { background: var(--paper-2); }
+    .theme-menu { position: absolute; z-index: 60; top: calc(100% + 10px); right: 0; width: min(248px, calc(100vw - 18px)); padding: 7px; border: 1px solid var(--border-soft, #4a6267); border-radius: 11px; background: var(--surface-floating, #102227f5); box-shadow: 0 18px 45px var(--shadow-color, #020708a8); backdrop-filter: blur(16px); }
+    .theme-menu::before { content: ""; position: absolute; top: -5px; right: 18px; width: 9px; height: 9px; border-top: 1px solid var(--border-soft, #4a6267); border-left: 1px solid var(--border-soft, #4a6267); background: var(--surface-floating, #102227f5); transform: rotate(45deg); }
+    .theme-menu-label { margin: 4px 7px 6px; color: var(--text-faint, #849795); font-size: 8px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .theme-option { position: relative; width: 100%; min-height: 46px; display: grid; grid-template-columns: 48px minmax(0, 1fr) 18px; align-items: center; gap: 10px; padding: 6px 8px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--text-main, #f1eadb); text-align: left; cursor: pointer; }
+    .theme-option:hover, .theme-option[aria-checked="true"] { border-color: var(--border-main, #385057); background: var(--surface-subtle, #ffffff08); }
+    .theme-option strong { display: block; font-size: 11px; }
+    .theme-option small { display: block; margin-top: 2px; color: var(--text-muted, #9eb0ae); font-size: 9px; }
+    .theme-check { color: var(--accent-bright, #f0c979); font-size: 14px; opacity: 0; }
+    .theme-option[aria-checked="true"] .theme-check { opacity: 1; }
+    .theme-swatches { display: flex; align-items: center; }
+    .theme-swatches i { width: 18px; height: 24px; display: block; margin-left: -4px; border: 1px solid #0003; border-radius: 5px; box-shadow: 0 2px 5px #0002; }
+    .theme-swatches i:first-child { margin-left: 0; background: var(--swatch-1); }
+    .theme-swatches i:nth-child(2) { background: var(--swatch-2); }
+    .theme-swatches i:nth-child(3) { background: var(--swatch-3); }
+    .theme-option[data-theme-option="night"] { --swatch-1: #17383f; --swatch-2: #b76f57; --swatch-3: #b48b4f; }
+    .theme-option[data-theme-option="parchment"] { --swatch-1: #c4d5cd; --swatch-2: #b95d4c; --swatch-3: #c28a3b; }
+    .theme-option[data-theme-option="oceanic"] { --swatch-1: #0a3048; --swatch-2: #e47c61; --swatch-3: #56b59f; }
+    .theme-option[data-theme-option="contrast"] { --swatch-1: #151515; --swatch-2: #f2f2f2; --swatch-3: #ffd800; }
+    .header-collapse { position: absolute; z-index: 4; left: 50%; bottom: -23px; width: 48px; height: 23px; display: grid; place-items: center; padding: 1px 0 0; border: 1px solid #455c61; border-top: 0; border-radius: 0 0 9px 9px; background: #0b1c21ed; color: #b7c4c0; box-shadow: 0 7px 16px #02090b45; cursor: pointer; transform: translateX(-50%); font-size: 16px; line-height: 1; }
+    .header-collapse:hover { border-color: #8f7750; color: var(--gold-bright); }
+
+    body.header-collapsed { --header-h: 0px; }
+    body.header-collapsed .appbar { gap: 0; padding: 0; border-bottom-color: transparent; background: transparent; box-shadow: none; backdrop-filter: none; }
+    body.header-collapsed .appbar > :not(.header-collapse) { display: none; }
+
+    .workspace { position: relative; min-width: 0; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) var(--inspector-w); overflow: hidden; transition: grid-template-columns .2s ease; }
+    .map-stage { position: relative; min-width: 0; min-height: 0; overflow: hidden; isolation: isolate; background: var(--sea); }
+    #mapCanvas { width: 100%; height: 100%; display: block; outline: 0; touch-action: none; cursor: grab; }
+    #mapCanvas:focus-visible { outline: 3px solid var(--gold-bright); outline-offset: -4px; }
+    #mapCanvas.dragging { cursor: grabbing; }
+    #mapCanvas.has-hover { cursor: pointer; }
+    .map-vignette { position: absolute; z-index: 2; inset: 0; pointer-events: none; box-shadow: inset 0 0 100px #07151988, inset 0 -30px 70px #06121552; }
+    .map-vignette::after { content: ""; position: absolute; inset: 0; opacity: .12; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.24'/%3E%3C/svg%3E"); mix-blend-mode: soft-light; }
+
+    .map-tools { position: absolute; z-index: 5; top: 18px; right: 18px; display: grid; gap: 7px; }
+    .tool-stack { display: grid; overflow: hidden; border: 1px solid #66777a66; border-radius: 9px; background: #0c1d22e8; box-shadow: 0 10px 26px #02090b66; backdrop-filter: blur(10px); }
+    .tool-stack button { width: 42px; height: 42px; padding: 0; border: 0; border-bottom: 1px solid #50656a66; background: transparent; cursor: pointer; font-size: 19px; }
+    .tool-stack button:last-child { border-bottom: 0; }
+    .tool-stack button:hover, .tool-stack button[aria-pressed="true"] { background: #d4a85e1d; color: var(--gold-bright); }
+    .labels-button { font-size: 12px !important; font-weight: 800; letter-spacing: .05em; }
+
+    .map-status { position: absolute; z-index: 6; left: 20px; bottom: 16px; display: flex; align-items: center; gap: 9px; min-height: 32px; max-width: min(520px, calc(100% - 90px)); padding: 6px 10px; border: 1px solid #66777a54; border-radius: 8px; background: #0b1b20dc; color: #b9c7c4; box-shadow: 0 8px 22px #030a0c55; font-size: 10px; backdrop-filter: blur(9px); }
+    .map-status a { color: #e3c681; }
+    .spinner { width: 13px; height: 13px; flex: 0 0 auto; border: 2px solid #7e949155; border-top-color: var(--gold-bright); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 1.8s; } }
+
+    .tooltip { position: absolute; z-index: 10; min-width: 150px; max-width: 260px; padding: 9px 11px; border: 1px solid #d3bf8870; border-radius: 8px; background: #09181ded; color: #f4edde; box-shadow: 0 12px 26px #02090ba6; pointer-events: none; transform: translate(12px, 12px); backdrop-filter: blur(9px); }
+    .tooltip strong { display: block; font: 600 14px/1.25 Georgia, "Times New Roman", serif; }
+    .tooltip span { display: block; margin-top: 3px; color: #a9b9b6; font-size: 10px; }
+
+    .toast { position: absolute; z-index: 18; left: 50%; bottom: 18px; max-width: min(520px, calc(100% - 32px)); padding: 9px 14px; border: 1px solid #d3bf8870; border-radius: 999px; background: #0a1a1fed; color: #f2eadb; box-shadow: 0 12px 30px #02070988; opacity: 0; transform: translate(-50%, 12px); transition: opacity .18s, transform .18s; pointer-events: none; text-align: center; font-size: 12px; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .inspector { position: relative; min-width: 0; min-height: 0; overflow: visible; border-left: 1px solid #364e54; background: linear-gradient(165deg, #12262b 0%, #0b1b20 70%); }
+    .inspector-inner { width: 100%; height: 100%; min-height: 0; padding: 19px 18px 24px; overflow: auto; scrollbar-color: #526a6e #0b1b20; transition: opacity .14s ease; }
+    .inspector-desktop-toggle { position: absolute; z-index: 4; top: 18px; left: -17px; width: 34px; height: 34px; display: grid; place-items: center; padding: 0; border: 1px solid #596f72; border-radius: 50%; background: #102429; color: #e6d8b8; box-shadow: 0 7px 18px #02090b88; cursor: pointer; font-size: 22px; line-height: 1; transition: left .2s, transform .2s, background .15s; }
+    .inspector-desktop-toggle:hover { border-color: #b49359; background: #1a3338; color: var(--gold-bright); }
+    .inspector-rail { display: none; height: 100%; align-items: center; justify-content: center; padding-top: 54px; color: #8fa29f; font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; writing-mode: vertical-rl; }
+    .inspector-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    .inspector-kicker { color: #91a5a2; font-size: 9px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .inspector-close { display: none; width: 36px; height: 36px; padding: 0; border: 1px solid #3c555b; border-radius: 8px; background: #172c31; cursor: pointer; font-size: 19px; }
+    .inspector h2 { margin: 5px 0 0; color: #f3ecdf; font: 600 25px/1.1 Georgia, "Times New Roman", serif; }
+    .inspector p { color: #aebdb9; }
+    .intro { margin: 0 0 21px; font-size: 12px; line-height: 1.6; }
+    .section-label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 19px 0 9px; color: #8fa29f; font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    .section-label output { color: #c5d1cd; font-size: 10px; letter-spacing: 0; text-transform: none; }
+
+    .era-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+    .era-button { min-height: 54px; padding: 8px 9px; border: 1px solid #354f55; border-radius: 8px; background: #ffffff05; cursor: pointer; text-align: left; }
+    .era-button:hover { border-color: #9b8357; background: #d4a85e0b; }
+    .era-button strong { display: block; color: #e9e2d5; font-size: 11px; }
+    .era-button small { display: block; margin-top: 3px; color: #8fa3a0; font-size: 9px; }
+
+    .territory-list { display: grid; gap: 4px; }
+    .territory-list button { width: 100%; display: grid; grid-template-columns: 9px minmax(0, 1fr) auto; align-items: center; gap: 8px; min-height: 36px; padding: 6px 8px; border: 0; border-radius: 6px; background: transparent; cursor: pointer; text-align: left; }
+    .territory-list button:hover { background: #ffffff0a; }
+    .territory-list i { width: 7px; height: 7px; border-radius: 50%; background: var(--territory-color); }
+    .territory-list span { overflow: hidden; color: #d9e0dc; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+    .territory-list small { color: #7f9390; font-size: 9px; }
+
+    .selected-swatch { width: 100%; height: 5px; margin: -8px 0 18px; border-radius: 5px; background: var(--selected-color, var(--gold)); box-shadow: 0 0 18px color-mix(in srgb, var(--selected-color, var(--gold)) 30%, transparent); }
+    .selected-title { margin: 0 !important; font-size: 29px !important; }
+    .selected-subtitle { margin: 7px 0 17px; color: #aab9b6; font-size: 11px; }
+    .fact-list { margin: 0; border-top: 1px solid #30494f; }
+    .fact { display: grid; grid-template-columns: 105px minmax(0, 1fr); gap: 12px; padding: 11px 0; border-bottom: 1px solid #30494f; }
+    .fact dt { color: #849996; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .fact dd { margin: 0; color: #dce3df; font-size: 11px; text-align: right; }
+    .confidence { display: inline-flex; align-items: center; justify-content: flex-end; gap: 7px; }
+    .confidence i { width: 26px; height: 0; border-top: 2px solid #d9ca9d; }
+    .confidence.precision-1 i { border-top-style: dashed; opacity: .65; }
+    .confidence.precision-2 i { border-top-style: dashed; }
+    .selected-actions { display: grid; grid-template-columns: 1fr auto; gap: 7px; margin-top: 16px; }
+    .selected-actions button { min-height: 39px; padding: 0 11px; border: 1px solid #4b6368; border-radius: 8px; background: #172d32; cursor: pointer; font-size: 11px; }
+    .selected-actions button.primary { border-color: #9a7d49; background: #71582d; }
+    .selected-actions button:hover { filter: brightness(1.13); }
+    .selection-note { margin: 16px 0 0; padding: 10px 11px; border-left: 2px solid #b38b4c; background: #d4a85e0a; color: #9fadaa !important; font-size: 10px; }
+
+    .legend { margin: 18px 0 0; padding: 12px; border: 1px solid #304a50; border-radius: 9px; background: #07181c4a; }
+    .legend strong { display: block; margin-bottom: 8px; color: #d7dfda; font-size: 10px; }
+    .legend-row { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 9px; margin-top: 7px; color: #8fa29f; font-size: 9px; }
+    .legend-line { border-top: 2px solid #c8bd9c; }
+    .legend-line.medium { border-top-style: dashed; }
+    .legend-line.fuzzy { border-top-style: dashed; opacity: .45; }
+
+    .inspector-toggle { display: none; position: absolute; z-index: 7; right: 14px; bottom: 14px; min-height: 42px; padding: 0 13px; border: 1px solid #a98c5c88; border-radius: 9px; background: #0b1c21e8; color: #f0e8d9; box-shadow: 0 9px 22px #02090b88; cursor: pointer; backdrop-filter: blur(8px); }
+
+    .timeline { position: relative; z-index: 22; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 22px; padding: 14px 22px 12px; border-top: 1px solid #455c61; background: #09181deF; box-shadow: 0 -16px 36px #02090b52; backdrop-filter: blur(15px); }
+    .timeline-collapse { position: absolute; z-index: 2; top: -22px; left: 50%; width: 48px; height: 23px; display: grid; place-items: center; padding: 0 0 2px; border: 1px solid #455c61; border-bottom: 0; border-radius: 9px 9px 0 0; background: #0b1c21ed; color: #b7c4c0; box-shadow: 0 -7px 16px #02090b45; cursor: pointer; transform: translateX(-50%); font-size: 16px; line-height: 1; }
+    .timeline-collapse:hover { border-color: #8f7750; color: var(--gold-bright); }
+    .transport { display: flex; align-items: center; gap: 7px; }
+    .transport button { width: 42px; height: 42px; display: grid; place-items: center; padding: 0; border: 1px solid #40595f; border-radius: 50%; background: #14282d; cursor: pointer; }
+    .transport button:hover { border-color: #8a754e; background: #1a3035; color: var(--gold-bright); }
+    .transport .play { width: 48px; height: 48px; border-color: #9a7e4d; background: #6c542c; color: #fff4d8; font-size: 16px; }
+    .transport button:disabled { opacity: .35; cursor: not-allowed; }
+
+    .timeline-main { min-width: 0; display: grid; gap: 8px; }
+    .timeline-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+    .timeline-meta strong { color: #efe7d9; font: 600 18px/1 Georgia, "Times New Roman", serif; }
+    .timeline-meta span { overflow: hidden; color: #8da19e; text-overflow: ellipsis; white-space: nowrap; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .range-wrap { position: relative; height: 25px; display: grid; align-items: center; }
+    .range-track { position: absolute; left: 0; right: 0; top: 11px; height: 3px; border-radius: 3px; background: linear-gradient(90deg, #5e4f36 var(--range-progress, 50%), #2e484e var(--range-progress, 50%)); pointer-events: none; }
+    .snapshot-marks { position: absolute; inset: 8px 7px auto; height: 9px; pointer-events: none; }
+    .snapshot-marks i { position: absolute; top: 1px; width: 1px; height: 5px; background: #91a29f52; }
+    #yearRange { position: relative; z-index: 2; width: 100%; height: 25px; margin: 0; opacity: .001; cursor: ew-resize; }
+    .range-thumb { position: absolute; z-index: 1; top: 5px; left: var(--range-progress, 50%); width: 15px; height: 15px; border: 3px solid #f0c979; border-radius: 50%; background: #102329; box-shadow: 0 0 0 4px #d4a85e18; transform: translateX(-50%); pointer-events: none; }
+    #yearRange:focus-visible + .range-thumb { box-shadow: 0 0 0 3px var(--ink), 0 0 0 6px var(--gold-bright); }
+    .timeline-ticks { display: flex; justify-content: space-between; color: #718784; font-size: 8px; letter-spacing: .05em; }
+
+    .jump-form { display: grid; grid-template-columns: 77px 68px; gap: 6px; width: 151px; }
+    .jump-form label { grid-column: 1 / -1; color: #829693; font-size: 8px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    .jump-form input, .jump-form select { min-width: 0; height: 36px; padding: 0 8px; border: 1px solid #3c555a; border-radius: 7px; background: #14282d; color: #e8e2d6; outline: 0; }
+    .jump-form input:focus-visible, .jump-form select:focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 2px; }
+    .jump-form button { grid-column: 1 / -1; min-height: 28px; border: 1px solid #5b664f; border-radius: 7px; background: #263b36; color: #e4dfd1; cursor: pointer; font-size: 10px; }
+    .jump-form button:hover { background: #314a42; }
+
+    body.timeline-collapsed { --timeline-h: 60px; }
+    body.timeline-collapsed .timeline { grid-template-columns: auto minmax(0, 1fr); grid-template-rows: 1fr; gap: 18px; padding-block: 6px; }
+    body.timeline-collapsed .timeline-main { display: block; grid-row: auto; grid-column: auto; align-self: center; }
+    body.timeline-collapsed .timeline-meta { display: block; }
+    body.timeline-collapsed .timeline-meta span,
+    body.timeline-collapsed .range-wrap,
+    body.timeline-collapsed .timeline-ticks,
+    body.timeline-collapsed .jump-form { display: none; }
+    body.timeline-collapsed .transport { grid-row: auto; }
+    body.timeline-collapsed .transport button { width: 34px; height: 34px; }
+    body.timeline-collapsed .transport .play { width: 40px; height: 40px; }
+
+    @media (min-width: 781px) {
+      body.inspector-collapsed .workspace { grid-template-columns: minmax(0, 1fr) var(--inspector-compact-w); }
+      body.inspector-collapsed .inspector-inner { visibility: hidden; opacity: 0; pointer-events: none; }
+      body.inspector-collapsed .inspector-rail { display: flex; }
+      body.inspector-collapsed .inspector-desktop-toggle { left: 8px; transform: rotate(180deg); }
+    }
+
+    dialog { width: min(650px, calc(100% - 28px)); max-height: min(720px, calc(100% - 28px)); padding: 0; overflow: auto; border: 1px solid #6a7876; border-radius: 13px; background: #102328; color: #ece5d8; box-shadow: 0 25px 80px #000c; }
+    dialog::backdrop { background: #02090bcf; backdrop-filter: blur(5px); }
+    .dialog-head { position: sticky; z-index: 2; top: 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 20px 22px 15px; border-bottom: 1px solid #354e54; background: #102328f2; backdrop-filter: blur(10px); }
+    .dialog-head h2 { margin: 0; font: 600 26px/1.1 Georgia, "Times New Roman", serif; }
+    .dialog-head p { margin: 5px 0 0; color: #95a8a5; font-size: 10px; }
+    .dialog-close { width: 36px; height: 36px; flex: 0 0 auto; padding: 0; border: 1px solid #425a60; border-radius: 8px; background: #172d32; cursor: pointer; font-size: 20px; }
+    .dialog-body { padding: 20px 22px 24px; }
+    .dialog-callout { margin: 0 0 18px; padding: 13px 14px; border-left: 3px solid var(--gold); background: #d4a85e0c; color: #d8dfda; font-size: 12px; line-height: 1.55; }
+    .dialog-section { padding: 15px 0; border-top: 1px solid #31494f; }
+    .dialog-section:first-of-type { border-top: 0; }
+    .dialog-section h3 { margin: 0 0 7px; color: #e7dece; font-size: 12px; }
+    .dialog-section p { margin: 0; color: #a3b3af; font-size: 11px; line-height: 1.65; }
+    .dialog-section a { color: #e4c57d; }
+    .dialog-status { display: grid; grid-template-columns: auto 1fr; gap: 9px; align-items: center; margin-top: 12px; color: #bfd0cb; font-size: 10px; }
+    .dialog-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--jade); }
+
+    /* Theme tokens keep the chrome and canvas palette in step. */
+    body[data-theme="night"] {
+      color-scheme: dark;
+      --surface-root: #0c1b20; --surface-bar: #0a181cef; --surface-panel: #0b1b20; --surface-panel-alt: #12262b;
+      --surface-floating: #102227f5; --surface-control: #14282d; --surface-control-hover: #1a3035; --surface-subtle: #ffffff0a; --surface-input: #14282de8;
+      --text-main: #f1eadb; --text-soft: #d9cfba; --text-muted: #9eb0ae; --text-faint: #849795;
+      --border-main: #385057; --border-soft: #4a6267; --accent: #d4a85e; --accent-bright: #f0c979; --accent-soft: #d4a85e1d;
+      --shadow-color: #02090b88; --vignette-color: #07151988; --range-done: #5e4f36; --range-rest: #2e484e; --dialog-backdrop: #02090bcf;
+    }
+    body[data-theme="parchment"] {
+      color-scheme: light;
+      --ink: #efe3c6; --ink-2: #e4d3aa; --ink-3: #d3bd8b; --paper: #2b2419; --paper-2: #493c29; --muted: #665a45; --line: #9d875d; --gold: #8a5a20; --gold-bright: #633b0e; --sea: #c6d6ce; --jade: #276655; --danger: #963d32;
+      --surface-root: #efe3c6; --surface-bar: #efe3c6f2; --surface-panel: #efe3c6; --surface-panel-alt: #e4d3aa;
+      --surface-floating: #f3e8cef7; --surface-control: #e4d3aa; --surface-control-hover: #d3bd8b; --surface-subtle: #493c2910; --surface-input: #f7edd3f2;
+      --text-main: #2b2419; --text-soft: #493c29; --text-muted: #665a45; --text-faint: #75674e;
+      --border-main: #9d875d; --border-soft: #b49d71; --accent: #8a5a20; --accent-bright: #633b0e; --accent-soft: #8a5a201a;
+      --shadow-color: #493b2945; --vignette-color: #493b2938; --range-done: #8a5a20; --range-rest: #b9aa8b; --dialog-backdrop: #2b241970;
+    }
+    body[data-theme="oceanic"] {
+      color-scheme: dark;
+      --ink: #061a2a; --ink-2: #0d2638; --ink-3: #14384b; --paper: #f1f7f7; --paper-2: #cbdcdf; --muted: #a1b8bd; --line: #315c70; --gold: #f0a45e; --gold-bright: #ffd08a; --sea: #092c43; --jade: #65c9b1; --danger: #ff8e78;
+      --surface-root: #061a2a; --surface-bar: #061725f2; --surface-panel: #071c2b; --surface-panel-alt: #0d2638;
+      --surface-floating: #09263af7; --surface-control: #0d2a3d; --surface-control-hover: #14384b; --surface-subtle: #ffffff0c; --surface-input: #0c293ce8;
+      --text-main: #f1f7f7; --text-soft: #cbdcdf; --text-muted: #a1b8bd; --text-faint: #7fa0a8;
+      --border-main: #315c70; --border-soft: #437489; --accent: #f0a45e; --accent-bright: #ffd08a; --accent-soft: #f0a45e1d;
+      --shadow-color: #020c1688; --vignette-color: #020f1b99; --range-done: #b76f42; --range-rest: #214b60; --dialog-backdrop: #020a12d9;
+    }
+    body[data-theme="contrast"] {
+      color-scheme: dark;
+      --ink: #050505; --ink-2: #111111; --ink-3: #1c1c1c; --paper: #ffffff; --paper-2: #e6e6e6; --muted: #c7c7c7; --line: #737373; --gold: #ffd800; --gold-bright: #fff36a; --sea: #171717; --jade: #7dffb2; --danger: #ff8a80;
+      --surface-root: #050505; --surface-bar: #050505f5; --surface-panel: #090909; --surface-panel-alt: #181818;
+      --surface-floating: #111111fa; --surface-control: #181818; --surface-control-hover: #292929; --surface-subtle: #ffffff12; --surface-input: #111111f2;
+      --text-main: #ffffff; --text-soft: #e6e6e6; --text-muted: #c7c7c7; --text-faint: #a8a8a8;
+      --border-main: #737373; --border-soft: #989898; --accent: #ffd800; --accent-bright: #fff36a; --accent-soft: #ffd80026;
+      --shadow-color: #000000c7; --vignette-color: #00000099; --range-done: #ffd800; --range-rest: #5e5e5e; --dialog-backdrop: #000000e8;
+    }
+
+    body, .app { background: var(--surface-root); color: var(--text-main); }
+    .appbar { border-color: var(--border-main); background: var(--surface-bar); box-shadow: 0 10px 30px var(--shadow-color); }
+    .brand-mark, .brand-mark::before, .brand-mark::after { border-color: color-mix(in srgb, var(--accent) 68%, transparent); }
+    .brand-mark i { background: color-mix(in srgb, var(--accent) 68%, transparent); }
+    .brand small, .result-meta, .search-empty { color: var(--text-muted); }
+    .search-icon { border-color: var(--text-muted); }
+    .search-icon::after { background: var(--text-muted); }
+    .search input { border-color: var(--border-main); background: var(--surface-input); color: var(--text-main); }
+    .search input::placeholder { color: var(--text-faint); }
+    .search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .search-clear { color: var(--text-muted); }
+    .search-clear:hover, .search-option:hover, .search-option.active { background: var(--surface-subtle); color: var(--text-main); }
+    .search-results { border-color: var(--border-soft); background: var(--surface-floating); box-shadow: 0 18px 45px var(--shadow-color); }
+    .quiet-button, .header-collapse, .timeline-collapse { border-color: var(--border-main); background: var(--surface-control); color: var(--text-soft); }
+    .quiet-button:hover, .header-collapse:hover, .timeline-collapse:hover { border-color: var(--accent); background: var(--surface-control-hover); color: var(--accent-bright); }
+    .map-stage { background: var(--sea); }
+    .map-vignette { box-shadow: inset 0 0 100px var(--vignette-color), inset 0 -30px 70px color-mix(in srgb, var(--vignette-color) 65%, transparent); }
+    .map-status, .tooltip, .toast { border-color: color-mix(in srgb, var(--accent) 40%, var(--border-main)); background: color-mix(in srgb, var(--surface-panel) 90%, transparent); color: var(--text-main); box-shadow: 0 12px 30px var(--shadow-color); }
+    .tooltip span, .map-status { color: var(--text-muted); }
+    .map-status a { color: var(--accent-bright); }
+    .tool-stack { border-color: var(--border-main); background: color-mix(in srgb, var(--surface-panel) 90%, transparent); box-shadow: 0 10px 26px var(--shadow-color); }
+    .tool-stack button { border-color: var(--border-main); }
+    .tool-stack button:hover, .tool-stack button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-bright); }
+    .inspector { border-color: var(--border-main); background: linear-gradient(165deg, var(--surface-panel-alt), var(--surface-panel) 70%); }
+    .inspector-inner { scrollbar-color: var(--border-soft) var(--surface-panel); }
+    .inspector-desktop-toggle, .inspector-close, .inspector-toggle { border-color: var(--border-main); background: var(--surface-control); color: var(--text-soft); box-shadow: 0 7px 18px var(--shadow-color); }
+    .inspector-desktop-toggle:hover { border-color: var(--accent); background: var(--surface-control-hover); color: var(--accent-bright); }
+    .inspector-rail, .inspector-kicker, .section-label, .era-button small, .territory-list small, .fact dt, .legend-row { color: var(--text-muted); }
+    .inspector h2, .era-button strong, .territory-list span, .fact dd, .legend strong { color: var(--text-main); }
+    .inspector p, .selected-subtitle { color: var(--text-muted); }
+    .section-label output { color: var(--text-soft); }
+    .era-button, .legend { border-color: var(--border-main); background: var(--surface-subtle); }
+    .era-button:hover, .territory-list button:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .fact-list, .fact { border-color: var(--border-main); }
+    .selected-actions button { border-color: var(--border-soft); background: var(--surface-control); }
+    .selected-actions button.primary { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 58%, var(--surface-control)); color: var(--surface-root); }
+    .selection-note, .dialog-callout { border-color: var(--accent); background: var(--accent-soft); color: var(--text-muted) !important; }
+    .timeline { border-color: var(--border-main); background: var(--surface-bar); box-shadow: 0 -16px 36px var(--shadow-color); }
+    .transport button { border-color: var(--border-main); background: var(--surface-control); }
+    .transport button:hover { border-color: var(--accent); background: var(--surface-control-hover); color: var(--accent-bright); }
+    .transport .play { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 58%, var(--surface-control)); color: var(--surface-root); }
+    .timeline-meta strong { color: var(--text-main); }
+    .timeline-meta span, .timeline-ticks, .jump-form label { color: var(--text-muted); }
+    .range-track { background: linear-gradient(90deg, var(--range-done) var(--range-progress, 50%), var(--range-rest) var(--range-progress, 50%)); }
+    .snapshot-marks i { background: color-mix(in srgb, var(--text-muted) 38%, transparent); }
+    .range-thumb { border-color: var(--accent-bright); background: var(--surface-control); box-shadow: 0 0 0 4px var(--accent-soft); }
+    .jump-form input, .jump-form select { border-color: var(--border-main); background: var(--surface-input); color: var(--text-main); }
+    .jump-form button { border-color: var(--border-main); background: var(--surface-control); color: var(--text-soft); }
+    .jump-form button:hover { background: var(--surface-control-hover); }
+    dialog { border-color: var(--border-soft); background: var(--surface-panel); color: var(--text-main); box-shadow: 0 25px 80px var(--shadow-color); }
+    dialog::backdrop { background: var(--dialog-backdrop); }
+    .dialog-head { border-color: var(--border-main); background: color-mix(in srgb, var(--surface-panel) 94%, transparent); }
+    .dialog-head p, .dialog-section p { color: var(--text-muted); }
+    .dialog-close { border-color: var(--border-main); background: var(--surface-control); }
+    .dialog-section { border-color: var(--border-main); }
+    .dialog-section h3 { color: var(--text-main); }
+    .dialog-section a { color: var(--accent-bright); }
+    .dialog-status { color: var(--text-soft); }
+
+    @media (max-width: 940px) {
+      :root { --inspector-w: 300px; }
+      .appbar { grid-template-columns: auto minmax(190px, 1fr) auto; gap: 13px; padding: 0 14px; }
+      .brand small { display: none; }
+      .timeline { gap: 13px; padding-inline: 14px; }
+    }
+
+    @media (max-width: 780px) {
+      :root { --header-h: 58px; --timeline-h: 132px; }
+      .appbar { grid-template-columns: auto minmax(0, 1fr) auto; gap: 9px; }
+      .brand-mark { width: 31px; height: 31px; }
+      .brand strong { font-size: 14px; }
+      .app-actions .action-label { display: none; }
+      .quiet-button { width: 38px; padding: 0; }
+      .source-pulse { margin: 0; }
+      .workspace { display: block; }
+      .map-stage { width: 100%; height: 100%; }
+      .inspector { position: absolute; z-index: 15; left: 10px; right: 10px; bottom: 10px; width: auto; max-height: min(64vh, 520px); overflow: hidden; border: 1px solid #50666a; border-radius: 13px; box-shadow: 0 18px 50px #010708d9; transform: translateY(calc(100% + 24px)); transition: transform .22s ease; }
+      body.inspector-open .inspector { transform: translateY(0); }
+      .inspector-inner { height: auto; max-height: min(64vh, 520px); min-height: 0; padding: 16px; overflow: auto; }
+      .inspector-desktop-toggle, .inspector-rail { display: none !important; }
+      .inspector-close, .inspector-toggle { display: block; }
+      body.inspector-open .inspector-toggle { display: none; }
+      .map-tools { top: 10px; right: 10px; }
+      .map-status { left: 10px; bottom: 10px; max-width: calc(100% - 120px); }
+      body.header-collapsed .map-tools { top: 32px; }
+      .timeline { grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; align-content: center; gap: 5px 13px; padding: 9px 12px; }
+      .transport { grid-row: 1 / 3; }
+      .transport button { width: 38px; height: 38px; }
+      .transport .play { width: 44px; height: 44px; }
+      .timeline-main { align-self: end; }
+      .timeline-meta strong { font-size: 16px; }
+      .jump-form { grid-column: 2; grid-template-columns: minmax(70px, 1fr) 62px auto; width: auto; align-self: start; }
+      .jump-form label { display: none; }
+      .jump-form input, .jump-form select { height: 31px; }
+      .jump-form button { grid-column: auto; min-width: 46px; min-height: 31px; }
+    }
+
+    @media (max-width: 560px) {
+      :root { --timeline-h: 146px; }
+      .appbar { padding: 0 9px; }
+      .brand strong { font-size: 0; letter-spacing: 0; }
+      .brand strong::after { content: "EA"; font-size: 13px; letter-spacing: .08em; }
+      .brand { gap: 5px; }
+      .search input { padding-left: 35px; font-size: 12px; }
+      .search-icon { left: 12px; }
+      .tool-stack button { width: 39px; height: 39px; }
+      .map-status { display: none; }
+      .timeline { grid-template-columns: 1fr; grid-template-rows: auto auto auto; gap: 4px; padding: 8px 10px; }
+      .transport { grid-row: auto; justify-content: center; }
+      .transport button { width: 34px; height: 34px; }
+      .transport .play { width: 38px; height: 38px; }
+      .timeline-main { grid-row: 2; }
+      .timeline-meta { margin-top: -1px; }
+      .jump-form { grid-column: 1; grid-row: 3; grid-template-columns: minmax(70px, 1fr) 62px 48px; }
+      .timeline-ticks { display: none; }
+      .range-wrap { height: 19px; }
+      .range-track { top: 8px; }
+      .snapshot-marks { top: 5px; }
+      .range-thumb { top: 2px; }
+      .era-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .era-button { min-height: 48px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; animation-iteration-count: 1 !important; }
+    }
+
+    @media (forced-colors: active) {
+      #mapCanvas { background: Canvas; }
+      .map-status, .tooltip, .inspector, .timeline, .appbar { border: 1px solid CanvasText; background: Canvas; color: CanvasText; }
+    }
+  </style>
+</head>
+<body>
+<main class="app" aria-label="Epoch Atlas historical territory explorer">
+  <header class="appbar">
+    <div class="brand" aria-label="Epoch Atlas">
+      <span class="brand-mark" aria-hidden="true"><i></i></span>
+      <span><strong>EPOCH ATLAS</strong><small>Territories through time</small></span>
+    </div>
+
+    <div class="search" role="search">
+      <span class="search-icon" aria-hidden="true"></span>
+      <label class="sr-only" for="territorySearch">Search territories on the current map</label>
+      <input id="territorySearch" type="search" autocomplete="off" placeholder="Search this map: empire, kingdom, people..." role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-controls="searchResults" aria-expanded="false">
+      <button class="search-clear" id="searchClear" type="button" aria-label="Clear search" hidden>&times;</button>
+      <ul class="search-results" id="searchResults" role="listbox" hidden></ul>
+    </div>
+
+    <div class="app-actions">
+      <div class="theme-picker">
+        <button class="quiet-button theme-toggle" id="themeToggle" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="themeMenu" aria-label="Choose map theme" title="Choose map theme">
+          <span class="theme-icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="action-label">Theme</span>
+        </button>
+        <div class="theme-menu" id="themeMenu" role="menu" aria-label="Visual theme" hidden>
+          <div class="theme-menu-label">Map &amp; interface</div>
+          <button class="theme-option" type="button" role="menuitemradio" aria-checked="true" data-theme-option="night">
+            <span class="theme-swatches" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Epoch Night</strong><small>Muted historical pigments</small></span><span class="theme-check" aria-hidden="true">&#10003;</span>
+          </button>
+          <button class="theme-option" type="button" role="menuitemradio" aria-checked="false" data-theme-option="parchment">
+            <span class="theme-swatches" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Parchment</strong><small>Warm paper and rich inks</small></span><span class="theme-check" aria-hidden="true">&#10003;</span>
+          </button>
+          <button class="theme-option" type="button" role="menuitemradio" aria-checked="false" data-theme-option="oceanic">
+            <span class="theme-swatches" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Oceanic</strong><small>Deep blue and jewel colors</small></span><span class="theme-check" aria-hidden="true">&#10003;</span>
+          </button>
+          <button class="theme-option" type="button" role="menuitemradio" aria-checked="false" data-theme-option="contrast">
+            <span class="theme-swatches" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>High Contrast</strong><small>Grayscale with yellow focus</small></span><span class="theme-check" aria-hidden="true">&#10003;</span>
+          </button>
+        </div>
+      </div>
+      <button class="quiet-button" id="openMethod" type="button" aria-label="Data and method"><span class="source-pulse" aria-hidden="true"></span><span class="action-label">Data &amp; method</span></button>
+    </div>
+    <button class="header-collapse" id="headerCollapse" type="button" aria-controls="territorySearch themeToggle openMethod" aria-expanded="true" aria-label="Collapse top bar" title="Collapse top bar"><span aria-hidden="true">&#8963;</span></button>
+  </header>
+
+  <section class="workspace">
+    <section class="map-stage" id="mapStage" aria-label="Interactive historical world map">
+      <canvas id="mapCanvas" tabindex="0" aria-label="Historical territories map. Drag to pan, use plus and minus to zoom, and click a territory for details."></canvas>
+      <div class="map-vignette" aria-hidden="true"></div>
+
+      <div class="map-tools" aria-label="Map controls">
+        <div class="tool-stack">
+          <button id="zoomIn" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+          <button id="zoomOut" type="button" aria-label="Zoom out" title="Zoom out">&minus;</button>
+          <button id="resetView" type="button" aria-label="Reset map view" title="Reset map view">&#8982;</button>
+        </div>
+        <div class="tool-stack">
+          <button class="labels-button" id="toggleLabels" type="button" aria-label="Toggle territory labels" aria-pressed="true" title="Toggle labels">Aa</button>
+          <button class="labels-button" id="toggleColors" type="button" aria-label="Color by authority" title="Change color grouping">&#9673;</button>
+        </div>
+      </div>
+
+      <div class="map-status" id="mapStatus"><span class="spinner" id="statusSpinner" aria-hidden="true"></span><span id="statusText">Loading historical map index&hellip;</span></div>
+      <div class="tooltip" id="tooltip" role="tooltip" hidden><strong></strong><span></span></div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <button class="inspector-toggle" id="inspectorToggle" type="button" aria-controls="inspector" aria-expanded="false">Explore map</button>
+    </section>
+
+    <aside class="inspector" id="inspector" aria-label="Territory details">
+      <button class="inspector-desktop-toggle" id="desktopInspectorToggle" type="button" aria-controls="inspectorPanel" aria-expanded="true" aria-label="Collapse field guide" title="Collapse field guide"><span aria-hidden="true">&#8250;</span></button>
+      <div class="inspector-rail" id="inspectorRail" aria-hidden="true">Field guide</div>
+      <div class="inspector-inner" id="inspectorPanel">
+        <div id="emptyInspector">
+          <header class="inspector-header">
+            <div><div class="inspector-kicker">Field guide</div><h2>Read the landscape</h2></div>
+            <button class="inspector-close" id="inspectorClose" type="button" aria-label="Close details">&times;</button>
+          </header>
+          <p class="intro">Travel between surviving map snapshots, then select a territory to inspect its authority, cultural grouping, and reported border confidence.</p>
+
+          <div class="section-label"><span>Jump to an era</span><output>nearest map</output></div>
+          <div class="era-grid">
+            <button class="era-button" type="button" data-year="-500"><strong>Classical</strong><small>500 BCE</small></button>
+            <button class="era-button" type="button" data-year="500"><strong>Late antiquity</strong><small>500 CE</small></button>
+            <button class="era-button" type="button" data-year="1200"><strong>Medieval</strong><small>1200 CE</small></button>
+            <button class="era-button" type="button" data-year="1492"><strong>Early modern</strong><small>1492 CE</small></button>
+            <button class="era-button" type="button" data-year="1815"><strong>Industrial</strong><small>1815 CE</small></button>
+            <button class="era-button" type="button" data-year="1960"><strong>Modern</strong><small>1960 CE</small></button>
+          </div>
+
+          <div class="section-label"><span>Large mapped regions</span><output id="territoryCount">&mdash;</output></div>
+          <div class="territory-list" id="territoryList" aria-label="Largest territories on this map"></div>
+
+          <div class="legend">
+            <strong>Boundary confidence</strong>
+            <div class="legend-row"><i class="legend-line"></i><span>Defined by law or treaty</span></div>
+            <div class="legend-row"><i class="legend-line medium"></i><span>Moderately reconstructed</span></div>
+            <div class="legend-row"><i class="legend-line fuzzy"></i><span>Approximate extent</span></div>
+          </div>
+        </div>
+
+        <div id="selectedInspector" hidden>
+          <header class="inspector-header">
+            <div><div class="inspector-kicker">Selected territory</div></div>
+            <button class="inspector-close" id="selectedCloseMobile" type="button" aria-label="Close details">&times;</button>
+          </header>
+          <div class="selected-swatch" id="selectedSwatch"></div>
+          <h2 class="selected-title" id="selectedName"></h2>
+          <p class="selected-subtitle" id="selectedSubtitle"></p>
+          <dl class="fact-list">
+            <div class="fact"><dt>Map date</dt><dd id="selectedYear"></dd></div>
+            <div class="fact"><dt>Authority / sphere</dt><dd id="selectedAuthority"></dd></div>
+            <div class="fact"><dt>Part of / culture</dt><dd id="selectedPart"></dd></div>
+            <div class="fact"><dt>Boundary</dt><dd><span class="confidence" id="selectedConfidence"><i></i><span></span></span></dd></div>
+          </dl>
+          <div class="selected-actions">
+            <button class="primary" id="fitSelected" type="button">Zoom to territory</button>
+            <button id="clearSelected" type="button">Clear</button>
+          </div>
+          <p class="selection-note">This panel reports the source fields as supplied. It does not imply modern sovereignty, exclusive control, or historical consensus.</p>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <footer class="timeline" aria-label="Historical timeline controls">
+    <button class="timeline-collapse" id="timelineCollapse" type="button" aria-controls="timelineDetails jumpForm" aria-expanded="true" aria-label="Collapse timeline" title="Collapse timeline"><span aria-hidden="true">&#8964;</span></button>
+    <div class="transport">
+      <button id="previousYear" type="button" aria-label="Previous available map" title="Previous available map" disabled>&#9664;</button>
+      <button class="play" id="playTimeline" type="button" aria-label="Play timeline" aria-pressed="false" title="Play timeline" disabled><span aria-hidden="true">&#9654;</span></button>
+      <button id="nextYear" type="button" aria-label="Next available map" title="Next available map" disabled>&#9654;</button>
+    </div>
+
+    <div class="timeline-main" id="timelineDetails">
+      <div class="timeline-meta"><strong id="timelineYear" aria-live="polite">1815 CE</strong><span id="timelineStatus">Waiting for map index</span></div>
+      <div class="range-wrap" id="rangeWrap">
+        <div class="range-track"></div>
+        <div class="snapshot-marks" id="snapshotMarks" aria-hidden="true"></div>
+        <input id="yearRange" type="range" min="0" max="1" value="0" step="1" aria-label="Available historical map" aria-valuetext="Loading map dates" disabled>
+        <i class="range-thumb" aria-hidden="true"></i>
+      </div>
+      <div class="timeline-ticks" aria-hidden="true"><span>Deep history</span><span>Ancient</span><span>Medieval</span><span>Modern</span></div>
+    </div>
+
+    <form class="jump-form" id="jumpForm">
+      <label for="jumpYear">Jump to a year</label>
+      <input id="jumpYear" type="number" min="1" max="123000" value="1815" inputmode="numeric" aria-label="Year">
+      <select id="jumpEra" aria-label="Era"><option value="CE">CE</option><option value="BCE">BCE</option></select>
+      <button type="submit">Go</button>
+    </form>
+  </footer>
+</main>
+
+<dialog id="methodDialog" aria-labelledby="methodTitle">
+  <header class="dialog-head">
+    <div><h2 id="methodTitle">Data &amp; method</h2><p>What this atlas shows&mdash;and what it cannot</p></div>
+    <button class="dialog-close" id="closeMethod" type="button" aria-label="Close dialog">&times;</button>
+  </header>
+  <div class="dialog-body">
+    <p class="dialog-callout">Historical territory is an interpretation, not a measurement. Boundaries may be approximate, overlapping, disputed, or inappropriate for societies that did not organize space as modern states do.</p>
+    <section class="dialog-section">
+      <h3>Community boundary data</h3>
+      <p>The map uses locally hosted GeoJSON snapshots from Andr&eacute; Ourednik&rsquo;s <a href="https://github.com/aourednik/historical-basemaps" target="_blank" rel="noopener">Historical Basemaps</a> project. The source is a work in progress, is provided without warranty, and asks users to verify it for academic work. A bundled copy is distributed under the <a href="/assets/epoch-atlas/LICENSE" target="_blank" rel="noopener">GNU GPL 3.0</a>.</p>
+      <div class="dialog-status"><i id="dialogSourceDot"></i><span id="dialogSourceStatus">Connecting to the community dataset&hellip;</span></div>
+    </section>
+    <section class="dialog-section">
+      <h3>Discrete snapshots, not invented annual borders</h3>
+      <p>The slider moves through dates that actually exist in the source. When you enter another year, Epoch Atlas chooses the nearest available snapshot and says which date is displayed. It does not interpolate boundaries between maps.</p>
+    </section>
+    <section class="dialog-section">
+      <h3>Inspired by GeaCron, built from separate data</h3>
+      <p><a href="https://geacron.com/home-en/" target="_blank" rel="noopener">GeaCron</a> inspired the time-travel atlas concept, but its database is proprietary. No GeaCron map data, interface assets, or code are included here.</p>
+    </section>
+    <section class="dialog-section">
+      <h3>Reading the map</h3>
+      <p>Colors group either related authorities or individual territories. Dashed and softened outlines represent lower values in the source&rsquo;s <code>BORDERPRECISION</code> field. Pan with a mouse or one finger; zoom with the wheel, pinch gesture, or map buttons.</p>
+    </section>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = selector => document.querySelector(selector);
+  const canvas = $('#mapCanvas');
+  const mapStage = $('#mapStage');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const hitContext = document.createElement('canvas').getContext('2d');
+
+  const DATA_REVISION = '62d8f1a03a71f2d3ff17f2d166f7553f256bce68';
+  const LOCAL_DATA_ROOT = '/assets/epoch-atlas';
+  const DATA_SOURCES = [
+    {
+      label: 'local site data',
+      index: `${LOCAL_DATA_ROOT}/index.json`,
+      base: `${LOCAL_DATA_ROOT}/geojson/`
+    }
+  ];
+
+  const FALLBACK_INDEX = [
+    [-10000, 'world_bc10000.geojson'], [-5000, 'world_bc5000.geojson'], [-3000, 'world_bc3000.geojson'],
+    [-2000, 'world_bc2000.geojson'], [-1500, 'world_bc1500.geojson'], [-1000, 'world_bc1000.geojson'],
+    [-500, 'world_bc500.geojson'], [1, 'world_1.geojson'], [500, 'world_500.geojson'],
+    [1000, 'world_1000.geojson'], [1200, 'world_1200.geojson'], [1492, 'world_1492.geojson'],
+    [1650, 'world_1650.geojson'], [1715, 'world_1715.geojson'], [1815, 'world_1815.geojson'],
+    [1880, 'world_1880.geojson'], [1914, 'world_1914.geojson'], [1920, 'world_1920.geojson'],
+    [1938, 'world_1938.geojson'], [1945, 'world_1945.geojson'], [1960, 'world_1960.geojson'],
+    [1994, 'world_1994.geojson'], [2000, 'world_2000.geojson'], [2010, 'world_2010.geojson']
+  ].map(([year, filename]) => ({ year, filename, countries: [] }));
+
+  const THEMES = Object.freeze({
+    night: {
+      label: 'Epoch Night', meta: '#0c1b20',
+      ocean: ['#23484f', '#17383f', '#102d34'],
+      palette: ['#b76f57', '#b48b4f', '#6d9882', '#677f9b', '#917596', '#9b745b', '#789b9d', '#a05f65', '#828e59', '#756e9b', '#c0875f', '#648c70'],
+      grid: '#a7c0bb1c', border: '#102126', unnamed: '#6f8584', schematicFill: '#70868232', schematicStroke: '#aec1ba26',
+      labelBg: '#0b1b20b8', labelActiveBg: '#081519e8', labelText: '#e8e0d1', labelActiveText: '#fff1c2', labelShadow: '#071419',
+      selectedFill: '#fff3c833', selectedStroke: '#fff0b9', selectedShadow: '#f5d687aa', hoverFill: '#ffffff20', hoverStroke: '#f4df9d'
+    },
+    parchment: {
+      label: 'Parchment', meta: '#efe3c6',
+      ocean: ['#d9e2d7', '#c4d5cd', '#aebfb8'],
+      palette: ['#b95d4c', '#c28a3b', '#81964b', '#438878', '#527da5', '#78649a', '#a85f7d', '#947040', '#5f8d8a', '#6e7f41', '#b87750', '#627662'],
+      grid: '#455c4b24', border: '#493b29', unnamed: '#8d8979', schematicFill: '#776e582d', schematicStroke: '#564b3445',
+      labelBg: '#f3e8cedd', labelActiveBg: '#291f15f0', labelText: '#2b2419', labelActiveText: '#fff1c4', labelShadow: '#6a573846',
+      selectedFill: '#fff1a640', selectedStroke: '#fff7d7', selectedShadow: '#2c1c08cc', hoverFill: '#3b2c141f', hoverStroke: '#5a401b'
+    },
+    oceanic: {
+      label: 'Oceanic', meta: '#061a2a',
+      ocean: ['#0d4660', '#0a3048', '#061e33'],
+      palette: ['#e47c61', '#e5b85a', '#92b866', '#56b59f', '#719fd0', '#9b86ce', '#d07aa7', '#cd9061', '#a3bf70', '#6eafc4', '#ca6d67', '#76aa8c'],
+      grid: '#bceaf122', border: '#041722', unnamed: '#6d8590', schematicFill: '#8fb7bd2f', schematicStroke: '#c7e6e834',
+      labelBg: '#071a28c7', labelActiveBg: '#03121df0', labelText: '#edf5f3', labelActiveText: '#fff2bd', labelShadow: '#020f19',
+      selectedFill: '#fff2a63d', selectedStroke: '#fff1b8', selectedShadow: '#ffc760aa', hoverFill: '#ffffff20', hoverStroke: '#d7eff2'
+    },
+    contrast: {
+      label: 'High Contrast', meta: '#050505',
+      ocean: ['#252525', '#151515', '#050505'],
+      palette: ['#f2f2f2', '#d9d9d9', '#bfbfbf', '#a6a6a6', '#8c8c8c', '#737373', '#595959', '#404040', '#cccccc', '#999999', '#666666', '#4d4d4d'],
+      grid: '#ffffff2e', border: '#000000', unnamed: '#525252', schematicFill: '#ffffff18', schematicStroke: '#ffffff50',
+      labelBg: '#000000ed', labelActiveBg: '#ffe600', labelText: '#ffffff', labelActiveText: '#000000', labelShadow: '#000000',
+      selectedFill: '#ffe6004d', selectedStroke: '#ffe600', selectedShadow: '#ffe600aa', hoverFill: '#ffffff26', hoverStroke: '#ffffff',
+      selectedUnderlay: '#000000', hoverUnderlay: '#000000'
+    }
+  });
+  const SCHEMATIC_LAND = [
+    [[-168, 70], [-145, 72], [-124, 55], [-108, 52], [-95, 49], [-82, 26], [-97, 15], [-115, 28], [-126, 49], [-150, 58]],
+    [[-81, 12], [-68, 10], [-51, 2], [-35, -8], [-48, -30], [-63, -55], [-73, -42], [-78, -12]],
+    [[-12, 36], [3, 44], [24, 38], [41, 13], [50, -12], [32, -35], [15, -35], [2, -13]],
+    [[-9, 36], [8, 55], [33, 71], [68, 74], [100, 66], [142, 50], [166, 61], [179, 48], [147, 32], [119, 22], [103, 5], [74, 8], [58, 25], [37, 38], [20, 31]],
+    [[111, -12], [134, -10], [154, -27], [146, -43], [116, -35]],
+    [[-52, 82], [-22, 78], [-18, 61], [-44, 59], [-62, 69]]
+  ];
+
+  const state = {
+    years: [],
+    currentIndex: -1,
+    requestedYear: 1815,
+    features: [],
+    selected: null,
+    hovered: null,
+    labels: true,
+    colorMode: 'authority',
+    theme: 'night',
+    playing: false,
+    loading: false,
+    source: null,
+    onlineIndex: false,
+    requestToken: 0,
+    paths: [],
+    width: 0,
+    height: 0,
+    dpr: 1,
+    baseScale: 1,
+    view: { zoom: 1, panX: 0, panY: 0 },
+    pointer: { active: new Map(), dragging: false, moved: false, startX: 0, startY: 0, panX: 0, panY: 0, pinchDistance: 0, pinchZoom: 1 },
+    drawQueued: false,
+    searchResults: [],
+    searchActive: -1
+  };
+
+  const snapshotCache = new Map();
+  const pendingSnapshots = new Map();
+  const PREFERENCES = {
+    header: 'epochAtlas.headerCollapsed',
+    inspector: 'epochAtlas.inspectorCollapsed',
+    timeline: 'epochAtlas.timelineCollapsed',
+    theme: 'epochAtlas.theme'
+  };
+  let playTimer = 0;
+  let toastTimer = 0;
+
+  function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+
+  function readPreference(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value === null ? fallback : value === 'true';
+    } catch (_) { return fallback; }
+  }
+
+  function savePreference(key, value) {
+    try { localStorage.setItem(key, String(Boolean(value))); }
+    catch (_) { /* Storage can be unavailable in private or local-file contexts. */ }
+  }
+
+  function readStringPreference(key, fallback) {
+    try { return localStorage.getItem(key) || fallback; }
+    catch (_) { return fallback; }
+  }
+
+  function saveStringPreference(key, value) {
+    try { localStorage.setItem(key, String(value)); }
+    catch (_) { /* Storage can be unavailable in private or local-file contexts. */ }
+  }
+
+  function currentTheme() { return THEMES[state.theme] || THEMES.night; }
+
+  function applyTheme(themeId, persist = true, announce = true) {
+    const id = Object.prototype.hasOwnProperty.call(THEMES, themeId) ? themeId : 'night';
+    const theme = THEMES[id];
+    state.theme = id;
+    document.body.dataset.theme = id;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.meta);
+    document.querySelectorAll('[data-theme-option]').forEach(option => {
+      option.setAttribute('aria-checked', String(option.dataset.themeOption === id));
+    });
+    const toggle = $('#themeToggle');
+    toggle.setAttribute('aria-label', `Choose map theme. Current: ${theme.label}`);
+    toggle.title = `Theme: ${theme.label}`;
+    if (persist) saveStringPreference(PREFERENCES.theme, id);
+    if (state.features.length) {
+      updateInspector();
+      updateSearch();
+    }
+    requestDraw();
+    if (announce) showToast(`${theme.label} theme applied`);
+  }
+
+  function roundedRect(context, x, y, width, height, radius) {
+    if (typeof context.roundRect === 'function') {
+      context.roundRect(x, y, width, height, radius);
+      return;
+    }
+    const r = Math.min(radius, Math.abs(width) / 2, Math.abs(height) / 2);
+    context.moveTo(x + r, y);
+    context.lineTo(x + width - r, y);
+    context.quadraticCurveTo(x + width, y, x + width, y + r);
+    context.lineTo(x + width, y + height - r);
+    context.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+    context.lineTo(x + r, y + height);
+    context.quadraticCurveTo(x, y + height, x, y + height - r);
+    context.lineTo(x, y + r);
+    context.quadraticCurveTo(x, y, x + r, y);
+    context.closePath();
+  }
+
+  function formatYear(year) {
+    const value = Number(year);
+    if (value < 0) return `${Math.abs(value).toLocaleString('en-US')} BCE`;
+    if (value === 0) return '1 BCE / CE';
+    return `${value.toLocaleString('en-US')} CE`;
+  }
+
+  function confidenceFor(value) {
+    const precision = Number(value);
+    if (precision === 3) return { value: 3, label: 'Defined by law or treaty' };
+    if (precision === 2) return { value: 2, label: 'Moderately reconstructed' };
+    if (precision === 1) return { value: 1, label: 'Approximate extent' };
+    return { value: 0, label: 'Not supplied' };
+  }
+
+  function hashNumber(text) {
+    let hash = 2166136261;
+    for (let index = 0; index < text.length; index += 1) {
+      hash ^= text.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return Math.abs(hash >>> 0);
+  }
+
+  function featureColor(feature) {
+    const theme = currentTheme();
+    if (feature.unnamed) return theme.unnamed;
+    const key = state.colorMode === 'authority' ? (feature.authority || feature.part || feature.name) : feature.name;
+    return theme.palette[hashNumber(key) % theme.palette.length];
+  }
+
+  function rawProject(longitude, latitude) {
+    const lambda = clamp(Number(longitude), -180, 180) * Math.PI / 180;
+    const phi = clamp(Number(latitude), -89.8, 89.8) * Math.PI / 180;
+    const phi2 = phi * phi;
+    const phi4 = phi2 * phi2;
+    const x = lambda * (0.8707 - 0.131979 * phi2 + phi4 * (-0.013791 + phi4 * (0.003971 * phi2 - 0.001529 * phi4)));
+    const y = phi * (1.007226 + phi2 * (0.015085 + phi4 * (-0.044475 + 0.028874 * phi2 - 0.005916 * phi4)));
+    return { x, y };
+  }
+
+  function project(longitude, latitude) {
+    const point = rawProject(longitude, latitude);
+    const scale = state.baseScale * state.view.zoom;
+    return {
+      x: state.width / 2 + point.x * scale + state.view.panX,
+      y: state.height / 2 - point.y * scale + state.view.panY
+    };
+  }
+
+  function geometryRings(geometry) {
+    if (!geometry) return [];
+    if (geometry.type === 'Polygon') return geometry.coordinates || [];
+    if (geometry.type === 'MultiPolygon') return (geometry.coordinates || []).flat();
+    if (geometry.type === 'GeometryCollection') return (geometry.geometries || []).flatMap(geometryRings);
+    return [];
+  }
+
+  function calculateFeatureMetrics(geometry) {
+    let overall = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
+    let best = null;
+    for (const ring of geometryRings(geometry)) {
+      if (!Array.isArray(ring) || ring.length < 3) continue;
+      const bounds = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
+      for (const coordinate of ring) {
+        if (!Array.isArray(coordinate) || coordinate.length < 2) continue;
+        const point = rawProject(coordinate[0], coordinate[1]);
+        bounds.minX = Math.min(bounds.minX, point.x);
+        bounds.maxX = Math.max(bounds.maxX, point.x);
+        bounds.minY = Math.min(bounds.minY, point.y);
+        bounds.maxY = Math.max(bounds.maxY, point.y);
+        overall.minX = Math.min(overall.minX, point.x);
+        overall.maxX = Math.max(overall.maxX, point.x);
+        overall.minY = Math.min(overall.minY, point.y);
+        overall.maxY = Math.max(overall.maxY, point.y);
+      }
+      const area = Math.max(0, bounds.maxX - bounds.minX) * Math.max(0, bounds.maxY - bounds.minY);
+      if (!best || area > best.area) best = { ...bounds, area };
+    }
+    if (!Number.isFinite(overall.minX)) overall = { minX: 0, minY: 0, maxX: 0, maxY: 0 };
+    if (!best) best = { ...overall, area: 0 };
+    return {
+      bounds: overall,
+      label: { x: (best.minX + best.maxX) / 2, y: (best.minY + best.maxY) / 2 },
+      area: best.area
+    };
+  }
+
+  function normalizeCollection(collection) {
+    const rawFeatures = Array.isArray(collection?.features) ? collection.features : [];
+    return rawFeatures.map((feature, index) => {
+      const properties = feature.properties || {};
+      const authority = String(properties.SUBJECTO ?? properties.subjecto ?? properties.authority ?? '').trim();
+      const part = String(properties.PARTOF ?? properties.partof ?? '').trim();
+      const suppliedName = String(properties.NAME ?? properties.name ?? properties.Name ?? '').trim();
+      const abbreviation = String(properties.ABBREVN ?? properties.abbreviation ?? '').trim();
+      const name = suppliedName || abbreviation || authority || part || 'Unlabeled area';
+      const unnamed = !suppliedName && !abbreviation && !authority && !part;
+      const precision = Number(properties.BORDERPRECISION ?? properties.borderprecision ?? 0);
+      const metrics = calculateFeatureMetrics(feature.geometry);
+      return {
+        id: `${name}\u241f${authority}\u241f${index}`,
+        name,
+        authority: authority && authority !== name ? authority : '',
+        part: part && part !== name ? part : '',
+        unnamed,
+        precision,
+        geometry: feature.geometry,
+        bounds: metrics.bounds,
+        label: metrics.label,
+        area: metrics.area,
+        properties
+      };
+    }).filter(feature => geometryRings(feature.geometry).length);
+  }
+
+  async function fetchJson(url, timeout = 26000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { signal: controller.signal, mode: 'cors', cache: 'force-cache' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function uniqueSortedYears(entries) {
+    const byYear = new Map();
+    for (const entry of entries || []) {
+      const year = Number(entry.year);
+      const filename = String(entry.filename || '');
+      if (Number.isFinite(year) && filename.endsWith('.geojson')) byYear.set(year, { ...entry, year, filename });
+    }
+    return [...byYear.values()].sort((a, b) => a.year - b.year);
+  }
+
+  async function loadIndex() {
+    setLoading(true, 'Loading the historical map index&hellip;');
+    for (const source of DATA_SOURCES) {
+      try {
+        const data = await fetchJson(source.index, 18000);
+        const years = uniqueSortedYears(data.years || data);
+        if (years.length < 5) throw new Error('Index contained too few dates');
+        state.years = years;
+        state.source = source;
+        state.onlineIndex = true;
+        configureTimeline();
+        updateSourceState();
+        const hash = readHash();
+        const requested = Number.isFinite(hash.year) ? hash.year : state.requestedYear;
+        const index = nearestYearIndex(requested);
+        await setYearIndex(index, { requestedYear: requested, territoryName: hash.territory, resetView: true });
+        return;
+      } catch (error) {
+        console.warn(`Epoch Atlas could not load ${source.label} index`, error);
+      }
+    }
+
+    state.years = FALLBACK_INDEX;
+    state.source = DATA_SOURCES[0];
+    state.onlineIndex = false;
+    configureTimeline();
+    updateSourceState();
+    const hash = readHash();
+    const requested = Number.isFinite(hash.year) ? hash.year : state.requestedYear;
+    await setYearIndex(nearestYearIndex(requested), { requestedYear: requested, territoryName: hash.territory, resetView: true });
+  }
+
+  function configureTimeline() {
+    const range = $('#yearRange');
+    range.min = '0';
+    range.max = String(Math.max(0, state.years.length - 1));
+    range.value = String(Math.max(0, nearestYearIndex(state.requestedYear)));
+    range.disabled = document.body.classList.contains('timeline-collapsed');
+    $('#playTimeline').disabled = false;
+    const marks = $('#snapshotMarks');
+    marks.replaceChildren();
+    const count = state.years.length;
+    const stride = Math.max(1, Math.ceil(count / 90));
+    for (let index = 0; index < count; index += stride) {
+      const mark = document.createElement('i');
+      mark.style.left = `${count <= 1 ? 0 : index / (count - 1) * 100}%`;
+      marks.appendChild(mark);
+    }
+  }
+
+  function nearestYearIndex(year) {
+    if (!state.years.length) return 0;
+    let low = 0;
+    let high = state.years.length - 1;
+    while (low < high) {
+      const middle = Math.floor((low + high) / 2);
+      if (state.years[middle].year < year) low = middle + 1;
+      else high = middle;
+    }
+    if (low === 0) return 0;
+    const before = state.years[low - 1];
+    const after = state.years[low];
+    return Math.abs(before.year - year) <= Math.abs(after.year - year) ? low - 1 : low;
+  }
+
+  function cacheSnapshot(key, features) {
+    if (snapshotCache.has(key)) snapshotCache.delete(key);
+    snapshotCache.set(key, features);
+    while (snapshotCache.size > 4) {
+      const oldest = snapshotCache.keys().next().value;
+      snapshotCache.delete(oldest);
+    }
+  }
+
+  async function fetchSnapshot(entry) {
+    if (snapshotCache.has(entry.filename)) {
+      const cached = snapshotCache.get(entry.filename);
+      snapshotCache.delete(entry.filename);
+      snapshotCache.set(entry.filename, cached);
+      return cached;
+    }
+    if (pendingSnapshots.has(entry.filename)) return pendingSnapshots.get(entry.filename);
+
+    const preferred = state.source ? [state.source, ...DATA_SOURCES.filter(source => source !== state.source)] : DATA_SOURCES;
+    const promise = (async () => {
+      let lastError;
+      for (const source of preferred) {
+        try {
+          const collection = await fetchJson(source.base + encodeURIComponent(entry.filename));
+          const features = normalizeCollection(collection);
+          if (!features.length) throw new Error('Snapshot had no polygon features');
+          state.source = source;
+          cacheSnapshot(entry.filename, features);
+          return features;
+        } catch (error) {
+          lastError = error;
+          console.warn(`Epoch Atlas could not load ${entry.filename} from ${source.label}`, error);
+        }
+      }
+      throw lastError || new Error('Snapshot unavailable');
+    })();
+
+    pendingSnapshots.set(entry.filename, promise);
+    try { return await promise; }
+    finally { pendingSnapshots.delete(entry.filename); }
+  }
+
+  async function setYearIndex(index, options = {}) {
+    if (!state.years.length) return;
+    const targetIndex = clamp(Number(index), 0, state.years.length - 1);
+    const entry = state.years[targetIndex];
+    const token = ++state.requestToken;
+    const hasTerritoryOption = Object.prototype.hasOwnProperty.call(options, 'territoryName');
+    const previousName = hasTerritoryOption ? (options.territoryName || '') : (state.selected?.name || '');
+    state.requestedYear = Number.isFinite(options.requestedYear) ? options.requestedYear : entry.year;
+    setLoading(true, `Loading ${formatYear(entry.year)}&hellip;`);
+    previewYear(targetIndex);
+
+    try {
+      const features = await fetchSnapshot(entry);
+      if (token !== state.requestToken) return;
+      state.features = features;
+      state.currentIndex = targetIndex;
+      state.hovered = null;
+      state.selected = previousName ? features.find(feature => feature.name.toLocaleLowerCase() === previousName.toLocaleLowerCase()) || null : null;
+      if (options.resetView) resetView(false);
+      updateYearInterface();
+      updateInspector();
+      updateSearch();
+      updateHash();
+      setLoading(false, `${features.length.toLocaleString()} mapped regions &middot; ${state.source?.label || 'community source'}`);
+      requestDraw();
+      if (state.selected && options.territoryName) fitFeature(state.selected);
+      if (state.playing) schedulePlay();
+    } catch (error) {
+      if (token !== state.requestToken) return;
+      setLoading(false, `Map unavailable for ${formatYear(entry.year)}. Check the connection and try another date.`, true);
+      showToast(`Could not load the ${formatYear(entry.year)} snapshot`);
+      pauseTimeline();
+      if (!state.features.length) requestDraw();
+    }
+  }
+
+  function previewYear(index) {
+    const entry = state.years[index];
+    if (!entry) return;
+    $('#timelineYear').textContent = formatYear(entry.year);
+    $('#timelineStatus').textContent = `Previewing available snapshot ${index + 1} of ${state.years.length}`;
+    $('#yearRange').value = String(index);
+    $('#yearRange').setAttribute('aria-valuetext', formatYear(entry.year));
+    setRangeProgress(index);
+  }
+
+  function updateYearInterface() {
+    const entry = state.years[state.currentIndex];
+    if (!entry) return;
+    const requestedDiffers = state.requestedYear !== entry.year;
+    $('#timelineYear').textContent = formatYear(entry.year);
+    $('#timelineStatus').textContent = requestedDiffers ? `Nearest available map to ${formatYear(state.requestedYear)}` : `Available snapshot ${state.currentIndex + 1} of ${state.years.length}`;
+    $('#yearRange').value = String(state.currentIndex);
+    $('#yearRange').setAttribute('aria-valuetext', formatYear(entry.year));
+    $('#previousYear').disabled = state.currentIndex <= 0 || state.loading;
+    $('#nextYear').disabled = state.currentIndex >= state.years.length - 1 || state.loading;
+    $('#jumpYear').value = String(Math.max(1, Math.abs(state.requestedYear)));
+    $('#jumpEra').value = state.requestedYear < 0 ? 'BCE' : 'CE';
+    setRangeProgress(state.currentIndex);
+  }
+
+  function setRangeProgress(index) {
+    const max = Math.max(1, state.years.length - 1);
+    $('#rangeWrap').style.setProperty('--range-progress', `${clamp(index / max * 100, 0, 100)}%`);
+  }
+
+  function updateSourceState() {
+    $('#dialogSourceStatus').textContent = state.onlineIndex
+      ? `Connected to ${state.years.length} dated snapshots via ${state.source?.label || 'the source repository'} (revision ${DATA_REVISION.slice(0, 7)}).`
+      : 'The live index could not be reached. Trying a small built-in list of known snapshot filenames.';
+    $('#dialogSourceDot').style.background = state.onlineIndex ? 'var(--jade)' : 'var(--danger)';
+  }
+
+  function setLoading(loading, message, error = false) {
+    state.loading = loading;
+    $('#statusSpinner').hidden = !loading;
+    $('#statusText').innerHTML = message;
+    $('#mapStatus').style.borderColor = error ? '#a96655' : '';
+    if (state.currentIndex >= 0) {
+      $('#previousYear').disabled = loading || state.currentIndex <= 0;
+      $('#nextYear').disabled = loading || state.currentIndex >= state.years.length - 1;
+    }
+  }
+
+  function requestDraw() {
+    if (state.drawQueued) return;
+    state.drawQueued = true;
+    requestAnimationFrame(() => {
+      state.drawQueued = false;
+      drawMap();
+    });
+  }
+
+  function resizeCanvas() {
+    const rect = mapStage.getBoundingClientRect();
+    state.width = Math.max(1, rect.width);
+    state.height = Math.max(1, rect.height);
+    state.dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(state.width * state.dpr);
+    canvas.height = Math.round(state.height * state.dpr);
+    state.baseScale = Math.min((state.width - 28) / 5.55, (state.height - 28) / 2.9);
+    requestDraw();
+  }
+
+  function drawMap() {
+    if (!state.width || !state.height) return;
+    const theme = currentTheme();
+    ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+    ctx.clearRect(0, 0, state.width, state.height);
+
+    const ocean = ctx.createLinearGradient(0, 0, 0, state.height);
+    ocean.addColorStop(0, theme.ocean[0]);
+    ocean.addColorStop(.55, theme.ocean[1]);
+    ocean.addColorStop(1, theme.ocean[2]);
+    ctx.fillStyle = ocean;
+    ctx.fillRect(0, 0, state.width, state.height);
+    drawGraticule();
+
+    if (!state.features.length) {
+      drawSchematicLand();
+      state.paths = [];
+      return;
+    }
+
+    const paths = [];
+    for (const feature of state.features) {
+      const path = buildPath(feature.geometry);
+      const color = featureColor(feature);
+      const confidence = confidenceFor(feature.precision);
+      ctx.save();
+      ctx.globalAlpha = confidence.value === 1 ? .68 : confidence.value === 2 ? .82 : .9;
+      ctx.fillStyle = color;
+      ctx.fill(path, 'evenodd');
+      ctx.globalAlpha = confidence.value === 1 ? .45 : confidence.value === 2 ? .7 : .92;
+      ctx.strokeStyle = theme.border;
+      ctx.lineWidth = confidence.value === 3 ? 1.15 : 1;
+      if (confidence.value === 1) ctx.setLineDash([3, 3]);
+      else if (confidence.value === 2) ctx.setLineDash([6, 3]);
+      ctx.stroke(path);
+      ctx.restore();
+      paths.push({ feature, path });
+    }
+
+    state.paths = paths;
+    const active = state.selected || state.hovered;
+    if (active) drawHighlight(active);
+    if (state.labels) drawLabels(active);
+  }
+
+  function drawGraticule() {
+    ctx.save();
+    ctx.strokeStyle = currentTheme().grid;
+    ctx.lineWidth = 1;
+    for (let longitude = -150; longitude <= 150; longitude += 30) {
+      ctx.beginPath();
+      for (let latitude = -80; latitude <= 80; latitude += 4) {
+        const point = project(longitude, latitude);
+        if (latitude === -80) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      }
+      ctx.stroke();
+    }
+    for (let latitude = -60; latitude <= 60; latitude += 30) {
+      ctx.beginPath();
+      for (let longitude = -180; longitude <= 180; longitude += 4) {
+        const point = project(longitude, latitude);
+        if (longitude === -180) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawSchematicLand() {
+    const theme = currentTheme();
+    ctx.save();
+    ctx.fillStyle = theme.schematicFill;
+    ctx.strokeStyle = theme.schematicStroke;
+    ctx.lineWidth = 1;
+    for (const polygon of SCHEMATIC_LAND) {
+      ctx.beginPath();
+      polygon.forEach((coordinate, index) => {
+        const point = project(coordinate[0], coordinate[1]);
+        if (index === 0) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      });
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function buildPath(geometry) {
+    const path = new Path2D();
+    const worldWidth = state.baseScale * state.view.zoom * 5.3;
+    for (const ring of geometryRings(geometry)) {
+      let previous = null;
+      let hasPoint = false;
+      for (const coordinate of ring) {
+        if (!Array.isArray(coordinate) || coordinate.length < 2) continue;
+        const point = project(coordinate[0], coordinate[1]);
+        if (!hasPoint || (previous && Math.abs(point.x - previous.x) > worldWidth * .58)) path.moveTo(point.x, point.y);
+        else path.lineTo(point.x, point.y);
+        previous = point;
+        hasPoint = true;
+      }
+      if (hasPoint) path.closePath();
+    }
+    return path;
+  }
+
+  function drawHighlight(feature) {
+    const record = state.paths.find(item => item.feature === feature);
+    if (!record) return;
+    const theme = currentTheme();
+    const selected = state.selected === feature;
+    ctx.save();
+    ctx.fillStyle = selected ? theme.selectedFill : theme.hoverFill;
+    ctx.fill(record.path, 'evenodd');
+    const underlay = selected ? theme.selectedUnderlay : theme.hoverUnderlay;
+    if (underlay) {
+      ctx.strokeStyle = underlay;
+      ctx.lineWidth = selected ? 5.5 : 4.5;
+      ctx.stroke(record.path);
+    }
+    ctx.strokeStyle = selected ? theme.selectedStroke : theme.hoverStroke;
+    ctx.lineWidth = selected ? 2.7 : 2;
+    ctx.shadowColor = selected ? theme.selectedShadow : theme.hoverStroke;
+    ctx.shadowBlur = selected ? 9 : 5;
+    ctx.stroke(record.path);
+    ctx.restore();
+  }
+
+  function drawLabels(active) {
+    const theme = currentTheme();
+    const scale = state.baseScale * state.view.zoom;
+    const candidates = state.features
+      .filter(feature => feature === active || (!feature.unnamed && feature.area * scale * scale > 1150))
+      .sort((a, b) => (a === active ? -1 : b === active ? 1 : b.area - a.area))
+      .slice(0, state.view.zoom > 4 ? 95 : state.view.zoom > 2 ? 65 : 40);
+    const occupied = [];
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (const feature of candidates) {
+      const point = {
+        x: state.width / 2 + feature.label.x * scale + state.view.panX,
+        y: state.height / 2 - feature.label.y * scale + state.view.panY
+      };
+      if (point.x < -50 || point.x > state.width + 50 || point.y < -20 || point.y > state.height + 20) continue;
+      const isActive = feature === active;
+      const fontSize = isActive ? 13 : state.view.zoom > 2.5 ? 11 : 10;
+      const label = feature.name.length > 32 && !isActive ? `${feature.name.slice(0, 29)}…` : feature.name;
+      ctx.font = `${isActive ? 700 : 600} ${fontSize}px ui-sans-serif, system-ui, sans-serif`;
+      const width = ctx.measureText(label).width + 10;
+      const box = { x: point.x - width / 2, y: point.y - fontSize, w: width, h: fontSize * 2 };
+      if (!isActive && occupied.some(other => box.x < other.x + other.w && box.x + box.w > other.x && box.y < other.y + other.h && box.y + box.h > other.y)) continue;
+      occupied.push(box);
+      ctx.fillStyle = isActive ? theme.labelActiveBg : theme.labelBg;
+      ctx.beginPath();
+      roundedRect(ctx, box.x, point.y - fontSize * .72, box.w, fontSize * 1.45, 4);
+      ctx.fill();
+      ctx.fillStyle = isActive ? theme.labelActiveText : theme.labelText;
+      ctx.shadowColor = theme.labelShadow;
+      ctx.shadowBlur = 3;
+      ctx.fillText(label, point.x, point.y + .5);
+      ctx.shadowBlur = 0;
+    }
+    ctx.restore();
+  }
+
+  function hitTest(x, y) {
+    for (let index = state.paths.length - 1; index >= 0; index -= 1) {
+      if (hitContext.isPointInPath(state.paths[index].path, x, y, 'evenodd')) return state.paths[index].feature;
+    }
+    return null;
+  }
+
+  function setHover(feature, x, y) {
+    if (feature !== state.hovered) {
+      state.hovered = feature;
+      canvas.classList.toggle('has-hover', Boolean(feature));
+      requestDraw();
+    }
+    const tooltip = $('#tooltip');
+    if (!feature) {
+      tooltip.hidden = true;
+      return;
+    }
+    tooltip.hidden = false;
+    tooltip.querySelector('strong').textContent = feature.name;
+    const authority = feature.authority ? `Authority: ${feature.authority}` : confidenceFor(feature.precision).label;
+    tooltip.querySelector('span').textContent = authority;
+    const maxX = state.width - Math.min(260, tooltip.offsetWidth || 220) - 18;
+    const maxY = state.height - Math.min(90, tooltip.offsetHeight || 70) - 18;
+    tooltip.style.left = `${clamp(x, 6, maxX)}px`;
+    tooltip.style.top = `${clamp(y, 6, maxY)}px`;
+  }
+
+  function selectFeature(feature, fit = false) {
+    state.selected = feature || null;
+    state.hovered = feature || null;
+    updateInspector();
+    updateHash();
+    requestDraw();
+    if (feature && fit) fitFeature(feature);
+    if (feature && matchMedia('(max-width: 780px)').matches) setInspectorOpen(true, false);
+  }
+
+  function fitFeature(feature) {
+    if (!feature) return;
+    const bounds = feature.bounds;
+    const rawWidth = Math.max(.025, bounds.maxX - bounds.minX);
+    const rawHeight = Math.max(.018, bounds.maxY - bounds.minY);
+    const zoom = clamp(Math.min((state.width * .72) / (rawWidth * state.baseScale), (state.height * .65) / (rawHeight * state.baseScale)), 1, 14);
+    const centerX = (bounds.minX + bounds.maxX) / 2;
+    const centerY = (bounds.minY + bounds.maxY) / 2;
+    state.view.zoom = zoom;
+    state.view.panX = -centerX * state.baseScale * zoom;
+    state.view.panY = centerY * state.baseScale * zoom;
+    requestDraw();
+  }
+
+  function resetView(draw = true) {
+    state.view.zoom = 1;
+    state.view.panX = 0;
+    state.view.panY = 0;
+    if (draw) requestDraw();
+  }
+
+  function zoomAt(factor, x = state.width / 2, y = state.height / 2) {
+    const oldZoom = state.view.zoom;
+    const newZoom = clamp(oldZoom * factor, .8, 18);
+    const ratio = newZoom / oldZoom;
+    state.view.panX = x - state.width / 2 - (x - state.width / 2 - state.view.panX) * ratio;
+    state.view.panY = y - state.height / 2 - (y - state.height / 2 - state.view.panY) * ratio;
+    state.view.zoom = newZoom;
+    requestDraw();
+  }
+
+  function updateInspector() {
+    const selected = state.selected;
+    $('#inspectorRail').textContent = selected ? 'Selected region' : 'Field guide';
+    $('#emptyInspector').hidden = Boolean(selected);
+    $('#selectedInspector').hidden = !selected;
+    if (!selected) {
+      renderTerritoryList();
+      $('#inspectorToggle').textContent = state.features.length ? `${state.features.length.toLocaleString()} regions` : 'Explore map';
+      return;
+    }
+    const entry = state.years[state.currentIndex];
+    const confidence = confidenceFor(selected.precision);
+    const color = featureColor(selected);
+    $('#selectedSwatch').style.setProperty('--selected-color', color);
+    $('#selectedName').textContent = selected.name;
+    $('#selectedSubtitle').textContent = selected.unnamed
+      ? 'Source polygon without a supplied historical name'
+      : selected.authority ? `Within the sphere of ${selected.authority}` : 'Mapped as an independent named region';
+    $('#selectedYear').textContent = entry ? formatYear(entry.year) : '—';
+    $('#selectedAuthority').textContent = selected.authority || 'Same as territory / not specified';
+    $('#selectedPart').textContent = selected.part || 'Not specified';
+    const confidenceElement = $('#selectedConfidence');
+    confidenceElement.className = `confidence precision-${confidence.value}`;
+    confidenceElement.querySelector('span').textContent = confidence.label;
+    $('#inspectorToggle').textContent = selected.name;
+  }
+
+  function renderTerritoryList() {
+    const list = $('#territoryList');
+    list.replaceChildren();
+    const unique = new Map();
+    for (const feature of [...state.features].filter(feature => !feature.unnamed).sort((a, b) => b.area - a.area)) {
+      const key = feature.name.toLocaleLowerCase();
+      if (!unique.has(key)) unique.set(key, feature);
+      if (unique.size >= 9) break;
+    }
+    const namedCount = state.features.filter(feature => !feature.unnamed).length;
+    $('#territoryCount').textContent = state.features.length ? `${namedCount.toLocaleString()} named` : '—';
+    for (const feature of unique.values()) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.style.setProperty('--territory-color', featureColor(feature));
+      const dot = document.createElement('i');
+      dot.setAttribute('aria-hidden', 'true');
+      const name = document.createElement('span');
+      name.textContent = feature.name;
+      const meta = document.createElement('small');
+      meta.textContent = confidenceFor(feature.precision).value ? `P${confidenceFor(feature.precision).value}` : '';
+      button.append(dot, name, meta);
+      button.addEventListener('click', () => selectFeature(feature, true));
+      list.appendChild(button);
+    }
+  }
+
+  function updateSearch() {
+    const input = $('#territorySearch');
+    const query = input.value.trim().toLocaleLowerCase();
+    $('#searchClear').hidden = !input.value;
+    if (!query) {
+      state.searchResults = [];
+      state.searchActive = -1;
+      $('#searchResults').hidden = true;
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
+      return;
+    }
+    const seen = new Set();
+    state.searchResults = state.features.filter(feature => {
+      if (feature.unnamed) return false;
+      const haystack = `${feature.name} ${feature.authority} ${feature.part}`.toLocaleLowerCase();
+      const key = feature.name.toLocaleLowerCase();
+      if (!haystack.includes(query) || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).sort((a, b) => {
+      const aStart = a.name.toLocaleLowerCase().startsWith(query) ? 0 : 1;
+      const bStart = b.name.toLocaleLowerCase().startsWith(query) ? 0 : 1;
+      return aStart - bStart || a.name.localeCompare(b.name);
+    }).slice(0, 10);
+    state.searchActive = -1;
+    renderSearchResults();
+  }
+
+  function renderSearchResults() {
+    const menu = $('#searchResults');
+    const input = $('#territorySearch');
+    menu.replaceChildren();
+    menu.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+    input.removeAttribute('aria-activedescendant');
+    if (!state.searchResults.length) {
+      const empty = document.createElement('li');
+      empty.className = 'search-empty';
+      empty.textContent = state.loading ? 'Map is still loading…' : 'No matching region on this snapshot';
+      menu.appendChild(empty);
+      return;
+    }
+    state.searchResults.forEach((feature, index) => {
+      const item = document.createElement('li');
+      item.id = `search-option-${index}`;
+      item.className = 'search-option';
+      item.setAttribute('role', 'option');
+      item.classList.toggle('active', index === state.searchActive);
+      item.setAttribute('aria-selected', String(index === state.searchActive));
+      item.style.setProperty('--result-color', featureColor(feature));
+      const dot = document.createElement('i');
+      dot.className = 'result-dot';
+      const name = document.createElement('span');
+      name.className = 'result-name';
+      name.textContent = feature.name;
+      const meta = document.createElement('small');
+      meta.className = 'result-meta';
+      meta.textContent = feature.authority || confidenceFor(feature.precision).label;
+      item.append(dot, name, meta);
+      item.addEventListener('pointerdown', event => event.preventDefault());
+      item.addEventListener('click', () => chooseSearchResult(feature));
+      menu.appendChild(item);
+    });
+    if (state.searchActive >= 0) input.setAttribute('aria-activedescendant', `search-option-${state.searchActive}`);
+  }
+
+  function chooseSearchResult(feature) {
+    $('#territorySearch').value = feature.name;
+    $('#searchClear').hidden = false;
+    $('#searchResults').hidden = true;
+    $('#territorySearch').setAttribute('aria-expanded', 'false');
+    $('#territorySearch').removeAttribute('aria-activedescendant');
+    selectFeature(feature, true);
+  }
+
+  function showToast(message) {
+    const toast = $('#toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+  }
+
+  function updateHash() {
+    const entry = state.years[state.currentIndex];
+    if (!entry || !history.replaceState) return;
+    const params = new URLSearchParams();
+    params.set('year', String(Number.isFinite(state.requestedYear) ? state.requestedYear : entry.year));
+    if (state.selected) params.set('territory', state.selected.name);
+    history.replaceState(null, '', `${location.pathname}${location.search}#${params.toString()}`);
+  }
+
+  function readHash() {
+    const params = new URLSearchParams(location.hash.replace(/^#/, ''));
+    const year = Number(params.get('year'));
+    return { year: Number.isFinite(year) && params.has('year') ? year : NaN, territory: params.get('territory') || '' };
+  }
+
+  function syncInspectorAvailability() {
+    const inspector = $('#inspector');
+    const panel = $('#inspectorPanel');
+    const mobile = matchMedia('(max-width: 780px)').matches;
+    const open = document.body.classList.contains('inspector-open');
+    if (!mobile) {
+      inspector.removeAttribute('inert');
+      inspector.removeAttribute('aria-hidden');
+      const collapsed = document.body.classList.contains('inspector-collapsed');
+      panel.toggleAttribute('inert', collapsed);
+      panel.setAttribute('aria-hidden', String(collapsed));
+      return;
+    }
+    panel.removeAttribute('inert');
+    panel.removeAttribute('aria-hidden');
+    inspector.toggleAttribute('inert', !open);
+    inspector.setAttribute('aria-hidden', String(!open));
+  }
+
+  function setDesktopInspectorCollapsed(collapsed, persist = true) {
+    const button = $('#desktopInspectorToggle');
+    const panel = $('#inspectorPanel');
+    if (collapsed && panel.contains(document.activeElement)) button.focus();
+    document.body.classList.toggle('inspector-collapsed', collapsed);
+    button.setAttribute('aria-expanded', String(!collapsed));
+    button.setAttribute('aria-label', collapsed ? 'Expand field guide' : 'Collapse field guide');
+    button.title = collapsed ? 'Expand field guide' : 'Collapse field guide';
+    syncInspectorAvailability();
+    if (persist) savePreference(PREFERENCES.inspector, collapsed);
+  }
+
+  function setThemeMenuOpen(open, moveFocus = false) {
+    const menu = $('#themeMenu');
+    const toggle = $('#themeToggle');
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    if (open && moveFocus) {
+      requestAnimationFrame(() => menu.querySelector('[aria-checked="true"]')?.focus());
+    } else if (!open && moveFocus) {
+      toggle.focus();
+    }
+  }
+
+  function setHeaderCollapsed(collapsed, persist = true) {
+    const button = $('#headerCollapse');
+    const search = document.querySelector('.search');
+    const actions = document.querySelector('.app-actions');
+    if (collapsed && (search.contains(document.activeElement) || actions.contains(document.activeElement))) button.focus();
+    document.body.classList.toggle('header-collapsed', collapsed);
+    button.setAttribute('aria-expanded', String(!collapsed));
+    button.setAttribute('aria-label', collapsed ? 'Expand top bar' : 'Collapse top bar');
+    button.title = collapsed ? 'Expand top bar' : 'Collapse top bar';
+    button.firstElementChild.textContent = collapsed ? '\u2304' : '\u2303';
+    search.toggleAttribute('inert', collapsed);
+    actions.toggleAttribute('inert', collapsed);
+    if (collapsed) {
+      setThemeMenuOpen(false);
+      $('#searchResults').hidden = true;
+      $('#territorySearch').setAttribute('aria-expanded', 'false');
+      $('#territorySearch').removeAttribute('aria-activedescendant');
+    }
+    if (persist) savePreference(PREFERENCES.header, collapsed);
+  }
+
+  function setTimelineCollapsed(collapsed, persist = true) {
+    const button = $('#timelineCollapse');
+    document.body.classList.toggle('timeline-collapsed', collapsed);
+    button.setAttribute('aria-expanded', String(!collapsed));
+    button.setAttribute('aria-label', collapsed ? 'Expand timeline' : 'Collapse timeline');
+    button.title = collapsed ? 'Expand timeline' : 'Collapse timeline';
+    button.firstElementChild.textContent = collapsed ? '\u2303' : '\u2304';
+    $('#jumpForm').toggleAttribute('inert', collapsed);
+    $('#yearRange').disabled = collapsed || !state.years.length;
+    if (persist) savePreference(PREFERENCES.timeline, collapsed);
+  }
+
+  function setInspectorOpen(open, moveFocus = false) {
+    const inspector = $('#inspector');
+    const focusWasInside = inspector.contains(document.activeElement);
+    document.body.classList.toggle('inspector-open', open);
+    $('#inspectorToggle').setAttribute('aria-expanded', String(open));
+    syncInspectorAvailability();
+    if (open && moveFocus) requestAnimationFrame(() => (state.selected ? $('#selectedCloseMobile') : $('#inspectorClose')).focus());
+    if (!open && (moveFocus || focusWasInside)) requestAnimationFrame(() => $('#inspectorToggle').focus());
+  }
+
+  function togglePlay() {
+    if (state.playing) {
+      pauseTimeline();
+      return;
+    }
+    if (!state.years.length || state.loading) return;
+    else {
+      if (state.currentIndex >= state.years.length - 1) setYearIndex(0, { requestedYear: state.years[0].year });
+      state.playing = true;
+      const button = $('#playTimeline');
+      button.setAttribute('aria-pressed', 'true');
+      button.setAttribute('aria-label', 'Pause timeline');
+      button.title = 'Pause timeline';
+      button.firstElementChild.textContent = '\u275A\u275A';
+      schedulePlay(850);
+    }
+  }
+
+  function pauseTimeline() {
+    state.playing = false;
+    clearTimeout(playTimer);
+    const button = $('#playTimeline');
+    button.setAttribute('aria-pressed', 'false');
+    button.setAttribute('aria-label', 'Play timeline');
+    button.title = 'Play timeline';
+    button.firstElementChild.textContent = '\u25B6';
+  }
+
+  function schedulePlay(delay = 1250) {
+    clearTimeout(playTimer);
+    if (!state.playing || state.loading) return;
+    if (state.currentIndex >= state.years.length - 1) {
+      pauseTimeline();
+      showToast('Reached the latest available snapshot');
+      return;
+    }
+    const nextEntry = state.years[state.currentIndex + 1];
+    if (nextEntry) fetchSnapshot(nextEntry).catch(() => {});
+    playTimer = setTimeout(() => {
+      if (state.playing) setYearIndex(state.currentIndex + 1, { requestedYear: state.years[state.currentIndex + 1].year });
+    }, delay);
+  }
+
+  function stepYear(direction) {
+    pauseTimeline();
+    if (state.loading || !state.years.length) return;
+    const index = clamp(state.currentIndex + direction, 0, state.years.length - 1);
+    if (index === state.currentIndex) return;
+    setYearIndex(index, { requestedYear: state.years[index].year });
+  }
+
+  function pointerPosition(event) {
+    const rect = canvas.getBoundingClientRect();
+    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+  }
+
+  canvas.addEventListener('pointerdown', event => {
+    pauseTimeline();
+    const point = pointerPosition(event);
+    canvas.setPointerCapture(event.pointerId);
+    state.pointer.active.set(event.pointerId, point);
+    state.pointer.startX = point.x;
+    state.pointer.startY = point.y;
+    state.pointer.panX = state.view.panX;
+    state.pointer.panY = state.view.panY;
+    state.pointer.moved = false;
+    state.pointer.dragging = state.pointer.active.size === 1;
+    canvas.classList.add('dragging');
+    if (state.pointer.active.size === 2) {
+      const [a, b] = [...state.pointer.active.values()];
+      state.pointer.pinchDistance = Math.hypot(b.x - a.x, b.y - a.y);
+      state.pointer.pinchZoom = state.view.zoom;
+      state.pointer.dragging = false;
+    }
+  });
+
+  canvas.addEventListener('pointermove', event => {
+    const point = pointerPosition(event);
+    if (state.pointer.active.has(event.pointerId)) state.pointer.active.set(event.pointerId, point);
+    if (state.pointer.active.size === 2) {
+      const [a, b] = [...state.pointer.active.values()];
+      const distance = Math.hypot(b.x - a.x, b.y - a.y);
+      const midpoint = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      const targetZoom = clamp(state.pointer.pinchZoom * distance / Math.max(1, state.pointer.pinchDistance), .8, 18);
+      zoomAt(targetZoom / state.view.zoom, midpoint.x, midpoint.y);
+      state.pointer.moved = true;
+      return;
+    }
+    if (state.pointer.dragging && state.pointer.active.has(event.pointerId)) {
+      const dx = point.x - state.pointer.startX;
+      const dy = point.y - state.pointer.startY;
+      if (Math.hypot(dx, dy) > 3) state.pointer.moved = true;
+      state.view.panX = state.pointer.panX + dx;
+      state.view.panY = state.pointer.panY + dy;
+      $('#tooltip').hidden = true;
+      requestDraw();
+      return;
+    }
+    if (event.pointerType !== 'touch') setHover(hitTest(point.x, point.y), point.x, point.y);
+  });
+
+  function resumeRemainingPointer() {
+    if (state.pointer.active.size === 1) {
+      const point = [...state.pointer.active.values()][0];
+      state.pointer.startX = point.x;
+      state.pointer.startY = point.y;
+      state.pointer.panX = state.view.panX;
+      state.pointer.panY = state.view.panY;
+      state.pointer.moved = true;
+      state.pointer.dragging = true;
+      canvas.classList.add('dragging');
+      return;
+    }
+    state.pointer.dragging = false;
+    canvas.classList.remove('dragging');
+  }
+
+  function endPointer(event) {
+    const point = pointerPosition(event);
+    const wasSingle = state.pointer.active.size === 1;
+    const moved = state.pointer.moved;
+    state.pointer.active.delete(event.pointerId);
+    if (wasSingle && !moved) selectFeature(hitTest(point.x, point.y));
+    if (!state.pointer.active.size && event.pointerType !== 'touch') setHover(hitTest(point.x, point.y), point.x, point.y);
+    resumeRemainingPointer();
+  }
+  canvas.addEventListener('pointerup', endPointer);
+  canvas.addEventListener('pointercancel', event => {
+    state.pointer.active.delete(event.pointerId);
+    resumeRemainingPointer();
+  });
+  canvas.addEventListener('pointerleave', () => {
+    if (!state.pointer.active.size) setHover(null, 0, 0);
+  });
+  canvas.addEventListener('wheel', event => {
+    event.preventDefault();
+    pauseTimeline();
+    const point = pointerPosition(event);
+    zoomAt(event.deltaY < 0 ? 1.16 : .86, point.x, point.y);
+  }, { passive: false });
+
+  canvas.addEventListener('keydown', event => {
+    if (event.key === '+' || event.key === '=') { event.preventDefault(); zoomAt(1.25); }
+    else if (event.key === '-') { event.preventDefault(); zoomAt(.8); }
+    else if (event.key === 'Home') { event.preventDefault(); resetView(); }
+    else if (event.key === 'Escape') { event.preventDefault(); selectFeature(null); }
+    else if (event.key.startsWith('Arrow')) {
+      event.preventDefault();
+      const distance = event.shiftKey ? 90 : 38;
+      if (event.key === 'ArrowLeft') state.view.panX += distance;
+      if (event.key === 'ArrowRight') state.view.panX -= distance;
+      if (event.key === 'ArrowUp') state.view.panY += distance;
+      if (event.key === 'ArrowDown') state.view.panY -= distance;
+      requestDraw();
+    }
+  });
+
+  $('#zoomIn').addEventListener('click', () => zoomAt(1.3));
+  $('#zoomOut').addEventListener('click', () => zoomAt(.77));
+  $('#resetView').addEventListener('click', () => resetView());
+  $('#toggleLabels').addEventListener('click', event => {
+    state.labels = !state.labels;
+    event.currentTarget.setAttribute('aria-pressed', String(state.labels));
+    requestDraw();
+  });
+  $('#toggleColors').addEventListener('click', event => {
+    state.colorMode = state.colorMode === 'authority' ? 'territory' : 'authority';
+    event.currentTarget.setAttribute('aria-label', state.colorMode === 'authority' ? 'Color by authority' : 'Color by territory');
+    event.currentTarget.title = state.colorMode === 'authority' ? 'Colors grouped by authority' : 'Colors assigned per territory';
+    showToast(state.colorMode === 'authority' ? 'Colors now group shared authorities' : 'Each territory now has its own color');
+    updateInspector();
+    updateSearch();
+    requestDraw();
+  });
+
+  $('#previousYear').addEventListener('click', () => stepYear(-1));
+  $('#nextYear').addEventListener('click', () => stepYear(1));
+  $('#playTimeline').addEventListener('click', togglePlay);
+  $('#yearRange').addEventListener('input', event => {
+    if (!state.years.length) return;
+    previewYear(Number(event.target.value));
+  });
+  $('#yearRange').addEventListener('change', event => {
+    if (!state.years.length) return;
+    pauseTimeline();
+    const index = Number(event.target.value);
+    if (!state.years[index]) return;
+    setYearIndex(index, { requestedYear: state.years[index].year });
+  });
+
+  $('#jumpForm').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!state.years.length) return;
+    pauseTimeline();
+    const magnitude = clamp(Math.abs(Number($('#jumpYear').value) || 1), 1, 123000);
+    const requested = $('#jumpEra').value === 'BCE' ? -magnitude : magnitude;
+    const index = nearestYearIndex(requested);
+    const nearest = state.years[index];
+    if (nearest && nearest.year !== requested) showToast(`Nearest available map: ${formatYear(nearest.year)}`);
+    setYearIndex(index, { requestedYear: requested });
+  });
+
+  document.querySelectorAll('.era-button').forEach(button => button.addEventListener('click', () => {
+    const requested = Number(button.dataset.year);
+    const index = nearestYearIndex(requested);
+    pauseTimeline();
+    setYearIndex(index, { requestedYear: requested });
+  }));
+
+  $('#territorySearch').addEventListener('input', updateSearch);
+  $('#territorySearch').addEventListener('keydown', event => {
+    if ($('#searchResults').hidden) return;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      if (!state.searchResults.length) return;
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      state.searchActive = clamp(state.searchActive + direction, 0, state.searchResults.length - 1);
+      renderSearchResults();
+      $('#searchResults').querySelector('.active')?.scrollIntoView({ block: 'nearest' });
+    } else if (event.key === 'Enter' && state.searchActive >= 0) {
+      event.preventDefault();
+      chooseSearchResult(state.searchResults[state.searchActive]);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      $('#searchResults').hidden = true;
+      event.currentTarget.setAttribute('aria-expanded', 'false');
+      event.currentTarget.removeAttribute('aria-activedescendant');
+    }
+  });
+  $('#searchClear').addEventListener('click', () => {
+    $('#territorySearch').value = '';
+    $('#territorySearch').focus();
+    updateSearch();
+  });
+  document.addEventListener('pointerdown', event => {
+    if (!event.target.closest('.search')) {
+      $('#searchResults').hidden = true;
+      $('#territorySearch').setAttribute('aria-expanded', 'false');
+      $('#territorySearch').removeAttribute('aria-activedescendant');
+    }
+    if (!event.target.closest('.theme-picker')) setThemeMenuOpen(false);
+  });
+
+  $('#themeToggle').addEventListener('click', () => {
+    setThemeMenuOpen($('#themeMenu').hidden, true);
+  });
+  document.querySelectorAll('[data-theme-option]').forEach(option => option.addEventListener('click', () => {
+    applyTheme(option.dataset.themeOption);
+    setThemeMenuOpen(false, true);
+  }));
+  $('#themeMenu').addEventListener('keydown', event => {
+    const options = [...event.currentTarget.querySelectorAll('[data-theme-option]')];
+    const current = options.indexOf(document.activeElement);
+    let next = current;
+    if (event.key === 'ArrowDown') next = (current + 1 + options.length) % options.length;
+    else if (event.key === 'ArrowUp') next = (current - 1 + options.length) % options.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = options.length - 1;
+    else if (event.key === 'Escape') {
+      event.preventDefault();
+      setThemeMenuOpen(false, true);
+      return;
+    } else return;
+    event.preventDefault();
+    options[next]?.focus();
+  });
+
+  $('#fitSelected').addEventListener('click', () => fitFeature(state.selected));
+  $('#clearSelected').addEventListener('click', () => selectFeature(null));
+  $('#inspectorToggle').addEventListener('click', () => setInspectorOpen(true, true));
+  $('#inspectorClose').addEventListener('click', () => setInspectorOpen(false, true));
+  $('#selectedCloseMobile').addEventListener('click', () => setInspectorOpen(false, true));
+  $('#desktopInspectorToggle').addEventListener('click', () => {
+    setDesktopInspectorCollapsed(!document.body.classList.contains('inspector-collapsed'));
+  });
+  $('#headerCollapse').addEventListener('click', () => {
+    setHeaderCollapsed(!document.body.classList.contains('header-collapsed'));
+  });
+  $('#timelineCollapse').addEventListener('click', () => {
+    setTimelineCollapsed(!document.body.classList.contains('timeline-collapsed'));
+  });
+
+  const methodDialog = $('#methodDialog');
+  $('#openMethod').addEventListener('click', () => methodDialog.showModal());
+  $('#closeMethod').addEventListener('click', () => methodDialog.close());
+  methodDialog.addEventListener('click', event => {
+    const rect = methodDialog.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) methodDialog.close();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.target.matches('input,select,button') || methodDialog.open) return;
+    if (event.code === 'Space') { event.preventDefault(); togglePlay(); }
+    if (event.code === 'BracketLeft') stepYear(-1);
+    if (event.code === 'BracketRight') stepYear(1);
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pauseTimeline(); });
+  window.addEventListener('hashchange', () => {
+    const hash = readHash();
+    if (!Number.isFinite(hash.year) || !state.years.length) return;
+    const index = nearestYearIndex(hash.year);
+    const territoryChanged = hash.territory !== (state.selected?.name || '');
+    if (index !== state.currentIndex || territoryChanged || hash.year !== state.requestedYear) {
+      setYearIndex(index, { requestedYear: hash.year, territoryName: hash.territory });
+    }
+  });
+  window.addEventListener('resize', () => { resizeCanvas(); syncInspectorAvailability(); });
+  if (window.ResizeObserver) new ResizeObserver(resizeCanvas).observe(mapStage);
+
+  applyTheme(readStringPreference(PREFERENCES.theme, 'night'), false, false);
+  setHeaderCollapsed(readPreference(PREFERENCES.header, true), false);
+  setDesktopInspectorCollapsed(readPreference(PREFERENCES.inspector, true), false);
+  setTimelineCollapsed(readPreference(PREFERENCES.timeline, true), false);
+  resizeCanvas();
+  updateInspector();
+  syncInspectorAvailability();
+  loadIndex();
+})();
+</script>
+</body>
+</html>
